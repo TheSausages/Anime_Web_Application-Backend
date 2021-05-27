@@ -1,0 +1,1 @@
+Insert into Users(name, password, roles) values ("user", "$2y$12$1MKYerqyToC3QMRRj7Ie4OIyB053BmsOzno3GB.u2u3XRjY2Za3wy", 'ADMIN');
