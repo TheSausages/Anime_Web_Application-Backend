@@ -50,7 +50,7 @@ class MediaRankTest {
 
         //when
         MediaRank rank = MediaRank.getMediaRankBuilder()
-                .rankNumber()
+                .rank()
                 .buildMediaRank();
 
         //then
@@ -63,8 +63,8 @@ class MediaRankTest {
 
         //when
         MediaRank rank = MediaRank.getMediaRankBuilder()
-                .rankNumber()
-                .rankNumber()
+                .rank()
+                .rank()
                 .buildMediaRank();
 
         //then
@@ -242,7 +242,7 @@ class MediaRankTest {
         //when
         MediaRank rank = MediaRank.getMediaRankBuilder()
                 .id()
-                .rankNumber()
+                .rank()
                 .buildMediaRank();
 
         //then
@@ -303,7 +303,7 @@ class MediaRankTest {
         //when
         MediaRank rank = MediaRank.getMediaRankBuilder()
                 .id()
-                .rankNumber()
+                .rank()
                 .type()
                 .format()
                 .year()
@@ -323,7 +323,7 @@ class MediaRankTest {
         //when
         MediaRank rank = MediaRank.getMediaRankBuilder()
                 .id()
-                .rankNumber()
+                .rank()
                 .type()
                 .format()
                 .year()

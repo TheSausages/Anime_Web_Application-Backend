@@ -19,11 +19,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_RomajiNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylized)
+                .romajiLanguage()
                 .buildMediaTitle();
 
         //then
@@ -33,12 +32,11 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyRomajiNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylized)
-                .romajiLanguage(stylized)
+                .romajiLanguage()
+                .romajiLanguage()
                 .buildMediaTitle();
 
         //then
@@ -48,11 +46,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_RomajiStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylized)
+                .romajiLanguageStylized()
                 .buildMediaTitle();
 
         //then
@@ -62,12 +59,11 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyRomajiStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylized)
-                .romajiLanguage(stylized)
+                .romajiLanguageStylized()
+                .romajiLanguage()
                 .buildMediaTitle();
 
         //then
@@ -77,11 +73,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_EnglishNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(stylized)
+                .englishLanguage()
                 .buildMediaTitle();
 
         //then
@@ -91,13 +86,12 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyEnglishNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(stylized)
-                .englishLanguage(stylized)
-                .englishLanguage(stylized)
+                .englishLanguage()
+                .englishLanguageStylized()
+                .englishLanguage()
                 .buildMediaTitle();
 
         //then
@@ -107,11 +101,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_EnglishStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(stylized)
+                .englishLanguageStylized()
                 .buildMediaTitle();
 
         //then
@@ -121,12 +114,12 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyEnglishStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(stylized)
-                .englishLanguage(stylized)
+                .englishLanguageStylized()
+                .englishLanguageStylized()
+                .englishLanguage()
                 .buildMediaTitle();
 
         //then
@@ -136,11 +129,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_NativeNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(stylized)
+                .nativeLanguage()
                 .buildMediaTitle();
 
         //then
@@ -150,13 +142,12 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyNativeNotStylized_NoException() {
         //given
-        boolean stylized = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(stylized)
-                .nativeLanguage(stylized)
-                .nativeLanguage(stylized)
+                .nativeLanguage()
+                .nativeLanguageStylized()
+                .nativeLanguage()
                 .buildMediaTitle();
 
         //then
@@ -166,11 +157,10 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_NativeStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(stylized)
+                .nativeLanguageStylized()
                 .buildMediaTitle();
 
         //then
@@ -180,13 +170,12 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_ManyNativeStylized_NoException() {
         //given
-        boolean stylized = true;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(stylized)
-                .nativeLanguage(stylized)
-                .nativeLanguage(stylized)
+                .nativeLanguageStylized()
+                .nativeLanguage()
+                .nativeLanguageStylized()
                 .buildMediaTitle();
 
         //then
@@ -196,13 +185,11 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_NativeStylizedAndEnglishNotStylized_NoException() {
         //given
-        boolean stylizedNative = true;
-        boolean stylizedEnglish = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(stylizedNative)
-                .englishLanguage(stylizedEnglish)
+                .nativeLanguageStylized()
+                .englishLanguage()
                 .buildMediaTitle();
 
         //then
@@ -212,15 +199,12 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_NativeStylizedAndEnglishNotStylizedAndRomajiStylized_NoException() {
         //given
-        boolean stylizedNative = true;
-        boolean stylizedEnglish = false;
-        boolean stylizedRomaji = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylizedRomaji)
-                .nativeLanguage(stylizedNative)
-                .englishLanguage(stylizedEnglish)
+                .romajiLanguage()
+                .nativeLanguageStylized()
+                .englishLanguage()
                 .buildMediaTitle();
 
         //then
@@ -230,17 +214,14 @@ class MediaTitleTest {
     @Test
     void MediaTitleBuilder_NativeStylizedAndEnglishNotStylizedAndManyRomajiStylized_NoException() {
         //given
-        boolean stylizedNative = true;
-        boolean stylizedEnglish = false;
-        boolean stylizedRomaji = false;
 
         //when
         MediaTitle mediaTitle = MediaTitle.getMediaTitleBuilder()
-                .romajiLanguage(stylizedRomaji)
-                .nativeLanguage(stylizedNative)
-                .romajiLanguage(stylizedRomaji)
-                .englishLanguage(stylizedEnglish)
-                .romajiLanguage(stylizedRomaji)
+                .romajiLanguage()
+                .nativeLanguageStylized()
+                .romajiLanguage()
+                .englishLanguage()
+                .romajiLanguage()
                 .buildMediaTitle();
 
         //then

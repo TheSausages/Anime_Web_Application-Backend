@@ -168,8 +168,7 @@ class FuzzyDateValueTest {
 
         //when
         FuzzyDateValue fuzzyDateValue = FuzzyDateValue.getFuzzyDateValueBuilder()
-                .now()
-                .buildFuzzyDateValue();
+                .nowAndBuild();
 
         //then
         assertEquals(fuzzyDateValue.getFuzzyDateNumber(), Integer.parseInt(LocalDateTime.now().toLocalDate().toString().replaceAll("-", "")));

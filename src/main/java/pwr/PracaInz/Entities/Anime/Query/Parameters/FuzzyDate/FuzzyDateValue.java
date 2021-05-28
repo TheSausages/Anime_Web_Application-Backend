@@ -64,12 +64,12 @@ public class FuzzyDateValue {
             return this;
         }
 
-        public FuzzyDateValueBuilder now() {
+        public FuzzyDateValue nowAndBuild() {
             this.year = LocalDateTime.now().getYear();
             this.month = LocalDateTime.now().getMonthValue();
             this.day = LocalDateTime.now().getDayOfMonth();
 
-            return this;
+            return buildFuzzyDateValue();
         }
 
         public FuzzyDateValue buildFuzzyDateValue() {

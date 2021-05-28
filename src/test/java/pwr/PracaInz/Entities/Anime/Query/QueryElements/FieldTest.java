@@ -1,12 +1,12 @@
 package pwr.PracaInz.Entities.Anime.Query.QueryElements;
 
 import org.junit.jupiter.api.Test;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.*;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaExternalLinks;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaRank;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaStreamingEpisodes;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,8 +75,8 @@ class FieldTest {
     void FieldBuilder_Titles_NoException() {
         //given
         MediaTitle title = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(false)
-                .romajiLanguage(true)
+                .englishLanguage()
+                .romajiLanguageStylized()
                 .buildMediaTitle();
 
         //when
@@ -92,11 +92,11 @@ class FieldTest {
     void FieldBuilder_ManyTitles_NoException() {
         //given
         MediaTitle title = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(false)
-                .romajiLanguage(true)
+                .englishLanguage()
+                .romajiLanguageStylized()
                 .buildMediaTitle();
         MediaTitle title2 = MediaTitle.getMediaTitleBuilder()
-                .nativeLanguage(false)
+                .nativeLanguage()
                 .buildMediaTitle();
 
         //when
@@ -265,11 +265,10 @@ class FieldTest {
     @Test
     void FieldBuilder_DescriptionNotAsHtml_NoException() {
         //given
-        boolean asHtml = false;
 
         //when
         Field field = Field.getFieldBuilder()
-                .description(asHtml)
+                .description()
                 .buildField();
 
         //then
@@ -279,12 +278,11 @@ class FieldTest {
     @Test
     void FieldBuilder_ManyDescriptionNotAsHtml_NoException() {
         //given
-        boolean asHtml = false;
 
         //when
         Field field = Field.getFieldBuilder()
-                .description(asHtml)
-                .description(asHtml)
+                .description()
+                .description()
                 .buildField();
 
         //then
@@ -294,11 +292,10 @@ class FieldTest {
     @Test
     void FieldBuilder_DescriptionWithAsHtml_NoException() {
         //given
-        boolean asHtml = true;
 
         //when
         Field field = Field.getFieldBuilder()
-                .description(asHtml)
+                .descriptionAsHtml()
                 .buildField();
 
         //then
@@ -308,12 +305,11 @@ class FieldTest {
     @Test
     void FieldBuilder_ManyDescriptionWithAsHtml_NoException() {
         //given
-        boolean asHtml = true;
 
         //when
         Field field = Field.getFieldBuilder()
-                .description(asHtml)
-                .description(asHtml)
+                .descriptionAsHtml()
+                .descriptionAsHtml()
                 .buildField();
 
         //then
@@ -323,13 +319,11 @@ class FieldTest {
     @Test
     void FieldBuilder_MixedDescriptionWithAsHtml_NoException() {
         //given
-        boolean asHtml = true;
-        boolean asHtml1 = false;
 
         //when
         Field field = Field.getFieldBuilder()
-                .description(asHtml)
-                .description(asHtml1)
+                .descriptionAsHtml()
+                .description()
                 .buildField();
 
         //then
@@ -448,7 +442,7 @@ class FieldTest {
     void FieldBuilder_Ranking_NoException() {
         //given
         MediaRank rank = MediaRank.getMediaRankBuilder()
-                .rankNumber()
+                .rank()
                 .buildMediaRank();
 
         //when
@@ -464,7 +458,7 @@ class FieldTest {
     void FieldBuilder_ManyRanking_NoException() {
         //given
         MediaRank rank = MediaRank.getMediaRankBuilder()
-                .rankNumber()
+                .rank()
                 .buildMediaRank();
         MediaRank rank1 = MediaRank.getMediaRankBuilder()
                 .year()
@@ -567,12 +561,111 @@ class FieldTest {
 
         //when
         Field field = Field.getFieldBuilder()
-                .streamingEpisodes(episode1)
                 .streamingEpisodes(episode)
+                .streamingEpisodes(episode1)
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\nstreamingEpisodes {\nsite\n}\n}");
+        assertEquals(field.toString(), "{\nstreamingEpisodes {\ntitle\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Characters_NoException() {
+        //given
+        CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
+                .id()
+                .buildCharacterEdge();
+        CharacterConnection characterConnection = CharacterConnection.getCharacterConnectionBuilder()
+                .edges(edge)
+                .buildCharacterConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .characters(characterConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ncharacters {\nedges {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_ManyCharacters_NoException() {
+        //given
+        CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
+                .name()
+                .buildCharacterEdge();
+        Character character = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
+        CharacterConnection characterConnection = CharacterConnection.getCharacterConnectionBuilder()
+                .nodes(character)
+                .buildCharacterConnection();
+        CharacterConnection characterConnection1 = CharacterConnection.getCharacterConnectionBuilder()
+                .edges(edge)
+                .buildCharacterConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .characters(characterConnection)
+                .characters(characterConnection1)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ncharacters {\nnodes {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_CharactersWithCharacterArguments_NoException() {
+        //given
+        CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
+                .role(CharacterRole.MAIN)
+                .buildCharacterMediaArguments();
+        CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
+                .id()
+                .buildCharacterEdge();
+        CharacterConnection characterConnection = CharacterConnection.getCharacterConnectionBuilder()
+                .edges(edge)
+                .buildCharacterConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .characters(arguments, characterConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ncharacters(role: MAIN) {\nedges {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_ManyCharactersWithCharacterArguments_NoException() {
+        //given
+        CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
+                .mediaSort(new MediaSort[]{MediaSort.TYPE})
+                .buildCharacterMediaArguments();
+        CharacterArguments arguments1 = CharacterArguments.getCharacterArgumentsBuilder()
+                .perPage(12)
+                .buildCharacterMediaArguments();
+        CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
+                .name()
+                .buildCharacterEdge();
+        Character character = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
+        CharacterConnection characterConnection = CharacterConnection.getCharacterConnectionBuilder()
+                .nodes(character)
+                .buildCharacterConnection();
+        CharacterConnection characterConnection1 = CharacterConnection.getCharacterConnectionBuilder()
+                .edges(edge)
+                .buildCharacterConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .characters(arguments, characterConnection)
+                .characters(arguments1, characterConnection1)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ncharacters(sort: [TYPE]) {\nnodes {\nid\n}\n}\n}");
     }
 
     @Test
@@ -580,8 +673,8 @@ class FieldTest {
         //given
         FieldParameters parameter = FieldParameters.id;
         MediaTitle title = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(false)
-                .romajiLanguage(true)
+                .englishLanguage()
+                .romajiLanguageStylized()
                 .buildMediaTitle();
 
         //when
@@ -602,7 +695,7 @@ class FieldTest {
         //when
         Field field = Field.getFieldBuilder()
                 .parameter(parameter)
-                .description(false)
+                .description()
                 .tags()
                 .status(2)
                 .buildField();
@@ -618,15 +711,15 @@ class FieldTest {
         FieldParameters parameter1 = FieldParameters.averageScore;
         FieldParameters parameter2 = FieldParameters.isLicensed;
         MediaTitle title = MediaTitle.getMediaTitleBuilder()
-                .englishLanguage(false)
-                .romajiLanguage(true)
+                .englishLanguage()
+                .romajiLanguageStylized()
                 .buildMediaTitle();
         MediaExternalLinks link = MediaExternalLinks.getMediaExternalLinkStringBuilder()
                 .addId()
                 .addUrl()
                 .buildMediaExternalLinks();
         MediaRank rank = MediaRank.getMediaRankBuilder()
-                .rankNumber()
+                .rank()
                 .year()
                 .season()
                 .buildMediaRank();
@@ -640,6 +733,21 @@ class FieldTest {
                 .url()
                 .buildMediaRank();
 
+        CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
+                .role(CharacterRole.MAIN)
+                .buildCharacterMediaArguments();
+        CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
+                .id()
+                .buildCharacterEdge();
+        Character character = Character.getCharacterBuilder()
+                .name()
+                .age()
+                .buildCharacter();
+        CharacterConnection characterConnection = CharacterConnection.getCharacterConnectionBuilder()
+                .edges(edge)
+                .nodes(character)
+                .buildCharacterConnection();
+
         //when
         Field field = Field.getFieldBuilder()
                 .parameter(parameter)
@@ -649,7 +757,7 @@ class FieldTest {
                 .tags()
                 .nextAiringEpisode()
                 .status(2)
-                .description(false)
+                .description()
                 .source()
                 .externalLinks(link)
                 .ranking(rank)
@@ -657,12 +765,13 @@ class FieldTest {
                 .fuzzyDate(endDateField)
                 .streamingEpisodes(episodes)
                 .parameter(parameter2)
+                .characters(arguments, characterConnection)
                 .buildField();
 
         //then
         assertEquals(field.toString(), "{\nid\naverageScore\ntitle {\nenglish\nromaji(stylized: true)\n}\ntrailer {\nid\nsite\nthumbnail\n}\n" +
                 "tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}\nnextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}\n" +
                 "status(version: 2)\ndescription\nsource\nexternalLinks {\nid\nurl\n}\nranking {\nrank\nyear\nseason\n}\nstartDate {\nyear\nmonth\nday\n}\nendDate {\nyear\nmonth\nday\n}\n" +
-                "streamingEpisodes {\ntitle\nthumbnail\nurl\n}\nisLicensed\n}");
+                "streamingEpisodes {\ntitle\nthumbnail\nurl\n}\nisLicensed\ncharacters(role: MAIN) {\nedges {\nid\n}\nnodes {\nname\nage\n}\n}\n}");
     }
 }

@@ -1,6 +1,9 @@
-package pwr.PracaInz.Entities.Anime.Query.QueryElements;
+package pwr.PracaInz.Entities.Anime.Query.QueryElements.Media;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
@@ -33,72 +36,92 @@ public class Field {
         private final Set<ParameterString> fieldParameters = new LinkedHashSet<>();
 
         public FieldBuilder parameter(FieldParameters parameter) {
-            fieldParameters.add(new ParameterString(parameter.name()));
+            fieldParameters.add(new ParameterString(parameter.name() + "\n"));
             return this;
         }
 
         public FieldBuilder title(MediaTitle titles) {
-            fieldParameters.add(new ParameterString(titles.toString()));
+            fieldParameters.add(new ParameterString(titles.toString() + "\n"));
             return this;
         }
 
-        public FieldBuilder trailer() { ;
-            fieldParameters.add(new ParameterString("trailer {\nid\nsite\nthumbnail\n}"));
+        public FieldBuilder trailer() {
+            fieldParameters.add(new ParameterString("trailer {\nid\nsite\nthumbnail\n}\n"));
             return this;
         }
 
         public FieldBuilder tags() {
-            fieldParameters.add(new ParameterString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}"));
+            fieldParameters.add(new ParameterString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}\n"));
             return this;
         }
 
         public FieldBuilder nextAiringEpisode() {
-            fieldParameters.add(new ParameterString("nextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}"));
+            fieldParameters.add(new ParameterString("nextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}\n"));
             return this;
         }
 
         public FieldBuilder status() {
-            fieldParameters.add(new ParameterString("status"));
+            fieldParameters.add(new ParameterString("status\n"));
             return this;
         }
 
         public FieldBuilder status(int version) {
-            fieldParameters.add(new ParameterString("status(version: " + version + ")"));
+            fieldParameters.add(new ParameterString("status(version: " + version + ")\n"));
             return this;
         }
 
-        public FieldBuilder description(boolean asHtml) {
-            fieldParameters.add(new ParameterString(asHtml ? "description(asHtml: true)" : "description"));
+        public FieldBuilder description() {
+            fieldParameters.add(new ParameterString("description\n"));
+            return this;
+        }
+
+        public FieldBuilder descriptionAsHtml() {
+            fieldParameters.add(new ParameterString("description(asHtml: true)\n"));
             return this;
         }
 
         public FieldBuilder source() {
-            fieldParameters.add(new ParameterString("source"));
+            fieldParameters.add(new ParameterString("source\n"));
             return this;
         }
 
         public FieldBuilder source(int version) {
-            fieldParameters.add(new ParameterString("source(version: " + version + ")"));
+            fieldParameters.add(new ParameterString("source(version: " + version + ")\n"));
             return this;
         }
 
         public FieldBuilder externalLinks(MediaExternalLinks externalLink) {
-            fieldParameters.add(new ParameterString(externalLink.getMediaExternalLinkString()));
+            fieldParameters.add(new ParameterString(externalLink.getMediaExternalLinkString() + "\n"));
             return this;
         }
 
         public FieldBuilder ranking(MediaRank rank) {
-            fieldParameters.add(new ParameterString(rank.getMediaRankString()));
+            fieldParameters.add(new ParameterString(rank.getMediaRankString() + "\n"));
             return this;
         }
 
         public FieldBuilder fuzzyDate(FuzzyDateField fuzzyDate) {
-            fieldParameters.add(new ParameterString(fuzzyDate.getFuzzyDateString()));
+            fieldParameters.add(new ParameterString(fuzzyDate.getFuzzyDateString() + "\n"));
             return this;
         }
 
         public FieldBuilder streamingEpisodes(MediaStreamingEpisodes episode) {
-            fieldParameters.add(new ParameterString(episode.getMediaStreamingEpisodeString()));
+            fieldParameters.add(new ParameterString(episode.getMediaStreamingEpisodeString() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder relations(MediaConnection connection) {
+            fieldParameters.add(new ParameterString("relations " + connection.getMediaConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder characters(CharacterConnection characterConnection) {
+            fieldParameters.add(new ParameterString("characters " + characterConnection.getStaffWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder characters(CharacterArguments characterArguments, CharacterConnection characterConnection) {
+            fieldParameters.add(new ParameterString("characters" + characterArguments + " " + characterConnection.getStaffWithoutFieldName() + "\n"));
             return this;
         }
 
@@ -107,16 +130,13 @@ public class Field {
 
             StringBuilder builder = new StringBuilder("{\n");
 
-            fieldParameters.forEach(param -> {
-                builder.append(param).append("\n");
-            });
+            fieldParameters.forEach(builder::append);
 
             builder.append("}");
 
             return new Field(builder.toString());
         }
 
-        //public FieldBuilder addCharacter
         //public FieldBuilder addStaff
         //public FieldBuilder addStudios
         //public FieldBuilder addAiringSchedule

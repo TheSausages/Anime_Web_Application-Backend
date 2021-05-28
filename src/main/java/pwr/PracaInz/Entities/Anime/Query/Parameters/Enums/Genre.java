@@ -1,4 +1,4 @@
-package pwr.PracaInz.Entities.Anime.Query.Parameters;
+package pwr.PracaInz.Entities.Anime.Query.Parameters.Enums;
 
 public enum Genre {
     ACTION("Action"),

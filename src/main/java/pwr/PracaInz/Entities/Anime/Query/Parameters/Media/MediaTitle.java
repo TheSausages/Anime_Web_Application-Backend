@@ -2,11 +2,9 @@ package pwr.PracaInz.Entities.Anime.Query.Parameters.Media;
 
 import lombok.Getter;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.TitleLanguages;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Enums.TitleLanguages;
 
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.Map;
+import java.util.*;
 
 @Getter
 public class MediaTitle {
@@ -28,36 +26,46 @@ public class MediaTitle {
     public String getLanguages() { return this.toString(); }
 
     public static final class MediaTitleBuilder {
-        private final Map<ParameterString, Boolean> languages = new LinkedHashMap<>();
+        private final Set<ParameterString> languages = new LinkedHashSet<>();
 
-        public MediaTitleBuilder romajiLanguage(boolean stylized) {
-            languages.put(new ParameterString(TitleLanguages.Romaji.getProperFieldString()), stylized);
+        public MediaTitleBuilder romajiLanguage() {
+            languages.add(new ParameterString(TitleLanguages.Romaji.getProperFieldString()));
             return this;
         }
 
-        public MediaTitleBuilder englishLanguage(boolean stylized) {
-            languages.put(new ParameterString(TitleLanguages.English.getProperFieldString()), stylized);
+        public MediaTitleBuilder romajiLanguageStylized() {
+            languages.add(new ParameterString(TitleLanguages.Romaji.getProperFieldString() + "(stylized: true)"));
             return this;
         }
 
-        public MediaTitleBuilder nativeLanguage(boolean stylized) {
-            languages.put(new ParameterString(TitleLanguages.Native.getProperFieldString()), stylized);
+        public MediaTitleBuilder englishLanguage() {
+            languages.add(new ParameterString(TitleLanguages.English.getProperFieldString()));
+            return this;
+        }
+
+        public MediaTitleBuilder englishLanguageStylized() {
+            languages.add(new ParameterString(TitleLanguages.English.getProperFieldString() + "(stylized: true)"));
+            return this;
+        }
+
+        public MediaTitleBuilder nativeLanguage() {
+            languages.add(new ParameterString(TitleLanguages.Native.getProperFieldString()));
+            return this;
+        }
+
+        public MediaTitleBuilder nativeLanguageStylized() {
+            languages.add(new ParameterString(TitleLanguages.Native.getProperFieldString() + "(stylized: true)"));
             return this;
         }
 
         public MediaTitle buildMediaTitle() {
             if (languages.isEmpty()) { throw new IllegalStateException("At least 1 language must be selected!"); }
 
-            StringBuilder languageBuilder = new StringBuilder("title {");
-
-            languages.forEach((lan, stylized) -> {
-                languageBuilder.append("\n").append(lan);
-
-                if (stylized) {
-                    languageBuilder.append("(stylized: true)");
-                }
+            StringBuilder languageBuilder = new StringBuilder("title {\n");
+            languages.forEach(lan -> {
+                languageBuilder.append(lan).append("\n");
             });
-            languageBuilder.append("\n").append("}");
+            languageBuilder.append("}");
 
             return new MediaTitle(languageBuilder.toString());
         }

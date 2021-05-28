@@ -31,7 +31,7 @@ public class MediaRank {
             return this;
         }
 
-        public MediaRankBuilder rankNumber() {
+        public MediaRankBuilder rank() {
             mediaRank.add(new ParameterString("rank\n"));
             return this;
         }

@@ -14,7 +14,7 @@ public class ParameterString {
 
     @Override
     public int hashCode() {
-        return new HashCodeBuilder(17, 37).append(field.split("[ (]")[0]).toHashCode();
+        return new HashCodeBuilder(17, 37).append(field.split("[ (\n]")[0]).toHashCode();
     }
 
     @Override
@@ -30,6 +30,6 @@ public class ParameterString {
 
         ParameterString that = (ParameterString) o;
 
-        return new EqualsBuilder().append(field.split("[ (]")[0], that.getField().split("[ (]")[0]).isEquals();
+        return new EqualsBuilder().append(field.split("[ (\n]")[0], that.getField().split("[ (\n]")[0]).isEquals();
     }
 }
