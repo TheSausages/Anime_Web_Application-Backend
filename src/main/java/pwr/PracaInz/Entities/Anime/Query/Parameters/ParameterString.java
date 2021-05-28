@@ -5,10 +5,10 @@ import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 @Getter
-public class FieldString {
+public class ParameterString {
     private final String field;
 
-    public FieldString(String field) {
+    public ParameterString(String field) {
         this.field = field;
     }
 
@@ -28,7 +28,7 @@ public class FieldString {
 
         if (o == null || getClass() != o.getClass()) return false;
 
-        FieldString that = (FieldString) o;
+        ParameterString that = (ParameterString) o;
 
         return new EqualsBuilder().append(field.split("[ (]")[0], that.getField().split("[ (]")[0]).isEquals();
     }

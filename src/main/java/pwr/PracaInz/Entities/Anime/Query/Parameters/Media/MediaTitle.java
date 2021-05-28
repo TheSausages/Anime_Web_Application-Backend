@@ -1,15 +1,18 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Media;
 
+import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.TitleLanguages;
 
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+@Getter
 public class MediaTitle {
-    private final Map<String, Boolean> languages;
+    private final String languages;
 
-    private MediaTitle(Map<String, Boolean> languages) {
+    private MediaTitle(String languages) {
         this.languages = languages;
     }
 
@@ -19,44 +22,44 @@ public class MediaTitle {
 
     @Override
     public String toString() {
-        StringBuilder builder = new StringBuilder("title {");
-
-        languages.forEach((lan, stylized) -> {
-            builder.append("\n").append(lan);
-
-            if (stylized) {
-                builder.append("(stylized: true)");
-            }
-        });
-        builder.append("\n").append("}");
-
-        return builder.toString();
+        return languages;
     }
 
     public String getLanguages() { return this.toString(); }
 
     public static final class MediaTitleBuilder {
-        private final Map<String, Boolean> titles = new LinkedHashMap<>();
+        private final Map<ParameterString, Boolean> languages = new LinkedHashMap<>();
 
         public MediaTitleBuilder romajiLanguage(boolean stylized) {
-            titles.put(TitleLanguages.Romaji.getProperFieldString(), stylized);
+            languages.put(new ParameterString(TitleLanguages.Romaji.getProperFieldString()), stylized);
             return this;
         }
 
         public MediaTitleBuilder englishLanguage(boolean stylized) {
-            titles.put(TitleLanguages.English.getProperFieldString(), stylized);
+            languages.put(new ParameterString(TitleLanguages.English.getProperFieldString()), stylized);
             return this;
         }
 
         public MediaTitleBuilder nativeLanguage(boolean stylized) {
-            titles.put(TitleLanguages.Native.getProperFieldString(), stylized);
+            languages.put(new ParameterString(TitleLanguages.Native.getProperFieldString()), stylized);
             return this;
         }
 
         public MediaTitle buildMediaTitle() {
-            if (titles.isEmpty()) { throw new IllegalStateException("At least 1 language must be selected!"); }
+            if (languages.isEmpty()) { throw new IllegalStateException("At least 1 language must be selected!"); }
 
-            return new MediaTitle(titles);
+            StringBuilder languageBuilder = new StringBuilder("title {");
+
+            languages.forEach((lan, stylized) -> {
+                languageBuilder.append("\n").append(lan);
+
+                if (stylized) {
+                    languageBuilder.append("(stylized: true)");
+                }
+            });
+            languageBuilder.append("\n").append("}");
+
+            return new MediaTitle(languageBuilder.toString());
         }
     }
 }

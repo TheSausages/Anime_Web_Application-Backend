@@ -1,6 +1,7 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Media;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,25 +24,25 @@ public class MediaStreamingEpisodes {
     }
 
     public final static class MediaStreamingEpisodesBuilder {
-        private final Set<String> mediaStreamingEpisode = new LinkedHashSet<>();
+        private final Set<ParameterString> mediaStreamingEpisode = new LinkedHashSet<>();
 
         public MediaStreamingEpisodesBuilder title() {
-            mediaStreamingEpisode.add("title\n");
+            mediaStreamingEpisode.add(new ParameterString("title\n"));
             return this;
         }
 
         public MediaStreamingEpisodesBuilder url() {
-            mediaStreamingEpisode.add("url\n");
+            mediaStreamingEpisode.add(new ParameterString("url\n"));
             return this;
         }
 
         public MediaStreamingEpisodesBuilder site() {
-            mediaStreamingEpisode.add("site\n");
+            mediaStreamingEpisode.add(new ParameterString("site\n"));
             return this;
         }
 
         public MediaStreamingEpisodesBuilder thumbnail() {
-            mediaStreamingEpisode.add("thumbnail\n");
+            mediaStreamingEpisode.add(new ParameterString("thumbnail\n"));
             return this;
         }
 

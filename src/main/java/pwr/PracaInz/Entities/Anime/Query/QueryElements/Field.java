@@ -2,7 +2,7 @@ package pwr.PracaInz.Entities.Anime.Query.QueryElements;
 
 import lombok.Getter;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldString;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaExternalLinks;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaRank;
@@ -30,105 +30,75 @@ public class Field {
     }
 
     public static final class FieldBuilder {
-        private final Set<FieldString> fieldParameters = new LinkedHashSet<>();
+        private final Set<ParameterString> fieldParameters = new LinkedHashSet<>();
 
         public FieldBuilder parameter(FieldParameters parameter) {
-            if (fieldParameters.contains(new FieldString(parameter.name()))) return this;
-
-            fieldParameters.add(new FieldString(parameter.name()));
+            fieldParameters.add(new ParameterString(parameter.name()));
             return this;
         }
 
         public FieldBuilder title(MediaTitle titles) {
-            if (fieldParameters.contains(new FieldString(titles.toString()))) return this;
-
-            fieldParameters.add(new FieldString(titles.toString()));
+            fieldParameters.add(new ParameterString(titles.toString()));
             return this;
         }
 
-        public FieldBuilder trailer() {
-            if (fieldParameters.contains(new FieldString("trailer {\nid\nsite\nthumbnail\n}"))) return this;
-
-            fieldParameters.add(new FieldString("trailer {\nid\nsite\nthumbnail\n}"));
+        public FieldBuilder trailer() { ;
+            fieldParameters.add(new ParameterString("trailer {\nid\nsite\nthumbnail\n}"));
             return this;
         }
 
         public FieldBuilder tags() {
-            if (fieldParameters.contains(new FieldString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}"))) return this;
-
-            fieldParameters.add(new FieldString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}"));
+            fieldParameters.add(new ParameterString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}"));
             return this;
         }
 
         public FieldBuilder nextAiringEpisode() {
-            if (fieldParameters.contains(new FieldString("nextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}"))) return this;
-
-            fieldParameters.add(new FieldString("nextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}"));
+            fieldParameters.add(new ParameterString("nextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}"));
             return this;
         }
 
         public FieldBuilder status() {
-            if (fieldParameters.contains(new FieldString("status"))) {
-                return this;
-            }
-
-            fieldParameters.add(new FieldString("status"));
+            fieldParameters.add(new ParameterString("status"));
             return this;
         }
 
         public FieldBuilder status(int version) {
-            if (fieldParameters.contains(new FieldString("status"))) return this;
-
-            fieldParameters.add(new FieldString("status(version: " + version + ")"));
+            fieldParameters.add(new ParameterString("status(version: " + version + ")"));
             return this;
         }
 
         public FieldBuilder description(boolean asHtml) {
-            if (fieldParameters.contains(new FieldString("description"))) return this;
-
-            fieldParameters.add(new FieldString(asHtml ? "description(asHtml: true)" : "description"));
+            fieldParameters.add(new ParameterString(asHtml ? "description(asHtml: true)" : "description"));
             return this;
         }
 
         public FieldBuilder source() {
-            if (fieldParameters.contains(new FieldString("source"))) return this;
-
-            fieldParameters.add(new FieldString("source"));
+            fieldParameters.add(new ParameterString("source"));
             return this;
         }
 
         public FieldBuilder source(int version) {
-            if (fieldParameters.contains(new FieldString("source"))) return this;
-
-            fieldParameters.add(new FieldString("source(version: " + version + ")"));
+            fieldParameters.add(new ParameterString("source(version: " + version + ")"));
             return this;
         }
 
         public FieldBuilder externalLinks(MediaExternalLinks externalLink) {
-            if (fieldParameters.contains(new FieldString(externalLink.getMediaExternalLinkString()))) return this;
-
-            fieldParameters.add(new FieldString(externalLink.getMediaExternalLinkString()));
+            fieldParameters.add(new ParameterString(externalLink.getMediaExternalLinkString()));
             return this;
         }
 
         public FieldBuilder ranking(MediaRank rank) {
-            if (fieldParameters.contains(new FieldString(rank.getMediaRankString()))) return this;
-
-            fieldParameters.add(new FieldString(rank.getMediaRankString()));
+            fieldParameters.add(new ParameterString(rank.getMediaRankString()));
             return this;
         }
 
         public FieldBuilder fuzzyDate(FuzzyDateField fuzzyDate) {
-            if (fieldParameters.contains(new FieldString(fuzzyDate.getFuzzyDateString()))) return this;
-
-            fieldParameters.add(new FieldString(fuzzyDate.getFuzzyDateString()));
+            fieldParameters.add(new ParameterString(fuzzyDate.getFuzzyDateString()));
             return this;
         }
 
         public FieldBuilder streamingEpisodes(MediaStreamingEpisodes episode) {
-            if (fieldParameters.contains(new FieldString(episode.getMediaStreamingEpisodeString()))) return this;
-
-            fieldParameters.add(new FieldString(episode.getMediaStreamingEpisodeString()));
+            fieldParameters.add(new ParameterString(episode.getMediaStreamingEpisodeString()));
             return this;
         }
 

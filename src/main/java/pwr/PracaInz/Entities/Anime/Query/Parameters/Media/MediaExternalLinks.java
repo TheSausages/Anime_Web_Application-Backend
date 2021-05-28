@@ -1,6 +1,7 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Media;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,20 +24,20 @@ public class MediaExternalLinks {
     }
 
     public static final class MediaExternalLinkStringBuilder {
-        private final Set<String> mediaExternalLink = new LinkedHashSet<>();
+        private final Set<ParameterString> mediaExternalLink = new LinkedHashSet<>();
 
         public MediaExternalLinkStringBuilder addId() {
-            mediaExternalLink.add("id\n");
+            mediaExternalLink.add(new ParameterString("id\n"));
             return this;
         }
 
         public MediaExternalLinkStringBuilder addUrl() {
-            mediaExternalLink.add("url\n");
+            mediaExternalLink.add(new ParameterString("url\n"));
             return this;
         }
 
         public MediaExternalLinkStringBuilder addSite() {
-            mediaExternalLink.add("site\n");
+            mediaExternalLink.add(new ParameterString("site\n"));
             return this;
         }
 

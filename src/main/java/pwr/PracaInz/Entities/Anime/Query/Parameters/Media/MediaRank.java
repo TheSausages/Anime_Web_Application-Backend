@@ -1,6 +1,7 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Media;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.LinkedHashSet;
 import java.util.Set;
@@ -23,45 +24,45 @@ public class MediaRank {
     }
 
     public static final class MediaRankBuilder {
-        private final Set<String> mediaRank= new LinkedHashSet<>();
+        private final Set<ParameterString> mediaRank= new LinkedHashSet<>();
 
         public MediaRankBuilder id() {
-            mediaRank.add("id\n");
+            mediaRank.add(new ParameterString("id\n"));
             return this;
         }
 
         public MediaRankBuilder rankNumber() {
-            mediaRank.add("rank\n");
+            mediaRank.add(new ParameterString("rank\n"));
             return this;
         }
 
         public MediaRankBuilder type() {
-            mediaRank.add("type\n");
+            mediaRank.add(new ParameterString("type\n"));
             return this;
         }
 
         public MediaRankBuilder format() {
-            mediaRank.add("format\n");
+            mediaRank.add(new ParameterString("format\n"));
             return this;
         }
 
         public MediaRankBuilder year() {
-            mediaRank.add("year\n");
+            mediaRank.add(new ParameterString("year\n"));
             return this;
         }
 
         public MediaRankBuilder season() {
-            mediaRank.add("season\n");
+            mediaRank.add(new ParameterString("season\n"));
             return this;
         }
 
         public MediaRankBuilder allTime() {
-            mediaRank.add("allTime\n");
+            mediaRank.add(new ParameterString("allTime\n"));
             return this;
         }
 
         public MediaRankBuilder context() {
-            mediaRank.add("context\n");
+            mediaRank.add(new ParameterString("context\n"));
             return this;
         }
 

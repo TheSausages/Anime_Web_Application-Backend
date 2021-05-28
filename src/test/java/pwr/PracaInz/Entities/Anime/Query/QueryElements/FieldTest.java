@@ -16,10 +16,8 @@ class FieldTest {
         //given
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
-            Field.getFieldBuilder()
-                    .buildField();
-        });
+        Exception exception = assertThrows(IllegalStateException.class, () -> Field.getFieldBuilder()
+                .buildField());
 
         //then
         assertEquals(exception.getMessage(), "Field must have at least 1 Parameter");
@@ -372,7 +370,7 @@ class FieldTest {
 
         //when
         Field field = Field.getFieldBuilder()
-                .source(2)
+                .source(version)
                 .buildField();
 
         //then
@@ -508,8 +506,7 @@ class FieldTest {
                 .buildFuzzyDateField();
         FieldParameters parameter1 = FieldParameters.startDate;
         FuzzyDateField fuzzyField1 = FuzzyDateField.getFuzzyDateFieldBuilder(parameter1)
-                .all()
-                .buildFuzzyDateField();
+                .allAndBuild();
 
         //when
         Field field = Field.getFieldBuilder()
@@ -530,8 +527,7 @@ class FieldTest {
                 .buildFuzzyDateField();
         FieldParameters parameter1 = FieldParameters.endDate;
         FuzzyDateField fuzzyField1 = FuzzyDateField.getFuzzyDateFieldBuilder(parameter1)
-                .all()
-                .buildFuzzyDateField();
+                .allAndBuild();
 
         //when
         Field field = Field.getFieldBuilder()
@@ -635,11 +631,9 @@ class FieldTest {
                 .season()
                 .buildMediaRank();
         FuzzyDateField startDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.startDate)
-                .all()
-                .buildFuzzyDateField();
+                .allAndBuild();
         FuzzyDateField endDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.endDate)
-                .all()
-                .buildFuzzyDateField();
+                .allAndBuild();
         MediaStreamingEpisodes episodes = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
                 .title()
                 .thumbnail()

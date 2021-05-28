@@ -12,10 +12,8 @@ class FuzzyDateFieldTest {
         FieldParameters parameter = null;
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
-                    .buildFuzzyDateField();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
+                .buildFuzzyDateField());
 
         //then
         assertEquals(exception.getMessage(), "The FieldParameters param should be of FuzzyDate Type!");
@@ -27,10 +25,7 @@ class FuzzyDateFieldTest {
         FieldParameters parameter = FieldParameters.id;
 
         //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> {
-            FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
-                    .buildFuzzyDateField();
-        });
+        Exception exception = assertThrows(IllegalArgumentException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter).buildFuzzyDateField());
 
         //then
         assertEquals(exception.getMessage(), "The FieldParameters param should be of FuzzyDate Type!");
@@ -42,10 +37,8 @@ class FuzzyDateFieldTest {
         FieldParameters parameter = FieldParameters.startDate;
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
-            FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
-                    .buildFuzzyDateField();
-        });
+        Exception exception = assertThrows(IllegalStateException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
+                .buildFuzzyDateField());
 
         //then
         assertEquals(exception.getMessage(), "Fuzzy Date should posses at least 1 parameter!");
@@ -130,8 +123,7 @@ class FuzzyDateFieldTest {
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
-                .all()
-                .buildFuzzyDateField();
+                .allAndBuild();
 
         //then
         assertEquals(dateField.toString(), "startDate {\nyear\nmonth\nday\n}");

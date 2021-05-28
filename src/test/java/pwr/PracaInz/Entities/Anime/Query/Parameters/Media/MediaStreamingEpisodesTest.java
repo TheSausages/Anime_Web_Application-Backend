@@ -10,16 +10,14 @@ class MediaStreamingEpisodesTest {
         //given
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> {
-           MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
-                   .buildMediaRank();
-        });
+        Exception exception = assertThrows(IllegalStateException.class, () -> MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .buildMediaRank());
 
         assertEquals(exception.getMessage(), "Streaming Episodes should posses at least 1 parameter!");
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_Title_ThrowException() {
+    void MediaStreamingEpisodeBuilder_Title_NoException() {
         //given
 
         //when
@@ -31,7 +29,20 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_Url_ThrowException() {
+    void MediaStreamingEpisodeBuilder_ManyTitle_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .title()
+                .title()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\ntitle\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_Url_NoException() {
         //given
 
         //when
@@ -43,7 +54,21 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_Site_ThrowException() {
+    void MediaStreamingEpisodeBuilder_ManyUrl_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .url()
+                .url()
+                .url()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\nurl\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_Site_NoException() {
         //given
 
         //when
@@ -55,7 +80,20 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_Thumbnail_ThrowException() {
+    void MediaStreamingEpisodeBuilder_ManySite_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .site()
+                .site()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\nsite\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_Thumbnail_NoException() {
         //given
 
         //when
@@ -67,7 +105,20 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_TitleAndSite_ThrowException() {
+    void MediaStreamingEpisodeBuilder_ManyThumbnail_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .thumbnail()
+                .thumbnail()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\nthumbnail\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_TitleAndSite_NoException() {
         //given
 
         //when
@@ -80,7 +131,22 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_ThumbnailAndUrlAndTitle_ThrowException() {
+    void MediaStreamingEpisodeBuilder_TitleAndSiteAndManyThumbnail_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .title()
+                .thumbnail()
+                .site()
+                .thumbnail()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\ntitle\nthumbnail\nsite\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_ThumbnailAndUrlAndTitle_NoException() {
         //given
 
         //when
@@ -94,7 +160,7 @@ class MediaStreamingEpisodesTest {
     }
 
     @Test
-    void MediaStreamingEpisodeBuilder_All_ThrowException() {
+    void MediaStreamingEpisodeBuilder_All_NoException() {
         //given
 
         //when
@@ -106,5 +172,22 @@ class MediaStreamingEpisodesTest {
                 .buildMediaRank();
 
         assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\nthumbnail\ntitle\nurl\nsite\n}");
+    }
+
+    @Test
+    void MediaStreamingEpisodeBuilder_AllWithManyUrlAndManySite_NoException() {
+        //given
+
+        //when
+        MediaStreamingEpisodes episode = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
+                .thumbnail()
+                .url()
+                .site()
+                .title()
+                .site()
+                .url()
+                .buildMediaRank();
+
+        assertEquals(episode.getMediaStreamingEpisodeString(), "streamingEpisodes {\nthumbnail\nurl\nsite\ntitle\n}");
     }
 }
