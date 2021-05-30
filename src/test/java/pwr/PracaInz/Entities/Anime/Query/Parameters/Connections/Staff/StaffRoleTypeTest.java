@@ -19,53 +19,69 @@ class StaffRoleTypeTest {
     @Test
     void StaffROleTypeBuilder_VoiceActor_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .age()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeString(), "staffRoleType {\nvoiceActor\n}");
+        assertEquals(type.getStaffRoleTypeString(), "staffRoleType {\nvoiceActor {\nage\n}\n}");
     }
 
     @Test
     void StaffROleTypeBuilder_ManyVoiceActor_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .homeTown()
+                .buildStaff();
+        Staff staff1 = Staff.getStaffBuilder()
+                .age()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
-                .voiceActor()
-                .voiceActor()
+                .voiceActor(staff)
+                .voiceActor(staff1)
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeString(), "staffRoleType {\nvoiceActor\n}");
+        assertEquals(type.getStaffRoleTypeString(), "staffRoleType {\nvoiceActor {\nhomeTown\n}\n}");
     }
 
     @Test
     void StaffROleTypeBuilder_VoiceActorNoFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .homeTown()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor\n}");
+        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor {\nhomeTown\n}\n}");
     }
 
     @Test
     void StaffROleTypeBuilder_ManyVoiceActorNoFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .image()
+                .buildStaff();
+        Staff staff1 = Staff.getStaffBuilder()
+                .homeTown()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
-                .voiceActor()
-                .voiceActor()
+                .voiceActor(staff)
+                .voiceActor(staff1)
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor\n}");
+        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor {\nimage {\nlarge\nmedium\n}\n}\n}");
     }
 
     @Test
@@ -175,14 +191,17 @@ class StaffRoleTypeTest {
     @Test
     void StaffROleTypeBuilder_VoiceActorAndDubGroupNoFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .image()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .dubGroup()
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor\ndubGroup\n}");
+        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor {\nimage {\nlarge\nmedium\n}\n}\ndubGroup\n}");
     }
 
     @Test
@@ -202,29 +221,35 @@ class StaffRoleTypeTest {
     @Test
     void StaffROleTypeBuilder_All_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .image()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .dubGroup()
                 .roleNotes()
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor\ndubGroup\nroleNotes\n}");
+        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor {\nimage {\nlarge\nmedium\n}\n}\ndubGroup\nroleNotes\n}");
     }
 
     @Test
     void StaffROleTypeBuilder_AllANdManyDubGroups_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .image()
+                .buildStaff();
 
         //when
         StaffRoleType type = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .dubGroup()
                 .roleNotes()
                 .dubGroup()
                 .buildStaffRoleType();
 
-        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor\ndubGroup\nroleNotes\n}");
+        assertEquals(type.getStaffRoleTypeStringWithoutFieldName(), "{\nvoiceActor {\nimage {\nlarge\nmedium\n}\n}\ndubGroup\nroleNotes\n}");
     }
 }

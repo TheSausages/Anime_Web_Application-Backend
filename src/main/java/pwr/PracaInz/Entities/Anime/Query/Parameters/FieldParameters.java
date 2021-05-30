@@ -6,6 +6,8 @@ public enum FieldParameters {
     type("MediaType"),
     format("MediaFormat"),
     startDate("FuzzyDate"),
+    dateOfBirth("FuzzyDate"),
+    dateOfDeath("FuzzyDate"),
     endDate("FuzzyDate"),
     status("MediaStatus"),
     season("MediaSeason"),

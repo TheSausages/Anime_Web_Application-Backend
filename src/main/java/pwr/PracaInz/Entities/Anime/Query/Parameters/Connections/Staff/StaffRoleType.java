@@ -23,29 +23,29 @@ public class StaffRoleType {
     }
 
     public static final class StaffRoleTypeBuilder {
-        private final Set<ParameterString> staff = new LinkedHashSet<>();
+        private final Set<ParameterString> staffRoleType = new LinkedHashSet<>();
 
-        public StaffRoleTypeBuilder voiceActor() {
-            staff.add(new ParameterString("voiceActor\n"));
+        public StaffRoleTypeBuilder voiceActor(Staff staff) {
+            staffRoleType.add(new ParameterString("voiceActor " + staff.getStaffWithoutFieldName() + "\n"));
             return this;
         }
 
         public StaffRoleTypeBuilder roleNotes() {
-            staff.add(new ParameterString("roleNotes\n"));
+            staffRoleType.add(new ParameterString("roleNotes\n"));
             return this;
         }
 
         public StaffRoleTypeBuilder dubGroup() {
-            staff.add(new ParameterString("dubGroup\n"));
+            staffRoleType.add(new ParameterString("dubGroup\n"));
             return this;
         }
 
         public StaffRoleType buildStaffRoleType() {
-            if (staff.isEmpty()) { throw new IllegalStateException("Staff Role Type should posses at least 1 parameter!"); }
+            if (staffRoleType.isEmpty()) { throw new IllegalStateException("Staff Role Type should posses at least 1 parameter!"); }
 
             StringBuilder StaffBuilder = new StringBuilder("staffRoleType {\n");
 
-            staff.forEach(StaffBuilder::append);
+            staffRoleType.forEach(StaffBuilder::append);
 
             StaffBuilder.append("}");
 

@@ -10,9 +10,11 @@ import java.util.Set;
 @Getter
 public class FuzzyDateField {
     private final String fuzzyDateString;
+    private final FieldParameters parameter;
 
-    private FuzzyDateField(String fuzzyDateString) {
+    private FuzzyDateField(String fuzzyDateString, FieldParameters parameter) {
         this.fuzzyDateString = fuzzyDateString;
+        this.parameter = parameter;
     }
 
     public static FuzzyDateFieldBuilder getFuzzyDateFieldBuilder(FieldParameters parameter) {
@@ -26,6 +28,10 @@ public class FuzzyDateField {
     @Override
     public String toString() {
         return fuzzyDateString;
+    }
+
+    public String getFuzzyDateStringWithoutFieldName() {
+        return this.getFuzzyDateString().substring(parameter.toString().length());
     }
 
     public final static class FuzzyDateFieldBuilder {
@@ -63,7 +69,7 @@ public class FuzzyDateField {
             fuzzyDate.forEach(fuzzyDateBuilder::append);
             fuzzyDateBuilder.append("}");
 
-            return new FuzzyDateField(fuzzyDateBuilder.toString());
+            return new FuzzyDateField(fuzzyDateBuilder.toString(), parameter);
          }
     }
 }

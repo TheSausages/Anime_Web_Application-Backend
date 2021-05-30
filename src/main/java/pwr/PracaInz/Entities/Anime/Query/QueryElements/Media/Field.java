@@ -1,9 +1,15 @@
 package pwr.PracaInz.Entities.Anime.Query.QueryElements.Media;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringScheduleArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringScheduleConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSort;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
@@ -12,6 +18,7 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaRank;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaStreamingEpisodes;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
 
+import java.util.Arrays;
 import java.util.LinkedHashSet;
 import java.util.Set;
 
@@ -116,14 +123,45 @@ public class Field {
         }
 
         public FieldBuilder characters(CharacterConnection characterConnection) {
-            fieldParameters.add(new ParameterString("characters " + characterConnection.getStaffWithoutFieldName() + "\n"));
+            fieldParameters.add(new ParameterString("characters " + characterConnection.getCharacterConnectionWithoutFieldName() + "\n"));
             return this;
         }
 
         public FieldBuilder characters(CharacterArguments characterArguments, CharacterConnection characterConnection) {
-            fieldParameters.add(new ParameterString("characters" + characterArguments + " " + characterConnection.getStaffWithoutFieldName() + "\n"));
+            fieldParameters.add(new ParameterString("characters" + characterArguments + " " + characterConnection.getCharacterConnectionWithoutFieldName() + "\n"));
             return this;
         }
+
+        public FieldBuilder staff(StaffConnection staffConnection) {
+            fieldParameters.add(new ParameterString("staff " + staffConnection.getStaffConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder staff(StaffArguments staffArguments, StaffConnection staffConnection) {
+            fieldParameters.add(new ParameterString("staff" + staffArguments.getStaffArgumentsString() + " " + staffConnection.getStaffConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder studios(StudioConnection studioConnection) {
+            fieldParameters.add(new ParameterString("studios " + studioConnection.getStudioConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder studios(StudioSort[] sorts, StudioConnection studioConnection) {
+            fieldParameters.add(new ParameterString("studios(sort: " + Arrays.toString(sorts) + ") " + studioConnection.getStudioConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder airingSchedule(AiringScheduleConnection airingScheduleConnection) {
+            fieldParameters.add(new ParameterString("airingSchedule " + airingScheduleConnection.getAiringScheduleConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder airingSchedule(AiringScheduleArguments airingScheduleArguments, AiringScheduleConnection airingScheduleConnection) {
+            fieldParameters.add(new ParameterString("airingSchedule" + airingScheduleArguments.getAiringScheduleArgumentsString() +  " " + airingScheduleConnection.getAiringScheduleConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
 
         public Field buildField() {
             if (fieldParameters.isEmpty()) { throw new IllegalStateException("Field must have at least 1 Parameter"); }

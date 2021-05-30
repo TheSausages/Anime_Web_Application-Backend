@@ -1,8 +1,17 @@
 package pwr.PracaInz.Entities.Anime.Query.QueryElements;
 
 import org.junit.jupiter.api.Test;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringSchedule;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringScheduleArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringScheduleConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringScheduleEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaEdge;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.Studio;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSort;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
@@ -640,7 +649,7 @@ class FieldTest {
     void FieldBuilder_ManyCharactersWithCharacterArguments_NoException() {
         //given
         CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
-                .mediaSort(new MediaSort[]{MediaSort.TYPE})
+                .mediaSort(new CharacterSort[]{CharacterSort.ROLE})
                 .buildCharacterMediaArguments();
         CharacterArguments arguments1 = CharacterArguments.getCharacterArgumentsBuilder()
                 .perPage(12)
@@ -665,7 +674,104 @@ class FieldTest {
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\ncharacters(sort: [TYPE]) {\nnodes {\nid\n}\n}\n}");
+        assertEquals(field.toString(), "{\ncharacters(sort: [ROLE]) {\nnodes {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Relations_NoException() {
+        //given
+        MediaEdge mediaEdge = MediaEdge.getMediaConnectionBuilder()
+                .staffRole()
+                .buildMediaEdge();
+        MediaConnection mediaConnection = MediaConnection.getMediaConnectionBuilder()
+                .edge(mediaEdge)
+                .buildMediaConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .relations(mediaConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nrelations {\nedges {\nstaffRole\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Studios_NoException() {
+        //given
+        Studio studio = Studio.getStudioBuilder()
+                .name()
+                .buildStudio();
+        StudioConnection studioConnection = StudioConnection.getStudioConnectionBuilder()
+                .nodes(studio)
+                .buildStudioConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .studios(studioConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nstudios {\nnodes {\nname\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_StudiosWithSort_NoException() {
+        //given
+        StudioSort[] sorts = new StudioSort[]{StudioSort.NAME, StudioSort.ID};
+        Studio studio = Studio.getStudioBuilder()
+                .name()
+                .buildStudio();
+        StudioConnection studioConnection = StudioConnection.getStudioConnectionBuilder()
+                .nodes(studio)
+                .buildStudioConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .studios(sorts, studioConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nstudios(sort: [NAME, ID]) {\nnodes {\nname\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_AiringSchedule_NoException() {
+        //given
+        AiringScheduleEdge airingScheduleEdge = new AiringScheduleEdge();
+        AiringScheduleConnection airingScheduleConnection = AiringScheduleConnection.getAiringScheduleConnectionBuilder()
+                .edges(airingScheduleEdge)
+                .buildAiringScheduleConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .airingSchedule(airingScheduleConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nairingSchedule {\nedges {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_AiringScheduleWithArguments_NoException() {
+        //given
+        AiringScheduleArguments airingScheduleArguments = AiringScheduleArguments.getAiringScheduleArgumentsBuilder()
+                .notYetAired()
+                .buildCharacterMediaArguments();
+        AiringSchedule airingSchedule = AiringSchedule.getAiringScheduleBuilder()
+                .timeUntilAiring()
+                .buildAiringSchedule();
+        AiringScheduleConnection airingScheduleConnection = AiringScheduleConnection.getAiringScheduleConnectionBuilder()
+                .nodes(airingSchedule)
+                .buildAiringScheduleConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .airingSchedule(airingScheduleArguments, airingScheduleConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nairingSchedule(notYetAired: true) {\nnodes {\ntimeUntilAiring\n}\n}\n}");
     }
 
     @Test
@@ -772,6 +878,6 @@ class FieldTest {
         assertEquals(field.toString(), "{\nid\naverageScore\ntitle {\nenglish\nromaji(stylized: true)\n}\ntrailer {\nid\nsite\nthumbnail\n}\n" +
                 "tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}\nnextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}\n" +
                 "status(version: 2)\ndescription\nsource\nexternalLinks {\nid\nurl\n}\nranking {\nrank\nyear\nseason\n}\nstartDate {\nyear\nmonth\nday\n}\nendDate {\nyear\nmonth\nday\n}\n" +
-                "streamingEpisodes {\ntitle\nthumbnail\nurl\n}\nisLicensed\ncharacters(role: MAIN) {\nedges {\nid\n}\nnodes {\nname\nage\n}\n}\n}");
+                "streamingEpisodes {\ntitle\nthumbnail\nurl\n}\nisLicensed\ncharacters(role: MAIN) {\nedges {\nid\n}\nnodes {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\nage\n}\n}\n}");
     }
 }

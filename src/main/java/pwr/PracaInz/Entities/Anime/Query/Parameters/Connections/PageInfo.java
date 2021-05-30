@@ -18,6 +18,10 @@ public class PageInfo {
         return new PageInfoBuilder();
     }
 
+    public String getPageInfoStringWithoutFieldName() {
+        return this.pageInfoString.substring(9);
+    }
+
     @Override
     public String toString() {
         return pageInfoString;

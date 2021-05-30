@@ -15,13 +15,13 @@ class CharacterArgumentsTest {
         Exception exception = assertThrows(IllegalStateException.class, () -> CharacterArguments.getCharacterArgumentsBuilder().buildCharacterMediaArguments());
 
         //then
-        assertEquals(exception.getMessage(), "Character should posses at least 1 parameter!");
+        assertEquals(exception.getMessage(), "Character Arguments should posses at least 1 parameter!");
     }
 
     @Test
     void CharacterArgumentsBuilder_MediaSort1Element_NoException() {
         //given
-        MediaSort[] sorts = new MediaSort[]{MediaSort.SCORE};
+        CharacterSort[] sorts = new CharacterSort[]{CharacterSort.ROLE};
 
         //when
         CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
@@ -29,14 +29,14 @@ class CharacterArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [SCORE])");
+        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [ROLE])");
     }
 
     @Test
     void CharacterArgumentsBuilder_ManyMediaSort1Element_NoException() {
         //given
-        MediaSort[] sorts = new MediaSort[]{MediaSort.SCORE};
-        MediaSort[] sorts1 = new MediaSort[]{MediaSort.ID};
+        CharacterSort[] sorts = new CharacterSort[]{CharacterSort.ROLE};
+        CharacterSort[] sorts1 = new CharacterSort[]{CharacterSort.ID};
 
         //when
         CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
@@ -45,13 +45,13 @@ class CharacterArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [SCORE])");
+        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [ROLE])");
     }
 
     @Test
     void CharacterArgumentsBuilder_MediaSortManyElement_NoException() {
         //given
-        MediaSort[] sorts = new MediaSort[]{MediaSort.SCORE, MediaSort.TYPE};
+        CharacterSort[] sorts = new CharacterSort[]{CharacterSort.ID, CharacterSort.RELEVANCE};
 
         //when
         CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
@@ -59,14 +59,14 @@ class CharacterArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [SCORE, TYPE])");
+        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [ID, RELEVANCE])");
     }
 
     @Test
     void CharacterArgumentsBuilder_ManyMediaSortManyElement_NoException() {
         //given
-        MediaSort[] sorts = new MediaSort[]{MediaSort.SCORE, MediaSort.TYPE};
-        MediaSort[] sorts1 = new MediaSort[]{MediaSort.START_DATE_DESC, MediaSort.EPISODES};
+        CharacterSort[] sorts1 = new CharacterSort[]{CharacterSort.ID, CharacterSort.RELEVANCE};
+        CharacterSort[] sorts = new CharacterSort[]{CharacterSort.FAVOURITES, CharacterSort.ROLE_DESC};
 
         //when
         CharacterArguments arguments = CharacterArguments.getCharacterArgumentsBuilder()
@@ -75,7 +75,7 @@ class CharacterArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [SCORE, TYPE])");
+        assertEquals(arguments.getCharacterArgumentsString(), "(sort: [FAVOURITES, ROLE_DESC])");
     }
 
     @Test
@@ -192,7 +192,7 @@ class CharacterArgumentsTest {
         int page = 5;
         int page1 = 10;
         int perPage = 14;
-        MediaSort[] sorts = new MediaSort[]{MediaSort.START_DATE_DESC, MediaSort.EPISODES};
+        CharacterSort[] sorts = new CharacterSort[]{CharacterSort.ID, CharacterSort.ROLE_DESC};
         CharacterRole role = CharacterRole.BACKGROUND;
         CharacterRole role1 = CharacterRole.SUPPORTING;
 
@@ -207,6 +207,6 @@ class CharacterArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterArgumentsString(), "(perPage: 14, page: 5, role: BACKGROUND, sort: [START_DATE_DESC, EPISODES])");
+        assertEquals(arguments.getCharacterArgumentsString(), "(perPage: 14, page: 5, role: BACKGROUND, sort: [ID, ROLE_DESC])");
     }
 }

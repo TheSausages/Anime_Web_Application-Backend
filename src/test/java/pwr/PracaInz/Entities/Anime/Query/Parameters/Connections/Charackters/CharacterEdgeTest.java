@@ -580,8 +580,11 @@ class CharacterEdgeTest {
     @Test
     void CharacterEdgeBuilder_VoiceActorsRoles_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .age()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -590,14 +593,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles {\nvoiceActor {\nage\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRoles_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .age()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -610,14 +616,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles {\nvoiceActor {\nage\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .age()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -626,14 +635,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles {\nvoiceActor {\nage\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .favourites()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -646,14 +658,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles {\nvoiceActor {\nfavourites\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithLanguage_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .favourites()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -662,14 +677,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor {\nfavourites\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithLanguage_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .favourites()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -682,14 +700,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor {\nfavourites\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithLanguageWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .siteUrl()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -698,14 +719,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor {\nsiteUrl\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithLanguageWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .siteUrl()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -718,14 +742,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: ENGLISH) {\nvoiceActor {\nsiteUrl\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithSort_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .siteUrl()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -734,14 +761,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor {\nsiteUrl\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithSort_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .yearsActive()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -754,14 +784,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor {\nyearsActive\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithSortWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .yearsActive()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -770,14 +803,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor {\nyearsActive\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithSortWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .yearsActive()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -790,14 +826,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(sort: [LANGUAGE]) {\nvoiceActor {\nyearsActive\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithLanguageAndSort_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .name()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -806,14 +845,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithLanguageAndSort_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .name()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -826,14 +868,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_VoiceActorsRolesWithLanguageAndSortWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .name()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
 
         //when
@@ -842,14 +887,17 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyVoiceActorsRolesWithLanguageAndSortWithoutFieldName_NoException() {
         //given
+        Staff staff = Staff.getStaffBuilder()
+                .name()
+                .buildStaff();
         StaffRoleType roleType = StaffRoleType.getStaffRoleTypeBuilder()
-                .voiceActor()
+                .voiceActor(staff)
                 .buildStaffRoleType();
         StaffRoleType roleType1 = StaffRoleType.getStaffRoleTypeBuilder()
                 .dubGroup()
@@ -862,6 +910,6 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
     }
 }

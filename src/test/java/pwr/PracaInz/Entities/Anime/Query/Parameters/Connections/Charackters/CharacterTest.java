@@ -1,6 +1,8 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters;
 
 import org.junit.jupiter.api.Test;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -76,7 +78,7 @@ class CharacterTest {
                 .name()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\nname\n}");
+        assertEquals(character.getCharacterString(), "character {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\n}");
     }
 
     @Test
@@ -90,7 +92,7 @@ class CharacterTest {
                 .name()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\nname\n}");
+        assertEquals(character.getCharacterString(), "character {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\n}");
     }
 
     @Test
@@ -102,7 +104,7 @@ class CharacterTest {
                 .name()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nname\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\n}");
     }
 
     @Test
@@ -116,7 +118,7 @@ class CharacterTest {
                 .name()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nname\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\n}");
     }
 
     @Test
@@ -128,7 +130,7 @@ class CharacterTest {
                 .image()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\nimage\n}");
+        assertEquals(character.getCharacterString(), "character {\nimage {\nlarge\nmedium\n}\n}");
     }
 
     @Test
@@ -142,7 +144,7 @@ class CharacterTest {
                 .image()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\nimage\n}");
+        assertEquals(character.getCharacterString(), "character {\nimage {\nlarge\nmedium\n}\n}");
     }
 
     @Test
@@ -154,7 +156,7 @@ class CharacterTest {
                 .image()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nimage\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nimage {\nlarge\nmedium\n}\n}");
     }
 
     @Test
@@ -167,7 +169,7 @@ class CharacterTest {
                 .image()
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nimage\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nimage {\nlarge\nmedium\n}\n}");
     }
 
     @Test
@@ -326,52 +328,60 @@ class CharacterTest {
     @Test
     void CharacterBuilder_DateOfBirth_NoException() {
         //given
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+                .allAndBuild();
 
         //when
         Character character = Character.getCharacterBuilder()
-                .dateOfBirth()
+                .dateOfBirth(fuzzyDateField)
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\ndateOfBirth\n}");
+        assertEquals(character.getCharacterString(), "character {\ndateOfBirth {\nyear\nmonth\nday\n}\n}");
     }
 
     @Test
     void CharacterBuilder_ManyDateOfBirth_NoException() {
         //given
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+                .allAndBuild();
 
         //when
         Character character = Character.getCharacterBuilder()
-                .dateOfBirth()
-                .dateOfBirth()
+                .dateOfBirth(fuzzyDateField)
+                .dateOfBirth(fuzzyDateField)
                 .buildCharacter();
 
-        assertEquals(character.getCharacterString(), "character {\ndateOfBirth\n}");
+        assertEquals(character.getCharacterString(), "character {\ndateOfBirth {\nyear\nmonth\nday\n}\n}");
     }
 
     @Test
     void CharacterBuilder_DateOfBirthWithoutFieldName_NoException() {
         //given
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+                .allAndBuild();
 
         //when
         Character character = Character.getCharacterBuilder()
-                .dateOfBirth()
+                .dateOfBirth(fuzzyDateField)
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\ndateOfBirth\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\ndateOfBirth {\nyear\nmonth\nday\n}\n}");
     }
 
     @Test
     void CharacterBuilder_ManyDateOfBirthWithoutFieldName_NoException() {
         //given
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+                .allAndBuild();
 
         //when
         Character character = Character.getCharacterBuilder()
-                .dateOfBirth()
-                .dateOfBirth()
-                .dateOfBirth()
+                .dateOfBirth(fuzzyDateField)
+                .dateOfBirth(fuzzyDateField)
+                .dateOfBirth(fuzzyDateField)
                 .buildCharacter();
 
-        assertEquals(character.getCharacterStringWithoutFieldName(), "{\ndateOfBirth\n}");
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\ndateOfBirth {\nyear\nmonth\nday\n}\n}");
     }
 
     @Test

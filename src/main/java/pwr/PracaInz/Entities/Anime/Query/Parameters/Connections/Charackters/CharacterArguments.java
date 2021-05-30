@@ -29,7 +29,7 @@ public class CharacterArguments {
     public static final class CharacterArgumentsBuilder {
         private final Set<ParameterString> characterMediaArguments = new LinkedHashSet<>();
 
-        public CharacterArgumentsBuilder mediaSort(MediaSort[] sorts) {
+        public CharacterArgumentsBuilder mediaSort(CharacterSort[] sorts) {
             characterMediaArguments.add(new ParameterString("sort: " + Arrays.toString(sorts) + ", "));
             return this;
         }
@@ -50,7 +50,7 @@ public class CharacterArguments {
         }
 
         public CharacterArguments buildCharacterMediaArguments() {
-            if (characterMediaArguments.isEmpty()) { throw new IllegalStateException("Character should posses at least 1 parameter!"); }
+            if (characterMediaArguments.isEmpty()) { throw new IllegalStateException("Character Arguments should posses at least 1 parameter!"); }
 
             StringBuilder characterMediaArguments = new StringBuilder("(");
 

@@ -15,7 +15,7 @@ public class CharacterConnection {
         this.characterConnectionString = characterConnectionString;
     }
 
-    public String getStaffWithoutFieldName() {
+    public String getCharacterConnectionWithoutFieldName() {
         return this.characterConnectionString.substring(20);
     }
 
@@ -38,7 +38,7 @@ public class CharacterConnection {
         }
 
         public CharacterConnectionBuilder pageInfo(PageInfo pageInfo) {
-            characterConnection.add(new ParameterString("pageInfo " + pageInfo.getPageInfoString() + "\n"));
+            characterConnection.add(new ParameterString("pageInfo " + pageInfo.getPageInfoStringWithoutFieldName() + "\n"));
             return this;
         }
 

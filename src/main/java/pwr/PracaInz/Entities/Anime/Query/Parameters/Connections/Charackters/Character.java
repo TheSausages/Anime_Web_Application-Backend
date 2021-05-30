@@ -1,7 +1,9 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters;
 
 import lombok.Getter;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.LinkedHashSet;
@@ -32,12 +34,12 @@ public class Character {
         }
 
         public CharacterBuilder name() {
-            character.add(new ParameterString("name\n"));
+            character.add(new ParameterString("name {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\n"));
             return this;
         }
 
         public CharacterBuilder image() {
-            character.add(new ParameterString("image\n"));
+            character.add(new ParameterString("image {\nlarge\nmedium\n}\n"));
             return this;
         }
 
@@ -56,8 +58,8 @@ public class Character {
             return this;
         }
 
-        public CharacterBuilder dateOfBirth() {
-            character.add(new ParameterString("dateOfBirth\n"));
+        public CharacterBuilder dateOfBirth(FuzzyDateField fuzzyDateField) {
+            character.add(new ParameterString("dateOfBirth" + fuzzyDateField.getFuzzyDateStringWithoutFieldName() + "\n"));
             return this;
         }
 
@@ -86,8 +88,8 @@ public class Character {
             return this;
         }
 
-        public CharacterBuilder media(CharacterMediaArguments characterMediaArguments, MediaConnection mediaConnection) {
-            character.add(new ParameterString("media" + characterMediaArguments.getCharacterMediaArgumentsString() + " " + mediaConnection.getMediaConnectionWithoutFieldName() + "\n"));
+        public CharacterBuilder media(MediaArguments mediaArguments, MediaConnection mediaConnection) {
+            character.add(new ParameterString("media" + mediaArguments.getMediaArgumentsString() + " " + mediaConnection.getMediaConnectionWithoutFieldName() + "\n"));
             return this;
         }
 

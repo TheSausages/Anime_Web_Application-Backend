@@ -1,23 +1,23 @@
-package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters;
+package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media;
 
 import org.junit.jupiter.api.Test;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaSort;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class CharacterMediaArgumentsTest {
+class MediaArgumentsTest {
 
     @Test
     void CharacterMediaArgumentsBuilder_NoParams_ThrowException() {
         //given
 
         //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> CharacterMediaArguments.getCharacterMediaArgumentsBuilder().buildCharacterMediaArguments());
+        Exception exception = assertThrows(IllegalStateException.class, () -> MediaArguments.getMediaArgumentsBuilder().buildCharacterMediaArguments());
 
         //then
-        assertEquals(exception.getMessage(), "Character should posses at least 1 parameter!");
+        assertEquals(exception.getMessage(), "Media Arguments should posses at least 1 parameter!");
     }
 
     @Test
@@ -26,12 +26,12 @@ class CharacterMediaArgumentsTest {
         MediaSort[] sorts = new MediaSort[]{MediaSort.EPISODES};
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [EPISODES])");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [EPISODES])");
     }
 
     @Test
@@ -40,13 +40,13 @@ class CharacterMediaArgumentsTest {
         MediaSort[] sorts = new MediaSort[]{MediaSort.EPISODES};
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
+                .sort(sorts)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [EPISODES])");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [EPISODES])");
     }
 
     @Test
@@ -55,12 +55,12 @@ class CharacterMediaArgumentsTest {
         MediaSort[] sorts = new MediaSort[]{MediaSort.EPISODES, MediaSort.ID};
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [EPISODES, ID])");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [EPISODES, ID])");
     }
 
     @Test
@@ -69,14 +69,14 @@ class CharacterMediaArgumentsTest {
         MediaSort[] sorts = new MediaSort[]{MediaSort.EPISODES, MediaSort.ID};
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
-                .mediaSort(sorts)
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
+                .sort(sorts)
+                .sort(sorts)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [EPISODES, ID])");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [EPISODES, ID])");
     }
 
     @Test
@@ -85,12 +85,12 @@ class CharacterMediaArgumentsTest {
         MediaType type = MediaType.ANIME;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .type(type)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(type: ANIME)");
+        assertEquals(arguments.getMediaArgumentsString(), "(type: ANIME)");
     }
 
     @Test
@@ -99,14 +99,14 @@ class CharacterMediaArgumentsTest {
         MediaType type = MediaType.ANIME;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .type(type)
                 .type(type)
                 .type(type)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(type: ANIME)");
+        assertEquals(arguments.getMediaArgumentsString(), "(type: ANIME)");
     }
 
     @Test
@@ -114,12 +114,12 @@ class CharacterMediaArgumentsTest {
         //given
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .onList()
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(onList: true)");
+        assertEquals(arguments.getMediaArgumentsString(), "(onList: true)");
     }
 
     @Test
@@ -127,14 +127,14 @@ class CharacterMediaArgumentsTest {
         //given
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .onList()
                 .onList()
                 .onList()
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(onList: true)");
+        assertEquals(arguments.getMediaArgumentsString(), "(onList: true)");
     }
 
     @Test
@@ -143,12 +143,12 @@ class CharacterMediaArgumentsTest {
         int page = 2;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .page(page)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(page: 2)");
+        assertEquals(arguments.getMediaArgumentsString(), "(page: 2)");
     }
 
     @Test
@@ -158,13 +158,13 @@ class CharacterMediaArgumentsTest {
         int page1 = 25;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .page(page)
                 .page(page1)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(page: 2)");
+        assertEquals(arguments.getMediaArgumentsString(), "(page: 2)");
     }
 
     @Test
@@ -174,12 +174,12 @@ class CharacterMediaArgumentsTest {
 
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .perPage(perPage)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(perPage: 9)");
+        assertEquals(arguments.getMediaArgumentsString(), "(perPage: 9)");
     }
 
     @Test
@@ -189,13 +189,13 @@ class CharacterMediaArgumentsTest {
         int perPage1 = 12;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .perPage(perPage)
                 .perPage(perPage1)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(perPage: 8)");
+        assertEquals(arguments.getMediaArgumentsString(), "(perPage: 8)");
     }
 
     @Test
@@ -205,13 +205,13 @@ class CharacterMediaArgumentsTest {
         int page = 3;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
                 .perPage(perPage)
                 .page(page)
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(perPage: 8, page: 3)");
+        assertEquals(arguments.getMediaArgumentsString(), "(perPage: 8, page: 3)");
     }
 
     @Test
@@ -221,14 +221,14 @@ class CharacterMediaArgumentsTest {
         MediaType type = MediaType.MANGA;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
                 .type(type)
                 .onList()
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [ID, TYPE, SCORE], type: MANGA, onList: true)");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [ID, TYPE, SCORE], type: MANGA, onList: true)");
     }
 
     @Test
@@ -242,8 +242,8 @@ class CharacterMediaArgumentsTest {
         int perPage1 = 18;
 
         //when
-        CharacterMediaArguments arguments = CharacterMediaArguments.getCharacterMediaArgumentsBuilder()
-                .mediaSort(sorts)
+        MediaArguments arguments = MediaArguments.getMediaArgumentsBuilder()
+                .sort(sorts)
                 .type(type)
                 .onList()
                 .perPage(perPage)
@@ -253,6 +253,6 @@ class CharacterMediaArgumentsTest {
                 .buildCharacterMediaArguments();
 
         //then
-        assertEquals(arguments.getCharacterMediaArgumentsString(), "(sort: [ID, START_DATE_DESC, END_DATE], type: ANIME, onList: true, perPage: 2, page: 6)");
+        assertEquals(arguments.getMediaArgumentsString(), "(sort: [ID, START_DATE_DESC, END_DATE], type: ANIME, onList: true, perPage: 2, page: 6)");
     }
 }
