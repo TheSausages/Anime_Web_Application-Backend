@@ -587,4 +587,17 @@ class CharacterTest {
 
         assertEquals(character.getCharacterStringWithoutFieldName(), "{\nmodNotes\n}");
     }
+
+    @Test
+    void CharacterBuilder_NameAndFavouritesWithoutFieldName_NoException() {
+        //given
+
+        //when
+        Character character = Character.getCharacterBuilder()
+                .name()
+                .favourites()
+                .buildCharacter();
+
+        assertEquals(character.getCharacterStringWithoutFieldName(), "{\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\nfavourites\n}");
+    }
 }

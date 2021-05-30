@@ -10,6 +10,8 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffArgum
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSort;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Trends.MediaTrendConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Trends.MediaTrendsArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
@@ -162,6 +164,15 @@ public class Field {
             return this;
         }
 
+        public FieldBuilder trends(MediaTrendConnection connection) {
+            fieldParameters.add(new ParameterString("trends " + connection.getMediaConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder trends(MediaTrendsArguments arguments, MediaTrendConnection connection) {
+            fieldParameters.add(new ParameterString("trends" + arguments.getMediaTrendsArgumentsString() + " " + connection.getMediaConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
 
         public Field buildField() {
             if (fieldParameters.isEmpty()) { throw new IllegalStateException("Field must have at least 1 Parameter"); }
@@ -175,10 +186,6 @@ public class Field {
             return new Field(builder.toString());
         }
 
-        //public FieldBuilder addStaff
-        //public FieldBuilder addStudios
-        //public FieldBuilder addAiringSchedule
-        //public FieldBuilder addTrends
         //public FieldBuilder addReviews
         //public FieldBuilder addRecommendation
     }

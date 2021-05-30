@@ -110,4 +110,22 @@ class AiringScheduleConnectionTest {
         //then
         assertEquals(connection.getAiringScheduleConnectionWithoutFieldName(), "{\npageInfo {\nhasNextPage\n}\n}");
     }
+
+    @Test
+    void AiringScheduleConnectionBuilder_EdgesAndPageInfo_NoException() {
+        //given
+        AiringScheduleEdge airingScheduleEdge = new AiringScheduleEdge();
+        PageInfo pageInfo = PageInfo.getPageInfoBuilder()
+                .lastPage()
+                .buildPageInfo();
+
+        //when
+        AiringScheduleConnection connection = AiringScheduleConnection.getAiringScheduleConnectionBuilder()
+                .edges(airingScheduleEdge)
+                .pageInfo(pageInfo)
+                .buildAiringScheduleConnection();
+
+        //then
+        assertEquals(connection.getAiringScheduleConnectionString(), "airingScheduleConnection {\nedges {\nid\n}\npageInfo {\nlastPage\n}\n}");
+    }
 }

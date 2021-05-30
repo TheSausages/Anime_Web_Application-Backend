@@ -7,7 +7,7 @@ import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MediaConnectionTest {
+class MediaTrendConnectionTest {
 
     @Test
     void MediaConnectionBuilder_NoParams_ThrowException() {

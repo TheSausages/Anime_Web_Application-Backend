@@ -12,6 +12,7 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.Studio;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSort;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Trends.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
@@ -772,6 +773,49 @@ class FieldTest {
 
         //then
         assertEquals(field.toString(), "{\nairingSchedule(notYetAired: true) {\nnodes {\ntimeUntilAiring\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Trends_NoException() {
+        //given
+        MediaTrend mediaTrend = MediaTrend.getMediaTrendBuilder()
+                .inProgress()
+                .buildMediaTrendEdge();
+        MediaTrendConnection connection = MediaTrendConnection.getMediaConnectionBuilder()
+                .nodes(mediaTrend)
+                .buildTrendsConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .trends(connection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ntrends {\nnodes {\ninProgress\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_TrendsWithArguments_NoException() {
+        //given
+        MediaTrendSort[] mediaTrendSort = new MediaTrendSort[]{MediaTrendSort.TRENDING};
+        MediaTrendsArguments arguments = MediaTrendsArguments.getMediaTrendsArgumentsBuilder()
+                .sort(mediaTrendSort)
+                .buildTrendsArguments();
+        MediaTrend mediaTrend = MediaTrend.getMediaTrendBuilder()
+                .mediaId()
+                .buildMediaTrendEdge();
+        MediaTrendEdge edge = new MediaTrendEdge(mediaTrend);
+        MediaTrendConnection connection = MediaTrendConnection.getMediaConnectionBuilder()
+                .edges(edge)
+                .buildTrendsConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .trends(arguments, connection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\ntrends(sort: [TRENDING]) {\nedges {\nmediaId\n}\n}\n}");
     }
 
     @Test

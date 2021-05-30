@@ -180,4 +180,18 @@ class AiringScheduleTest {
         //then
         assertEquals(airingSchedule.getAiringScheduleString(), "airingSchedule {\nmediaId\n}");
     }
+
+    @Test
+    void AiringScheduleBuilder_IdAndMediaId_NoException() {
+        //given
+
+        //when
+        AiringSchedule airingSchedule = AiringSchedule.getAiringScheduleBuilder()
+                .id()
+                .mediaId()
+                .buildAiringSchedule();
+
+        //then
+        assertEquals(airingSchedule.getAiringScheduleString(), "airingSchedule {\nid\nmediaId\n}");
+    }
 }

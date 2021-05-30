@@ -104,4 +104,20 @@ class AiringScheduleArgumentsTest {
         //then
         assertEquals(airingScheduleArguments.getAiringScheduleArgumentsString(), "(perPage: 5)");
     }
+
+    @Test
+    void AiringScheduleArgumentsBuilder_PageAndPerPage_NoException() {
+        //given
+        int page = 5;
+        int perPage = 20;
+
+        //when
+        AiringScheduleArguments airingScheduleArguments = AiringScheduleArguments.getAiringScheduleArgumentsBuilder()
+                .page(page)
+                .perPage(perPage)
+                .buildCharacterMediaArguments();
+
+        //then
+        assertEquals(airingScheduleArguments.getAiringScheduleArgumentsString(), "(page: 5, perPage: 20)");
+    }
 }
