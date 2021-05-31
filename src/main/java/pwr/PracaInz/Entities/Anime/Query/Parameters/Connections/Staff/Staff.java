@@ -137,13 +137,13 @@ public class Staff {
         public Staff buildStaff() {
             if (staff.isEmpty()) { throw new IllegalStateException("Staff should posses at least 1 parameter!"); }
 
-            StringBuilder StaffBuilder = new StringBuilder("staff {\n");
+            StringBuilder staffBuilder = new StringBuilder("staff {\n");
 
-            staff.forEach(StaffBuilder::append);
+            staff.forEach(staffBuilder::append);
 
-            StaffBuilder.append("}");
+            staffBuilder.append("}");
 
-            return new Staff(StaffBuilder.toString());
+            return new Staff(staffBuilder.toString());
         }
     }
 }

@@ -9,6 +9,14 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaEdge;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.Recommendation;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.RecommendationArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.RecommendationConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.RecommendationSort;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.Review;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.ReviewArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.ReviewConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.ReviewEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.Studio;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSort;
@@ -816,6 +824,91 @@ class FieldTest {
 
         //then
         assertEquals(field.toString(), "{\ntrends(sort: [TRENDING]) {\nedges {\nmediaId\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Reviews_NoException() {
+        //given
+        Review review = Review.getReviewBuilder()
+                .body()
+                .buildReview();
+        ReviewConnection reviewConnection = ReviewConnection.getReviewConnectionBuilder()
+                .nodes(review)
+                .buildReviewConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .reviews(reviewConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nreviews {\nnodes {\nbody\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_ReviewsWithArguments_NoException() {
+        //given
+        int limit = 6;
+        ReviewArguments arguments = ReviewArguments.getReviewArgumentsBuilder()
+                .limit(limit)
+                .buildCharacterMediaArguments();
+        Review review = Review.getReviewBuilder()
+                .mediaType()
+                .buildReview();
+        ReviewEdge edge = new ReviewEdge(review);
+        ReviewConnection reviewConnection = ReviewConnection.getReviewConnectionBuilder()
+                .edge(edge)
+                .buildReviewConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .reviews(arguments, reviewConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nreviews(limit: 6) {\nedges {\nnode {\nmediaType\n}\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_Recommendation_NoException() {
+        //given
+        Recommendation recommendation = Recommendation.getRecommendationBuilder()
+                .id()
+                .buildRecommendation();
+        RecommendationConnection recommendationConnection = RecommendationConnection.getRecommendationConnectionBuilder()
+                .nodes(recommendation)
+                .buildRecommendationConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .recommendation(recommendationConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nrecommendation {\nnodes {\nid\n}\n}\n}");
+    }
+
+    @Test
+    void FieldBuilder_RecommendationWithArguments_NoException() {
+        //given
+        RecommendationSort[] sorts = new RecommendationSort[]{RecommendationSort.RATING};
+        RecommendationArguments recommendationArguments = RecommendationArguments.getRecommendationArgumentBuilder()
+                .sort(sorts)
+                .buildCharacterMediaArguments();
+        Recommendation recommendation = Recommendation.getRecommendationBuilder()
+                .id()
+                .buildRecommendation();
+        RecommendationConnection recommendationConnection = RecommendationConnection.getRecommendationConnectionBuilder()
+                .nodes(recommendation)
+                .buildRecommendationConnection();
+
+        //when
+        Field field = Field.getFieldBuilder()
+                .recommendation(recommendationArguments, recommendationConnection)
+                .buildField();
+
+        //then
+        assertEquals(field.toString(), "{\nrecommendation(sort: [RATING]) {\nnodes {\nid\n}\n}\n}");
     }
 
     @Test

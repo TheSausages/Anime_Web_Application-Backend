@@ -6,6 +6,10 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.A
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.RecommendationArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation.RecommendationConnection;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.ReviewArguments;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews.ReviewConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffArguments;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioConnection;
@@ -174,6 +178,26 @@ public class Field {
             return this;
         }
 
+        public FieldBuilder reviews(ReviewConnection reviewConnection) {
+            fieldParameters.add(new ParameterString("reviews " + reviewConnection.getReviewConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder reviews(ReviewArguments reviewArguments, ReviewConnection reviewConnection) {
+            fieldParameters.add(new ParameterString("reviews" + reviewArguments.getReviewArgumentsString() + " " + reviewConnection.getReviewConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder recommendation(RecommendationConnection recommendationConnection) {
+            fieldParameters.add(new ParameterString("recommendation " + recommendationConnection.getRecommendationConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
+        public FieldBuilder recommendation(RecommendationArguments recommendationArguments, RecommendationConnection recommendationConnection) {
+            fieldParameters.add(new ParameterString("recommendation" + recommendationArguments.getRecommendationArgumentsString() + " " + recommendationConnection.getRecommendationConnectionWithoutFieldName() + "\n"));
+            return this;
+        }
+
         public Field buildField() {
             if (fieldParameters.isEmpty()) { throw new IllegalStateException("Field must have at least 1 Parameter"); }
 
@@ -185,8 +209,5 @@ public class Field {
 
             return new Field(builder.toString());
         }
-
-        //public FieldBuilder addReviews
-        //public FieldBuilder addRecommendation
     }
 }

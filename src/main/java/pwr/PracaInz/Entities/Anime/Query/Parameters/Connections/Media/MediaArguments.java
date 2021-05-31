@@ -27,39 +27,39 @@ public class MediaArguments {
     }
 
     public static final class MediaArgumentsBuilder {
-        private final Set<ParameterString> MediaArguments = new LinkedHashSet<>();
+        private final Set<ParameterString> mediaArguments = new LinkedHashSet<>();
 
         public MediaArgumentsBuilder sort(MediaSort[] sorts) {
-            MediaArguments.add(new ParameterString("sort: " + Arrays.toString(sorts) + ", "));
+            mediaArguments.add(new ParameterString("sort: " + Arrays.toString(sorts) + ", "));
             return this;
         }
 
         public MediaArgumentsBuilder type(MediaType type) {
-            MediaArguments.add(new ParameterString("type: " + type.name() + ", "));
+            mediaArguments.add(new ParameterString("type: " + type.name() + ", "));
             return this;
         }
 
         public MediaArgumentsBuilder onList() {
-            MediaArguments.add(new ParameterString("onList: true"  + ", "));
+            mediaArguments.add(new ParameterString("onList: true"  + ", "));
             return this;
         }
 
         public MediaArgumentsBuilder page(int page) {
-            MediaArguments.add(new ParameterString("page: " + page + ", "));
+            mediaArguments.add(new ParameterString("page: " + page + ", "));
             return this;
         }
 
         public MediaArgumentsBuilder perPage(int perPage) {
-            MediaArguments.add(new ParameterString("perPage: " + perPage + ", "));
+            mediaArguments.add(new ParameterString("perPage: " + perPage + ", "));
             return this;
         }
 
         public MediaArguments buildCharacterMediaArguments() {
-            if (MediaArguments.isEmpty()) { throw new IllegalStateException("Media Arguments should posses at least 1 parameter!"); }
+            if (mediaArguments.isEmpty()) { throw new IllegalStateException("Media Arguments should posses at least 1 parameter!"); }
 
             StringBuilder MediaArguments = new StringBuilder("(");
 
-            this.MediaArguments.forEach(MediaArguments::append);
+            this.mediaArguments.forEach(MediaArguments::append);
 
             MediaArguments.delete(MediaArguments.length() - 2, MediaArguments.length()).append(")");
 

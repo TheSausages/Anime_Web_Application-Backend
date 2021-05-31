@@ -24,29 +24,29 @@ public class AiringScheduleArguments {
     }
 
     public static final class AiringScheduleArgumentsBuilder {
-        private final Set<ParameterString> AiringScheduleArguments = new LinkedHashSet<>();
+        private final Set<ParameterString> airingScheduleArguments = new LinkedHashSet<>();
 
         public AiringScheduleArgumentsBuilder notYetAired() {
-            AiringScheduleArguments.add(new ParameterString("notYetAired: true, "));
+            airingScheduleArguments.add(new ParameterString("notYetAired: true, "));
             return this;
         }
 
         public AiringScheduleArgumentsBuilder page(int page) {
-            AiringScheduleArguments.add(new ParameterString("page: " + page + ", "));
+            airingScheduleArguments.add(new ParameterString("page: " + page + ", "));
             return this;
         }
 
         public AiringScheduleArgumentsBuilder perPage(int perPage) {
-            AiringScheduleArguments.add(new ParameterString("perPage: " + perPage + ", "));
+            airingScheduleArguments.add(new ParameterString("perPage: " + perPage + ", "));
             return this;
         }
 
         public AiringScheduleArguments buildCharacterMediaArguments() {
-            if (AiringScheduleArguments.isEmpty()) { throw new IllegalStateException("Airing Schedule Arguments should posses at least 1 parameter!"); }
+            if (airingScheduleArguments.isEmpty()) { throw new IllegalStateException("Airing Schedule Arguments should posses at least 1 parameter!"); }
 
             StringBuilder airingScheduleArguments = new StringBuilder("(");
 
-            this.AiringScheduleArguments.forEach(airingScheduleArguments::append);
+            this.airingScheduleArguments.forEach(airingScheduleArguments::append);
 
             airingScheduleArguments.delete(airingScheduleArguments.length() - 2, airingScheduleArguments.length()).append(")");
 
