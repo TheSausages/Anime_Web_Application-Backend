@@ -16,7 +16,6 @@ public enum FieldParameters {
     isLicensed("Boolean"),
     hashtag("String"),
     updatedAt("Int"),
-    coverImage("MediaCoverImage"),
     bannerImage("String"),
     genres("[String]"),
     synonyms("[String]"),

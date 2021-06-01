@@ -2,7 +2,6 @@ package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media;
 
 import lombok.Getter;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.Staff;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffLanguage;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.StaffRoleType;
@@ -34,7 +33,7 @@ public class MediaEdge {
         private final Set<ParameterString> mediaEdge = new LinkedHashSet<>();
 
         public MediaEdgeBuilder node(Media media) {
-            mediaEdge.add(new ParameterString("node" + media.getMediaStringWithoutFieldName() + "\n"));
+            mediaEdge.add(new ParameterString("node" + media.getFieldOfMedia() + "\n"));
             return this;
         }
 

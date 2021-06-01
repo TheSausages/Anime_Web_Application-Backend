@@ -7,12 +7,12 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Enums.Tags;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateValue;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
-import pwr.PracaInz.Entities.Anime.Query.QueryElements.QueryElements;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.QueryElement;
 
 import java.util.*;
 
 @Getter
-public class Media implements QueryElements {
+public class Media implements QueryElement {
     private final String elementString;
     private final Set<ParameterString> queryParameters;
     private final JSONObject variables;
@@ -23,8 +23,12 @@ public class Media implements QueryElements {
         this.variables = variables;
     }
 
-    public String getMediaStringWithoutFieldName() {
+    public String getFieldOfMedia() {
         return elementString.substring(elementString.indexOf(')') + 2);
+    }
+
+    public String getMediaWithoutFieldName() {
+        return elementString.substring(5);
     }
 
     public static MediaBuilder getMediaBuilder(Field field) {

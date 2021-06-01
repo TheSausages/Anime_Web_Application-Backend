@@ -63,6 +63,11 @@ public class Field {
             return this;
         }
 
+        public FieldBuilder coverImage() {
+            fieldParameters.add(new ParameterString("coverImage {\nextraLarge\nlarge\nmedium\ncolor\n}\n"));
+            return this;
+        }
+
         public FieldBuilder tags() {
             fieldParameters.add(new ParameterString("tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}\n"));
             return this;

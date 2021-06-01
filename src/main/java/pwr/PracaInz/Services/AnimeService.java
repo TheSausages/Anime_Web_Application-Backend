@@ -7,18 +7,18 @@ import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ReactiveHttpOutputMessage;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.PageInfo;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaSeason;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
 import pwr.PracaInz.Entities.Anime.Query.Query;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.Page.Page;
 import pwr.PracaInz.Entities.Anime.TagFile.Tag;
 import pwr.PracaInz.Entities.Anime.TagFile.TagList;
 import reactor.core.publisher.Mono;
@@ -48,37 +48,29 @@ public class AnimeService {
     }
 
     public String getCurrentSeasonAnime() {
-        String query =
-                "query ($page: Int, $pageSize: Int, $seasonYear: Int, $season: MediaSeason) {" +
-                        " Page (page: $page, perPage: $pageSize) {" +
-                        "    pageInfo {" +
-                        "      total" +
-                        "      currentPage" +
-                        "      lastPage" +
-                        "      hasNextPage" +
-                        "      perPage" +
-                        "    }" +
-                        "  media (seasonYear: $seasonYear, season: $season, type: ANIME) {" +
-                        "    id" +
-                        "    title {" +
-                        "      english" +
-                        "      romaji" +
-                        "    }" +
-                        "    coverImage {" +
-                        "      extraLarge" +
-                        "      large" +
-                        "      medium" +
-                        "      color" +
-                        "    }" +
-                        "  }" +
-                        "  }" +
-                        "}";
-
-        JSONObject queryParameters = new JSONObject();
-        queryParameters.put("page", "1");
-        queryParameters.put("pageSize", "40");
-        queryParameters.put("seasonYear", LocalDateTime.now().getYear());
-        queryParameters.put("season", MediaSeason.getCurrentSeason());
+        Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .coverImage()
+                .buildField();
+        PageInfo pageInfo = PageInfo.getPageInfoBuilder()
+                .total()
+                .currentPage()
+                .lastPage()
+                .hasNextPage()
+                .perPage()
+                .buildPageInfo();
+        Page page = Page.getPageBuilder(1, 40)
+                .pageInfo(pageInfo)
+                .media(Media.getMediaBuilder(field)
+                        .seasonYear(LocalDateTime.now().getYear())
+                        .season(MediaSeason.getCurrentSeason())
+                        .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .buildMedia())
+                .buildPage();
 
         Mono<String> response = client
                 .post()
@@ -86,44 +78,36 @@ public class AnimeService {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
-                .body(prepareJSONObject(query, queryParameters))
+                .body(Query.fromQueryElement(page))
                 .exchangeToMono(this::evaluateClientResponse);
 
         return response.block();
     }
 
     public String getSeasonAnime(String season, String year) {
-        String query =
-                "query ($page: Int, $pageSize: Int, $seasonYear: Int, $season: MediaSeason) {" +
-                        " Page (page: $page, perPage: $pageSize) {" +
-                        "    pageInfo {" +
-                        "      total" +
-                        "      currentPage" +
-                        "      lastPage" +
-                        "      hasNextPage" +
-                        "      perPage" +
-                        "    }" +
-                        "  media (seasonYear: $seasonYear, season: $season, type: ANIME) {" +
-                        "    id" +
-                        "    title {" +
-                        "      english" +
-                        "      romaji" +
-                        "    }" +
-                        "    coverImage {" +
-                        "      extraLarge" +
-                        "      large" +
-                        "      medium" +
-                        "      color" +
-                        "    }" +
-                        "  }" +
-                        "  }" +
-                        "}";
-
-        JSONObject queryParameters = new JSONObject();
-        queryParameters.put("page", "1");
-        queryParameters.put("pageSize", "40");
-        queryParameters.put("seasonYear", "2021");
-        queryParameters.put("season", "SPRING");
+        Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .coverImage()
+                .buildField();
+        PageInfo pageInfo = PageInfo.getPageInfoBuilder()
+                .total()
+                .currentPage()
+                .lastPage()
+                .hasNextPage()
+                .perPage()
+                .buildPageInfo();
+        Page page = Page.getPageBuilder(1, 40)
+                .pageInfo(pageInfo)
+                .media(Media.getMediaBuilder(field)
+                        .seasonYear(2021)
+                        .season(MediaSeason.SPRING)
+                        .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .buildMedia())
+                .buildPage();
 
         Mono<String> response = client
                 .post()
@@ -131,7 +115,7 @@ public class AnimeService {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
-                .body(prepareJSONObject(query, queryParameters))
+                .body(Query.fromQueryElement(page))
                 .exchangeToMono(this::evaluateClientResponse);
 
         return response.block();
@@ -158,7 +142,7 @@ public class AnimeService {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
-                .body(Query.fromMedia(media))
+                .body(Query.fromQueryElement(media))
                 .exchangeToMono(this::evaluateClientResponse);
 
         return response.block();
@@ -169,7 +153,6 @@ public class AnimeService {
             return response.bodyToMono(String.class);
         } else {
             System.out.println(response.bodyToMono(String.class));
-
             return response.createException()
                     .flatMap(Mono::error);
         }
@@ -195,13 +178,17 @@ public class AnimeService {
 
         JSONObject queryParameters = new JSONObject();
 
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("query", query);
+        requestBody.put("variables", queryParameters.toJSONString());
+
         Mono<String> response = client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
-                .body(prepareJSONObject(query, queryParameters))
+                .body(BodyInserters.fromValue(requestBody))
                 .exchangeToMono(this::evaluateClientResponse);
 
         Object data = gson.fromJson(response.block(), JSONObject.class).get("data");
@@ -221,13 +208,5 @@ public class AnimeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    private BodyInserter<JSONObject, ReactiveHttpOutputMessage> prepareJSONObject(String query, JSONObject queryParameters) {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("query", query);
-        requestBody.put("variables", queryParameters.toJSONString());
-
-        return BodyInserters.fromValue(requestBody);
     }
 }

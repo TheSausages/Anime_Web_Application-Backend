@@ -1,7 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Reviews;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Staff.Staff;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.User;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
@@ -104,7 +103,7 @@ public class Review {
         }
 
         public ReviewBuilder media(Media media) {
-            review.add(new ParameterString("media " + media.getMediaStringWithoutFieldName() + "\n"));
+            review.add(new ParameterString("media " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 

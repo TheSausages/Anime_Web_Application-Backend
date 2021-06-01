@@ -1,7 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Recommendation;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringSchedule;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.User;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
@@ -39,12 +38,12 @@ public class Recommendation {
         }
 
         public RecommendationBuilder media(Media media) {
-            recommendation.add(new ParameterString("media " + media.getMediaStringWithoutFieldName() + "\n"));
+            recommendation.add(new ParameterString("media " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 
         public RecommendationBuilder mediaRecommendation(Media media) {
-            recommendation.add(new ParameterString("mediaRecommendation " + media.getMediaStringWithoutFieldName() + "\n"));
+            recommendation.add(new ParameterString("mediaRecommendation " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 

@@ -1,7 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
 
@@ -53,7 +52,7 @@ public class AiringSchedule {
         }
 
         public AiringScheduleBuilder media(Media media) {
-            airingSchedule.add(new ParameterString("media " + media.getMediaStringWithoutFieldName() + "\n"));
+            airingSchedule.add(new ParameterString("media " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 

@@ -1,8 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.CharacterConnection;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.PageInfo;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
@@ -35,7 +33,7 @@ public class MediaConnection {
         }
 
         public MediaConnectionBuilder nodes(Media media) {
-            mediaConnections.add(new ParameterString("nodes " + media.getMediaStringWithoutFieldName() + "\n"));
+            mediaConnections.add(new ParameterString("nodes " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 

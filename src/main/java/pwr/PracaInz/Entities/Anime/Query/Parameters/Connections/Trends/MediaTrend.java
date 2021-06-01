@@ -1,7 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Trends;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
 
@@ -73,7 +72,7 @@ public class MediaTrend {
         }
 
         public MediaTrendBuilder media(Media media) {
-            mediaTrend.add(new ParameterString("media " + media.getMediaStringWithoutFieldName() + "\n"));
+            mediaTrend.add(new ParameterString("media " + media.getFieldOfMedia() + "\n"));
             return this;
         }
 
