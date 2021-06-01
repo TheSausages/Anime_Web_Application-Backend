@@ -9,7 +9,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_NullArgument_ThrowException() {
         //given
-        FieldParameters parameter = null;
+        FuzzyDateFieldParameter parameter = null;
 
         //when
         Exception exception = assertThrows(IllegalArgumentException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -20,21 +20,9 @@ class FuzzyDateFieldTest {
     }
 
     @Test
-    void FuzzyDateQueryBuilder_WithWrongArgument_ThrowException() {
-        //given
-        FieldParameters parameter = FieldParameters.id;
-
-        //when
-        Exception exception = assertThrows(IllegalArgumentException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter).buildFuzzyDateField());
-
-        //then
-        assertEquals(exception.getMessage(), "The FieldParameters param should be of FuzzyDate Type!");
-    }
-
-    @Test
     void FuzzyDateQueryBuilder_WithCorrectArgument_ThrowException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         Exception exception = assertThrows(IllegalStateException.class, () -> FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -47,7 +35,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentYear_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -61,7 +49,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentMonth_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -75,7 +63,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentDay_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -89,7 +77,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentYearAndMonth_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -104,7 +92,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentDayAndMonth_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
@@ -119,7 +107,7 @@ class FuzzyDateFieldTest {
     @Test
     void FuzzyDateQueryBuilder_WithCorrectArgumentAll_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
 
         //when
         FuzzyDateField dateField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)

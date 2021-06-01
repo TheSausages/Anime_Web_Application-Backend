@@ -5,11 +5,6 @@ public enum FieldParameters {
     idMal("Int"),
     type("MediaType"),
     format("MediaFormat"),
-    startDate("FuzzyDate"),
-    dateOfBirth("FuzzyDate"),
-    dateOfDeath("FuzzyDate"),
-    endDate("FuzzyDate"),
-    status("MediaStatus"),
     season("MediaSeason"),
     seasonYear("Int"),
     seasonInt("Int"),
@@ -19,7 +14,6 @@ public enum FieldParameters {
     volumes("Int"),
     countryOfOrigin("CountryCode"),
     isLicensed("Boolean"),
-    source("MediaSource"),
     hashtag("String"),
     updatedAt("Int"),
     coverImage("MediaCoverImage"),
@@ -32,11 +26,9 @@ public enum FieldParameters {
     isLocked("Boolean"),
     trending("Int"),
     favorites("Int"),
-    relations("MediaConnection"),
     isAdult("Boolean"),
     stats("MediaStats"),
     siteUrl("String"),
-    isRecommendationBlocked("Boolean"),
     modNotes("String")
     ;
 
@@ -49,8 +41,6 @@ public enum FieldParameters {
 
     public String getType() {
         return switch (this.fieldType) {
-            case "Int" -> "int";
-            case "Boolean" -> "boolean";
             case "[Int]" -> "int[]";
             case "[String]" -> "String[]";
             case "[MediaTag]" -> "MediaTag[]";

@@ -3,6 +3,7 @@ package pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters;
 import org.junit.jupiter.api.Test;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateFieldParameter;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -328,7 +329,7 @@ class CharacterTest {
     @Test
     void CharacterBuilder_DateOfBirth_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -342,7 +343,7 @@ class CharacterTest {
     @Test
     void CharacterBuilder_ManyDateOfBirth_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -357,7 +358,7 @@ class CharacterTest {
     @Test
     void CharacterBuilder_DateOfBirthWithoutFieldName_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -371,7 +372,7 @@ class CharacterTest {
     @Test
     void CharacterBuilder_ManyDateOfBirthWithoutFieldName_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when

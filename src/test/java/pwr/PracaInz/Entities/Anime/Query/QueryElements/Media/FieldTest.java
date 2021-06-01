@@ -1,4 +1,4 @@
-package pwr.PracaInz.Entities.Anime.Query.QueryElements;
+package pwr.PracaInz.Entities.Anime.Query.QueryElements.Media;
 
 import org.junit.jupiter.api.Test;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.AiringSchedule.AiringSchedule;
@@ -23,6 +23,7 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Studio.StudioSor
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Trends.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateFieldParameter;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
 
@@ -495,7 +496,7 @@ class FieldTest {
     @Test
     void FieldBuilder_FuzzyDate_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
         FuzzyDateField fuzzyField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
                 .year()
                 .buildFuzzyDateField();
@@ -512,11 +513,11 @@ class FieldTest {
     @Test
     void FieldBuilder_ManySameFuzzyDate_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
         FuzzyDateField fuzzyField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
                 .year()
                 .buildFuzzyDateField();
-        FieldParameters parameter1 = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter1 = FuzzyDateFieldParameter.startDate;
         FuzzyDateField fuzzyField1 = FuzzyDateField.getFuzzyDateFieldBuilder(parameter1)
                 .allAndBuild();
 
@@ -533,11 +534,11 @@ class FieldTest {
     @Test
     void FieldBuilder_ManyDifferentFuzzyDate_NoException() {
         //given
-        FieldParameters parameter = FieldParameters.startDate;
+        FuzzyDateFieldParameter parameter = FuzzyDateFieldParameter.startDate;
         FuzzyDateField fuzzyField = FuzzyDateField.getFuzzyDateFieldBuilder(parameter)
                 .year()
                 .buildFuzzyDateField();
-        FieldParameters parameter1 = FieldParameters.endDate;
+        FuzzyDateFieldParameter parameter1 = FuzzyDateFieldParameter.endDate;
         FuzzyDateField fuzzyField1 = FuzzyDateField.getFuzzyDateFieldBuilder(parameter1)
                 .allAndBuild();
 
@@ -966,9 +967,9 @@ class FieldTest {
                 .year()
                 .season()
                 .buildMediaRank();
-        FuzzyDateField startDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.startDate)
+        FuzzyDateField startDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.startDate)
                 .allAndBuild();
-        FuzzyDateField endDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.endDate)
+        FuzzyDateField endDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.endDate)
                 .allAndBuild();
         MediaStreamingEpisodes episodes = MediaStreamingEpisodes.MediaStreamingEpisodesBuilder()
                 .title()

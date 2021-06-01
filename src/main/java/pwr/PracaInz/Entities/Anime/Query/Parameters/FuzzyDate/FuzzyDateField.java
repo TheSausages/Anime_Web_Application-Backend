@@ -1,7 +1,6 @@
 package pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate;
 
 import lombok.Getter;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.LinkedHashSet;
@@ -10,15 +9,15 @@ import java.util.Set;
 @Getter
 public class FuzzyDateField {
     private final String fuzzyDateString;
-    private final FieldParameters parameter;
+    private final FuzzyDateFieldParameter parameter;
 
-    private FuzzyDateField(String fuzzyDateString, FieldParameters parameter) {
+    private FuzzyDateField(String fuzzyDateString, FuzzyDateFieldParameter parameter) {
         this.fuzzyDateString = fuzzyDateString;
         this.parameter = parameter;
     }
 
-    public static FuzzyDateFieldBuilder getFuzzyDateFieldBuilder(FieldParameters parameter) {
-        if (parameter != null && parameter.getType().equals("FuzzyDate")) {
+    public static FuzzyDateFieldBuilder getFuzzyDateFieldBuilder(FuzzyDateFieldParameter parameter) {
+        if (parameter != null) {
             return new FuzzyDateFieldBuilder(parameter);
         }
 
@@ -36,9 +35,9 @@ public class FuzzyDateField {
 
     public final static class FuzzyDateFieldBuilder {
         private final Set<ParameterString> fuzzyDate = new LinkedHashSet<>();
-        private final FieldParameters parameter;
+        private final FuzzyDateFieldParameter parameter;
 
-        private FuzzyDateFieldBuilder(FieldParameters parameter) {
+        private FuzzyDateFieldBuilder(FuzzyDateFieldParameter parameter) {
             this.parameter = parameter;
         }
 

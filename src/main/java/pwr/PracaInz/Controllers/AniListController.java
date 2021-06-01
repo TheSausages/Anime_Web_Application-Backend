@@ -18,7 +18,7 @@ public class AniListController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public String getAnimeById(@PathVariable Long id) {
+    public String getAnimeById(@PathVariable int id) {
         return animeService.getAnimeById(id);
     }
 

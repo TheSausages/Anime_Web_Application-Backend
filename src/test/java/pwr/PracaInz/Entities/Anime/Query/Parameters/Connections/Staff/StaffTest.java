@@ -8,6 +8,7 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConne
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaEdge;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateField;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FuzzyDate.FuzzyDateFieldParameter;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaSort;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -258,7 +259,7 @@ class StaffTest {
     @Test
     void StaffBuilder_DateOfBirth_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -273,7 +274,7 @@ class StaffTest {
     @Test
     void StaffBuilder_ManyDateOfBirth_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -289,7 +290,7 @@ class StaffTest {
     @Test
     void StaffBuilder_DateOfDeath_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when
@@ -304,7 +305,7 @@ class StaffTest {
     @Test
     void StaffBuilder_ManyDateOfDeath_NoException() {
         //given
-        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FieldParameters.dateOfBirth)
+        FuzzyDateField fuzzyDateField = FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.dateOfBirth)
                 .allAndBuild();
 
         //when

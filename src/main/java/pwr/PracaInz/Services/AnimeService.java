@@ -13,7 +13,12 @@ import org.springframework.web.reactive.function.BodyInserter;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaSeason;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
+import pwr.PracaInz.Entities.Anime.Query.Query;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
 import pwr.PracaInz.Entities.Anime.TagFile.Tag;
 import pwr.PracaInz.Entities.Anime.TagFile.TagList;
 import reactor.core.publisher.Mono;
@@ -132,108 +137,20 @@ public class AnimeService {
         return response.block();
     }
 
-    public String getAnimeById(Long id) {
-        String query =
-                "query ($id: Int) {" +
-                        "Media(id: $id, type: ANIME) {" +
-                        "      id" +
-                        "      title {" +
-                        "        romaji" +
-                        "        english" +
-                        "      }" +
-                        "      format" +
-                        "      averageScore" +
-                        "      favourites" +
-                        "      description" +
-                        "      episodes" +
-                        "      startDate {" +
-                        "        year" +
-                        "        month" +
-                        "        day" +
-                        "      }" +
-                        "      endDate {" +
-                        "        year" +
-                        "        month" +
-                        "        day" +
-                        "      }" +
-                        "      season" +
-                        "      seasonYear" +
-                        "      source" +
-                        "      trailer {" +
-                        "       id" +
-                        "      }" +
-                        "      genres" +
-                        "      synonyms" +
-                        "      meanScore" +
-                        "      trending" +
-                        "      tags {" +
-                        "        id" +
-                        "      }" +
-                        "      characters {" +
-                        "        edges {" +
-                        "          id" +
-                        "        }" +
-                        "      }" +
-                        "      staff {" +
-                        "        edges {" +
-                        "          id" +
-                        "        }" +
-                        "      }" +
-                        "      studios {" +
-                        "        edges {" +
-                        "          id" +
-                        "        }" +
-                        "      }" +
-                        "      isAdult" +
-                        "      nextAiringEpisode {" +
-                        "        id" +
-                        "      }" +
-                        "      airingSchedule {" +
-                        "        edges {" +
-                        "          id" +
-                        "        }" +
-                        "      }" +
-                        "      trends {" +
-                        "        edges {" +
-                        "          node {" +
-                        "            averageScore" +
-                        "            popularity" +
-                        "            inProgress" +
-                        "            episode" +
-                        "          }" +
-                        "        }" +
-                        "      }" +
-                        "      rankings {" +
-                        "        id" +
-                        "      }" +
-                        "      externalLinks {" +
-                        "        id" +
-                        "      }" +
-                        "      streamingEpisodes {" +
-                        "        title" +
-                        "        thumbnail" +
-                        "        url" +
-                        "        site" +
-                        "      }" +
-                        "      reviews {" +
-                        "        edges {" +
-                        "          node {" +
-                        "            id" +
-                        "          }" +
-                        "        }" +
-                        "      }" +
-                        "    recommendations {" +
-                        "      edges {" +
-                        "        node {" +
-                        "          id" +
-                        "        }" +
-                        "      }" +
-                        "    }" +
-                        "}" +
-                "}";
-
-        JSONObject queryParameters = new JSONObject();
-        queryParameters.put("id", id);
+    public String getAnimeById(int id) {
+        Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .parameter(FieldParameters.format)
+                .parameter(FieldParameters.averageScore)
+                .description()
+                .buildField();
+        Media media = Media.getMediaBuilder(field)
+                .id(id)
+                .buildMedia();
 
         Mono<String> response = client
                 .post()
@@ -241,7 +158,7 @@ public class AnimeService {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
-                .body(prepareJSONObject(query, queryParameters))
+                .body(Query.fromMedia(media))
                 .exchangeToMono(this::evaluateClientResponse);
 
         return response.block();
@@ -251,22 +168,11 @@ public class AnimeService {
         if (response.statusCode().equals(HttpStatus.OK)) {
             return response.bodyToMono(String.class);
         } else {
-            if (response.statusCode()
-                    .is4xxClientError()) {
-                return Mono.just("Error response");
-            } else {
-                return response.createException()
-                        .flatMap(Mono::error);
-            }
+            System.out.println(response.bodyToMono(String.class));
+
+            return response.createException()
+                    .flatMap(Mono::error);
         }
-    }
-
-    private BodyInserter<JSONObject, ReactiveHttpOutputMessage> prepareJSONObject(String query, JSONObject queryParameters) {
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("query", query);
-        requestBody.put("variables", queryParameters.toJSONString());
-
-        return BodyInserters.fromValue(requestBody);
     }
 
     private void populateTagFile() {
@@ -315,5 +221,13 @@ public class AnimeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private BodyInserter<JSONObject, ReactiveHttpOutputMessage> prepareJSONObject(String query, JSONObject queryParameters) {
+        JSONObject requestBody = new JSONObject();
+        requestBody.put("query", query);
+        requestBody.put("variables", queryParameters.toJSONString());
+
+        return BodyInserters.fromValue(requestBody);
     }
 }
