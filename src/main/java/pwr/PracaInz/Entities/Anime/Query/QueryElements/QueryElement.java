@@ -5,7 +5,7 @@ import pwr.PracaInz.Entities.Anime.Query.Parameters.ParameterString;
 
 import java.util.Set;
 
-public interface QueryElements {
+public interface QueryElement {
     String getElementString();
     Set<ParameterString> getQueryParameters();
     JSONObject getVariables();
