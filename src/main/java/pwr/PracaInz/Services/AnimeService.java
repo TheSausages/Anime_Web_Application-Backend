@@ -130,6 +130,7 @@ public class AnimeService {
                         .buildMediaTitle())
                 .parameter(FieldParameters.format)
                 .parameter(FieldParameters.averageScore)
+                .coverImage()
                 .description()
                 .buildField();
         Media media = Media.getMediaBuilder(field)
