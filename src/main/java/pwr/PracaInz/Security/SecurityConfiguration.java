@@ -1,6 +1,7 @@
 package pwr.PracaInz.Security;
 
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
+import org.keycloak.adapters.springsecurity.KeycloakConfiguration;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
 import org.keycloak.adapters.springsecurity.authentication.KeycloakAuthenticationProvider;
 import org.keycloak.adapters.springsecurity.config.KeycloakWebSecurityConfigurerAdapter;
@@ -22,11 +23,14 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@KeycloakConfiguration
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
@@ -51,27 +55,28 @@ public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter 
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        super.configure(http);
         http
                 .csrf().disable()
                 .cors().and()
                 .headers().frameOptions().sameOrigin()
                 .and()
                 .authorizeRequests()
-                .mvcMatchers("/login**", "/login", "/anime/**", "/anime**").permitAll()
-                .mvcMatchers("/forum/**", "/forum**").authenticated()
+                .mvcMatchers( "/login", "/anime/**", "/anime**", "/logoutUser").permitAll()
+                .mvcMatchers("/forum/**", "/forum**", "/aa", "/aa**").authenticated()
                 .anyRequest().authenticated()
-                .and()
-                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and()
-                .exceptionHandling()
-                .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED));
+        ;
 
     }
 
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
+        List<String> arr = new ArrayList<>();
+        arr.add("http://localhost:3000");
+        arr.add("http://localhost:8180");
+
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("http://localhost:3000"));
+        configuration.setAllowedOrigins(arr);
         configuration.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT", "HEAD", "PATCH"));
         configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(Arrays.asList("Origin", "X-Requested-With", "Content-Type", "Accept", "If-Match", "remember-me", "Authorization", "ETag", "Referer"));

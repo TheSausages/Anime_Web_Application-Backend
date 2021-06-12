@@ -1,5 +1,6 @@
 package pwr.PracaInz.Services;
 
+import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -16,12 +17,35 @@ public class KeycloakService {
 
     @Autowired
     KeycloakService() {
-        client = WebClient.create("http://localhost:8180/auth/realms/PracaInz-realm/protocol/openid-connect/token");
+        client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
+    }
+
+    public void logout(String refreshToken, String accessToken) {
+        if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
+            System.out.println("No");
+            return;
+        }
+        refreshToken = refreshToken.substring(17, refreshToken.length() - 2);
+
+
+        Mono<String> response = client
+                .post()
+                .uri("/logout")
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
+                    httpHeaders.set("Authorization", accessToken);
+                })
+                .body(BodyInserters
+                        .fromFormData("client_id", "ClientServer")
+                        .with("client_secret", "2cd84b1b-8fd3-4cba-ab72-dce64d366ac3")
+                        .with("refresh_token", refreshToken))
+                .exchangeToMono(this::evaluateClientResponse);
     }
 
     public String login(LoginCredentials credentials) {
         Mono<String> response = client
                 .post()
+                .uri("/token")
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
                 })
