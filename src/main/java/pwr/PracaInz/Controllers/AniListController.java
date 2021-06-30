@@ -33,4 +33,22 @@ public class AniListController {
     public String getCurrentSeasonInformation() {
         return animeService.getCurrentSeasonInformation();
     }
+
+    @GetMapping(value = "/ranking/topAllTime/{pageNumber}")
+    @ResponseBody
+    public String getTopAnimeOfAllTime(@PathVariable int pageNumber) {
+        return animeService.getTopAnimeAllTime(pageNumber);
+    }
+
+    @GetMapping(value = "/ranking/topAiring/{pageNumber}")
+    @ResponseBody
+    public String getTopAiringAnime(@PathVariable int pageNumber) {
+        return animeService.getTopAnimeAiring(pageNumber);
+    }
+
+    @GetMapping(value = "/ranking/topMovie/{pageNumber}")
+    @ResponseBody
+    public String getTopAnimeMovies(@PathVariable int pageNumber) {
+        return animeService.getTopAnimeMovies(pageNumber);
+    }
 }

@@ -13,8 +13,7 @@ import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.PageInfo;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaSeason;
-import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaTitle;
+import pwr.PracaInz.Entities.Anime.Query.Parameters.Media.*;
 import pwr.PracaInz.Entities.Anime.Query.Query;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
@@ -106,6 +105,104 @@ public class AnimeService {
                         .seasonYear(2021)
                         .season(MediaSeason.SPRING)
                         .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .buildMedia())
+                .buildPage();
+
+        Mono<String> response = client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .exchangeToMono(this::evaluateClientResponse);
+
+        return response.block();
+    }
+
+    public String getTopAnimeMovies(int pageNumber) {
+        Field field = Field.getFieldBuilder()
+                .coverImage()
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .nativeLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .buildField();
+        Page page = Page.getPageBuilder(pageNumber, 49)
+                .pageInfo(PageInfo.getPageInfoBuilder()
+                        .currentPage()
+                        .lastPage()
+                        .buildPageInfo())
+                .media(Media.getMediaBuilder(field)
+                        .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .format(MediaFormat.MOVIE)
+                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+                        .buildMedia())
+                .buildPage();
+
+        Mono<String> response = client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .exchangeToMono(this::evaluateClientResponse);
+
+        return response.block();
+    }
+
+    public String getTopAnimeAiring(int pageNumber) {
+        Field field = Field.getFieldBuilder()
+                .coverImage()
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .nativeLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .buildField();
+        Page page = Page.getPageBuilder(pageNumber, 49)
+                .pageInfo(PageInfo.getPageInfoBuilder()
+                        .currentPage()
+                        .lastPage()
+                        .buildPageInfo())
+                .media(Media.getMediaBuilder(field)
+                        .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .status(MediaStatus.RELEASING)
+                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+                        .buildMedia())
+                .buildPage();
+
+        Mono<String> response = client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .exchangeToMono(this::evaluateClientResponse);
+
+        return response.block();
+    }
+
+    public String getTopAnimeAllTime(int pageNumber) {
+        Field field = Field.getFieldBuilder()
+                .coverImage()
+                .title(MediaTitle.getMediaTitleBuilder()
+                        .englishLanguage()
+                        .nativeLanguage()
+                        .romajiLanguage()
+                        .buildMediaTitle())
+                .buildField();
+        Page page = Page.getPageBuilder(pageNumber, 49)
+                .pageInfo(PageInfo.getPageInfoBuilder()
+                        .currentPage()
+                        .lastPage()
+                        .buildPageInfo())
+                .media(Media.getMediaBuilder(field)
+                        .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
+                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
                         .buildMedia())
                 .buildPage();
 
