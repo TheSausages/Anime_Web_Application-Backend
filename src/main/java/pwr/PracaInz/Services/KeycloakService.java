@@ -1,6 +1,7 @@
 package pwr.PracaInz.Services;
 
 import com.mysql.cj.util.StringUtils;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -9,11 +10,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.servlet.function.ServerResponse;
 import pwr.PracaInz.Entities.LoginCredentials;
 import reactor.core.publisher.Mono;
 
+import javax.security.auth.login.LoginException;
 import java.util.Objects;
 
+@Log4j2
 @Service
 public class KeycloakService {
     private final WebClient client;
@@ -24,8 +28,11 @@ public class KeycloakService {
     }
 
     public HttpStatus logout(String refreshToken, String accessToken) {
+        log.info("Attempt to Log Out");
 
         if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
+            log.warn("Could not log out - missing information!");
+
             return HttpStatus.UNAUTHORIZED;
         }
 
@@ -43,14 +50,14 @@ public class KeycloakService {
                 .retrieve()
                 .toBodilessEntity();
 
-        if (!Objects.requireNonNull(response.block()).getStatusCode().equals(HttpStatus.NO_CONTENT)) {
-            return HttpStatus.NOT_FOUND;
-        }
+        log.info("Logged Out Successfully");
         return Objects.requireNonNull(response.block()).getStatusCode();
     }
 
-    public String login(LoginCredentials credentials) {
-        Mono<String> response = client
+    public ResponseEntity<String> login(LoginCredentials credentials) {
+        log.info("Attempt to Log In");
+
+        return client
                 .post()
                 .uri("/token")
                 .headers(httpHeaders -> {
@@ -63,17 +70,13 @@ public class KeycloakService {
                         .with("username", credentials.getUsername())
                         .with("password", credentials.getPassword())
                         .with("grant_type", "password"))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
+                .onErrorReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Given Credentials are not correct!"))
+                .block();
     }
 
-    private Mono<String> evaluateClientResponse(ClientResponse response) {
-        if (response.statusCode().equals(HttpStatus.OK)) {
-            return response.bodyToMono(String.class);
-        } else {
-            return response.createException()
-                    .flatMap(Mono::error);
-        }
-    }
 }

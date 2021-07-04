@@ -3,6 +3,7 @@ package pwr.PracaInz.Services;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
+import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Set;
 
+@Log4j2
 @Service
 public class AnimeService {
     private final WebClient client;
@@ -39,6 +41,8 @@ public class AnimeService {
     }
 
     public String getCurrentSeasonInformation() {
+        log.info("Get current Season Information");
+
         JSONObject seasonInformation = new JSONObject();
         seasonInformation.put("year", LocalDateTime.now().getYear());
         seasonInformation.put("season", MediaSeason.getCurrentSeason());
@@ -47,6 +51,8 @@ public class AnimeService {
     }
 
     public String getCurrentSeasonAnime() {
+        log.info("Get current Season Anime");
+
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -83,7 +89,9 @@ public class AnimeService {
         return response.block();
     }
 
-    public String getSeasonAnime(String season, String year) {
+    public String getSeasonAnime(MediaSeason season, int year) {
+        log.info("Get Anime from season:" + season + " from the year:" + year);
+
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -102,8 +110,8 @@ public class AnimeService {
         Page page = Page.getPageBuilder(1, 40)
                 .pageInfo(pageInfo)
                 .media(Media.getMediaBuilder(field)
-                        .seasonYear(2021)
-                        .season(MediaSeason.SPRING)
+                        .seasonYear(year)
+                        .season(season)
                         .type(pwr.PracaInz.Entities.Anime.Query.Parameters.Media.MediaType.ANIME)
                         .buildMedia())
                 .buildPage();
@@ -121,6 +129,8 @@ public class AnimeService {
     }
 
     public String getTopAnimeMovies(int pageNumber) {
+        log.info("Get the " + pageNumber + " page of the top ranking Movies based on Score");
+
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -154,6 +164,8 @@ public class AnimeService {
     }
 
     public String getTopAnimeAiring(int pageNumber) {
+        log.info("Get the " + pageNumber + " page of the top ranking airing Anime based on Score");
+
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -187,6 +199,8 @@ public class AnimeService {
     }
 
     public String getTopAnimeAllTime(int pageNumber) {
+        log.info("Get the" + pageNumber + " page of the top ranking Anime of all Time");
+
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -219,6 +233,8 @@ public class AnimeService {
     }
 
     public String getAnimeById(int id) {
+        log.info("Get Anime with id:" + id);
+
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -257,6 +273,8 @@ public class AnimeService {
     }
 
     private void populateTagFile() {
+        log.info("Populate the Tag file with Current Existing Tags from the Database");
+
         Gson gson = new GsonBuilder()
                 .serializeNulls()
                 .create();
