@@ -4,12 +4,15 @@ import com.mysql.cj.util.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.PracaInz.Entities.LoginCredentials;
 import reactor.core.publisher.Mono;
+
+import java.util.Objects;
 
 @Service
 public class KeycloakService {
@@ -20,15 +23,13 @@ public class KeycloakService {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
     }
 
-    public void logout(String refreshToken, String accessToken) {
+    public HttpStatus logout(String refreshToken, String accessToken) {
+
         if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
-            System.out.println("No");
-            return;
+            return HttpStatus.UNAUTHORIZED;
         }
-        refreshToken = refreshToken.substring(17, refreshToken.length() - 2);
 
-
-        Mono<String> response = client
+        Mono<ResponseEntity<Void>> response = client
                 .post()
                 .uri("/logout")
                 .headers(httpHeaders -> {
@@ -38,8 +39,14 @@ public class KeycloakService {
                 .body(BodyInserters
                         .fromFormData("client_id", "ClientServer")
                         .with("client_secret", "2cd84b1b-8fd3-4cba-ab72-dce64d366ac3")
-                        .with("refresh_token", refreshToken))
-                .exchangeToMono(this::evaluateClientResponse);
+                        .with("refresh_token", refreshToken.substring(17, refreshToken.length() - 2)))
+                .retrieve()
+                .toBodilessEntity();
+
+        if (!Objects.requireNonNull(response.block()).getStatusCode().equals(HttpStatus.NO_CONTENT)) {
+            return HttpStatus.NOT_FOUND;
+        }
+        return Objects.requireNonNull(response.block()).getStatusCode();
     }
 
     public String login(LoginCredentials credentials) {
@@ -65,7 +72,6 @@ public class KeycloakService {
         if (response.statusCode().equals(HttpStatus.OK)) {
             return response.bodyToMono(String.class);
         } else {
-            System.out.println(response.bodyToMono(String.class));
             return response.createException()
                     .flatMap(Mono::error);
         }

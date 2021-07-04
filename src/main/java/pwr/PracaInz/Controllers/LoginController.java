@@ -1,6 +1,9 @@
 package pwr.PracaInz.Controllers;
 
+import net.minidev.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import pwr.PracaInz.Entities.LoginCredentials;
@@ -24,16 +27,7 @@ public class LoginController {
     }
 
     @PostMapping("/logoutUser")
-    public void logout(@RequestBody String refreshToken, @RequestHeader("Authorization") String accessToken) {
-        keycloakService.logout(refreshToken, accessToken);
-    }
-
-    /*
-    Small mapping used to test if authorized paths are available
-     */
-    @GetMapping(value = "/aa")
-    public String aa() {
-        System.out.println("Authorized controller ok");
-        return "{\n\"aa\": \"aa\"\n}";
+    public ResponseEntity<Object> logout(@RequestBody String refreshToken, @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.status(keycloakService.logout(refreshToken, accessToken)).body(null);
     }
 }

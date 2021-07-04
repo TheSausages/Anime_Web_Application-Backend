@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 
 import pwr.PracaInz.Services.AnimeService;
 
-
 @RestController
 @RequestMapping("/anime")
 public class AniListController {
