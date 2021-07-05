@@ -1,8 +1,10 @@
 package pwr.PracaInz.Controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import pwr.PracaInz.Entities.LoginCredentials;
 import pwr.PracaInz.Services.AnimeService;
 
 @RestController
@@ -17,13 +19,13 @@ public class AniListController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public String getAnimeById(@PathVariable int id) {
+    public ResponseEntity<String> getAnimeById(@PathVariable int id) {
         return animeService.getAnimeById(id);
     }
 
     @GetMapping(value = "/season/current")
     @ResponseBody
-    public String getSeasonAnime() {
+    public ResponseEntity<String> getCurrentSeasonAnime() {
         return animeService.getCurrentSeasonAnime();
     }
 
@@ -35,19 +37,19 @@ public class AniListController {
 
     @GetMapping(value = "/ranking/topAllTime/{pageNumber}")
     @ResponseBody
-    public String getTopAnimeOfAllTime(@PathVariable int pageNumber) {
+    public ResponseEntity<String> getTopAnimeOfAllTime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAllTime(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topAiring/{pageNumber}")
     @ResponseBody
-    public String getTopAiringAnime(@PathVariable int pageNumber) {
+    public ResponseEntity<String> getTopAiringAnime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAiring(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topMovie/{pageNumber}")
     @ResponseBody
-    public String getTopAnimeMovies(@PathVariable int pageNumber) {
+    public ResponseEntity<String> getTopAnimeMovies(@PathVariable int pageNumber) {
         return animeService.getTopAnimeMovies(pageNumber);
     }
 }

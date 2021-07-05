@@ -2,15 +2,15 @@ package pwr.PracaInz.Services;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.gson.reflect.TypeToken;
+import com.google.gson.JsonObject;
 import lombok.extern.log4j.Log4j2;
 import net.minidev.json.JSONObject;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.reactive.function.BodyInserters;
-import org.springframework.web.reactive.function.client.ClientResponse;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.PageInfo;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.FieldParameters;
@@ -19,23 +19,24 @@ import pwr.PracaInz.Entities.Anime.Query.Query;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Field;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Media.Media;
 import pwr.PracaInz.Entities.Anime.Query.QueryElements.Page.Page;
-import pwr.PracaInz.Entities.Anime.TagFile.Tag;
-import pwr.PracaInz.Entities.Anime.TagFile.TagList;
+import pwr.PracaInz.Entities.Anime.Query.QueryElements.QueryElements;
 import reactor.core.publisher.Mono;
 
-import java.io.*;
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Set;
 
 @Log4j2
 @Service
 public class AnimeService {
     private final WebClient client;
+    private final Gson gson;
 
     @Autowired
     AnimeService() {
         client = WebClient.create("https://graphql.anilist.co");
+        gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
 
         //this.populateTagFile();
     }
@@ -50,7 +51,7 @@ public class AnimeService {
         return seasonInformation.toJSONString();
     }
 
-    public String getCurrentSeasonAnime() {
+    public ResponseEntity<String> getCurrentSeasonAnime() {
         log.info("Get current Season Anime");
 
         Field field = Field.getFieldBuilder()
@@ -77,19 +78,22 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        Mono<String> response = client
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(page))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(res -> evaluateClientResponseWithAdditionalBody(QueryElements.Page, Mono.just(res), "Successfully got Current Season Information and Anime", "\"seasonInformation\": " + getCurrentSeasonInformation()))
+                .block()
+                .block()
+                ;
     }
 
-    public String getSeasonAnime(MediaSeason season, int year) {
+    public ResponseEntity<String> getSeasonAnime(MediaSeason season, int year) {
         log.info("Get Anime from season:" + season + " from the year:" + year);
 
         Field field = Field.getFieldBuilder()
@@ -116,19 +120,21 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        Mono<String> response = client
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(page))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(res -> evaluateClientResponse(QueryElements.Media, Mono.just(res), "Successfully got Anime from " + season + " of " + year))
+                .block()
+                .block();
     }
 
-    public String getTopAnimeMovies(int pageNumber) {
+    public ResponseEntity<String> getTopAnimeMovies(int pageNumber) {
         log.info("Get the " + pageNumber + " page of the top ranking Movies based on Score");
 
         Field field = Field.getFieldBuilder()
@@ -151,19 +157,21 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        Mono<String> response = client
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(page))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(res -> evaluateClientResponse(QueryElements.Page, Mono.just(res), "Successfully got " + pageNumber + " Page of Top Movies"))
+                .block()
+                .block();
     }
 
-    public String getTopAnimeAiring(int pageNumber) {
+    public ResponseEntity<String> getTopAnimeAiring(int pageNumber) {
         log.info("Get the " + pageNumber + " page of the top ranking airing Anime based on Score");
 
         Field field = Field.getFieldBuilder()
@@ -186,19 +194,21 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        Mono<String> response = client
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(page))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(res -> evaluateClientResponse(QueryElements.Page, Mono.just(res), "Successfully got " + pageNumber + " Page of Top Airing Anime"))
+                .block()
+                .block();
     }
 
-    public String getTopAnimeAllTime(int pageNumber) {
+    public ResponseEntity<String> getTopAnimeAllTime(int pageNumber) {
         log.info("Get the" + pageNumber + " page of the top ranking Anime of all Time");
 
         Field field = Field.getFieldBuilder()
@@ -220,19 +230,21 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        Mono<String> response = client
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(page))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .map(res -> evaluateClientResponse(QueryElements.Page, Mono.just(res), "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
+                .block()
+                .block();
     }
 
-    public String getAnimeById(int id) {
+    public ResponseEntity<String> getAnimeById(int id) {
         log.info("Get Anime with id:" + id);
 
         Field field = Field.getFieldBuilder()
@@ -250,29 +262,44 @@ public class AnimeService {
                 .id(id)
                 .buildMedia();
 
-        Mono<String> response = client
+
+        return client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
                     httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
                 })
                 .body(Query.fromQueryElement(media))
-                .exchangeToMono(this::evaluateClientResponse);
-
-        return response.block();
+                .retrieve()
+                .bodyToMono(String.class)
+                .mapNotNull(res -> evaluateClientResponse(QueryElements.Media, Mono.just(res), "Successfully got Anime with id:" + id))
+                .block()
+                .block();
     }
 
-    private Mono<String> evaluateClientResponse(ClientResponse response) {
-        if (response.statusCode().equals(HttpStatus.OK)) {
-            return response.bodyToMono(String.class);
-        } else {
-            System.out.println(response.bodyToMono(String.class));
-            return response.createException()
-                    .flatMap(Mono::error);
-        }
+    private Mono<ResponseEntity<String>> evaluateClientResponseWithAdditionalBody(QueryElements element, Mono<String> response, String positiveResponse, String additionalBody) {
+        return response
+                .mapNotNull(res -> removeDataAndQueryElementFromJson(res, element))
+                .doOnSuccess(s -> log.info(positiveResponse))
+                .mapNotNull(res -> ResponseEntity.status(HttpStatus.OK).body(StringUtils.chop(res) + ",\n" + additionalBody + "}"))
+                .doOnError(e -> log.info("Anilist Server did not Respond!"))
+                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Anilist Server did not Respond!"));
     }
 
-    private void populateTagFile() {
+    private Mono<ResponseEntity<String>> evaluateClientResponse(QueryElements element, Mono<String> response, String positiveResponse) {
+        return response
+                .mapNotNull(res -> removeDataAndQueryElementFromJson(res, element))
+                .doOnSuccess(s -> log.info(positiveResponse))
+                .mapNotNull(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .doOnError(e -> log.info("Anilist Server did not Respond!"))
+                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body("Anilist Server did not Respond!"));
+    }
+
+    private String removeDataAndQueryElementFromJson(String json, QueryElements element) {
+        return gson.toJson(gson.fromJson(json, JsonObject.class).getAsJsonObject("data").getAsJsonObject(element.name()));
+    }
+
+    /*private void populateTagFile() {
         log.info("Populate the Tag file with Current Existing Tags from the Database");
 
         Gson gson = new GsonBuilder()
@@ -298,7 +325,7 @@ public class AnimeService {
         requestBody.put("query", query);
         requestBody.put("variables", queryParameters.toJSONString());
 
-        Mono<String> response = client
+        Mono<JSONObject> response = client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -307,7 +334,7 @@ public class AnimeService {
                 .body(BodyInserters.fromValue(requestBody))
                 .exchangeToMono(this::evaluateClientResponse);
 
-        Object data = gson.fromJson(response.block(), JSONObject.class).get("data");
+        Object data = gson.fromJson(response.block().toJSONString(), JSONObject.class).get("data");
         Object tagsMedia = gson.fromJson(gson.toJson(data), JSONObject.class).get("MediaTagCollection");
 
         TagList tagList = new TagList();
@@ -324,5 +351,5 @@ public class AnimeService {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+    }*/
 }
