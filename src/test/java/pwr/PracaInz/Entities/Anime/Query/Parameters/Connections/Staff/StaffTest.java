@@ -76,7 +76,7 @@ class StaffTest {
                 .buildStaff();
 
         //then
-        assertEquals(staff.getStaffString(), "staff {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}");
+        assertEquals(staff.getStaffString(), "staff {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}");
     }
 
     @Test
@@ -91,7 +91,7 @@ class StaffTest {
                 .buildStaff();
 
         //then
-        assertEquals(staff.getStaffString(), "staff {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}");
+        assertEquals(staff.getStaffString(), "staff {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}");
     }
 
     @Test

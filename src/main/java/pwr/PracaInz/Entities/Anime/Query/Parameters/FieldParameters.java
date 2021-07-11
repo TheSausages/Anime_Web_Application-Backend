@@ -24,7 +24,7 @@ public enum FieldParameters {
     popularity("Int"),
     isLocked("Boolean"),
     trending("Int"),
-    favorites("Int"),
+    favourites("Int"),
     isAdult("Boolean"),
     stats("MediaStats"),
     siteUrl("String"),

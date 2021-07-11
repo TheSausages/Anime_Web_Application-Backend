@@ -17,21 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class MediaTest {
 
     @Test
-    void MediaBuilder_NoParam_ThrowException() {
-        //given
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .parameter(FieldParameters.episodes)
-                .buildField();
-
-        //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> Media.getMediaBuilder(field).buildMedia());
-
-        //then
-        assertEquals(exception.getMessage(), "Media must posses at least 1 parameter!");
-    }
-
-    @Test
     void MediaBuilder_Id_NoException() {
         //given
         int id = 256545;

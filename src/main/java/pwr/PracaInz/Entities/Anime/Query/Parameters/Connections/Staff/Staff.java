@@ -35,7 +35,7 @@ public class Staff {
         }
 
         public StaffBuilder name() {
-            staff.add(new ParameterString("name {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n"));
+            staff.add(new ParameterString("name {\nfirst\nmiddle\nlast\nfull\nnative\n}\n"));
             return this;
         }
 

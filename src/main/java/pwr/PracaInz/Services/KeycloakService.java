@@ -1,5 +1,8 @@
 package pwr.PracaInz.Services;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
 import com.mysql.cj.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,15 +24,17 @@ import java.util.Objects;
 @Service
 public class KeycloakService {
     private final WebClient client;
+    private final Gson gson;
 
     @Autowired
     KeycloakService() {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
+        gson = new GsonBuilder()
+                .setPrettyPrinting()
+                .create();
     }
 
     public HttpStatus logout(String refreshToken, String accessToken) {
-        log.info("Attempt to Log Out");
-
         if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
             log.warn("Could not log out - missing information!");
 
@@ -54,15 +59,11 @@ public class KeycloakService {
         return Objects.requireNonNull(response.block()).getStatusCode();
     }
 
-    public ResponseEntity<String> login(LoginCredentials credentials) {
-        log.info("Attempt to Log In");
-
+    public ResponseEntity<JsonObject> login(LoginCredentials credentials) {
         return client
                 .post()
                 .uri("/token")
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE));
-                })
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
                 .body(BodyInserters
                         .fromFormData("client_id", "ClientServer")
                         .with("client_secret", "2cd84b1b-8fd3-4cba-ab72-dce64d366ac3")
@@ -72,11 +73,18 @@ public class KeycloakService {
                         .with("grant_type", "password"))
                 .retrieve()
                 .bodyToMono(String.class)
-                .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
+                .map(body -> gson.fromJson(body, JsonObject.class))
                 .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
                 .doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
-                .onErrorReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Given Credentials are not correct!"))
+                .onErrorReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(getErrorMessage("Given Credentials are not correct!")))
                 .block();
     }
 
+    private JsonObject getErrorMessage(String message) {
+        JsonObject error = new JsonObject();
+        error.addProperty("message", "Anilist Server did not Respond");
+
+        return error;
+    }
 }

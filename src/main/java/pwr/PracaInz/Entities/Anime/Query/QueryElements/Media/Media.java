@@ -467,8 +467,6 @@ public class Media implements QueryElement {
         }
 
         public Media buildMedia() {
-            if (mediaParameters.isEmpty()) { throw new IllegalStateException("Media must posses at least 1 parameter!"); }
-
             StringBuilder mediaBuilder = new StringBuilder("Media(");
             mediaParameters.forEach(mediaBuilder::append);
             mediaBuilder.delete(mediaBuilder.length() - 2, mediaBuilder.length())

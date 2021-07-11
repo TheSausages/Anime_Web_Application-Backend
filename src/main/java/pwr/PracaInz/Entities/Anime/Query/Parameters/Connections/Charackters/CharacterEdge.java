@@ -36,8 +36,8 @@ public class CharacterEdge {
     public static final class CharacterEdgeBuilder {
         private final Set<ParameterString> characterEdge = new LinkedHashSet<>();
 
-        public CharacterEdgeBuilder node() {
-            characterEdge.add(new ParameterString("node\n"));
+        public CharacterEdgeBuilder node(Character character) {
+            characterEdge.add(new ParameterString("node " + character.getCharacterStringWithoutFieldName() + "\n"));
             return this;
         }
 

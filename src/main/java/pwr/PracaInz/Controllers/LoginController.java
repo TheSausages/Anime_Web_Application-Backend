@@ -1,5 +1,6 @@
 package pwr.PracaInz.Controllers;
 
+import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -16,12 +17,12 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody LoginCredentials credentials) {
+    public ResponseEntity<JsonObject> login(@RequestBody LoginCredentials credentials) {
         return keycloakService.login(credentials);
     }
 
     @PostMapping("/logoutUser")
-    public ResponseEntity<Object> logout(@RequestBody String refreshToken, @RequestHeader("Authorization") String accessToken) {
-        return ResponseEntity.status(keycloakService.logout(refreshToken, accessToken)).body(null);
+    public ResponseEntity<String> logout(@RequestBody String refreshToken, @RequestHeader("Authorization") String accessToken) {
+        return ResponseEntity.status(keycloakService.logout(refreshToken, accessToken)).body("OK");
     }
 }

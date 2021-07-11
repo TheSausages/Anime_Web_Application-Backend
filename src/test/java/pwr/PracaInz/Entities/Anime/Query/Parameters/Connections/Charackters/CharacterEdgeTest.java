@@ -22,55 +22,73 @@ class CharacterEdgeTest {
     @Test
     void CharacterEdgeBuilder_Node_NoException() {
         //given
+        Character character = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
 
         //when
         CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
-                .node()
+                .node(character)
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nnode\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nnode {\nid\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyNode_NoException() {
         //given
+        Character character = Character.getCharacterBuilder()
+                .age()
+                .buildCharacter();
+        Character character1 = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
 
         //when
         CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
-                .node()
-                .node()
+                .node(character)
+                .node(character1)
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nnode\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nnode {\nage\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_NodeWithoutFieldName_NoException() {
         //given
+        Character character = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
 
         //when
         CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
-                .node()
+                .node(character)
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nnode\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nnode {\nid\n}\n}");
     }
 
     @Test
     void CharacterEdgeBuilder_ManyNodeWithoutFieldName_NoException() {
         //given
+        Character character = Character.getCharacterBuilder()
+                .age()
+                .buildCharacter();
+        Character character1 = Character.getCharacterBuilder()
+                .id()
+                .buildCharacter();
 
         //when
         CharacterEdge edge = CharacterEdge.getCharacterEdgeBuilder()
-                .node()
-                .node()
+                .node(character)
+                .node(character1)
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nnode\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nnode {\nage\n}\n}");
     }
 
     @Test
@@ -845,7 +863,7 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}\n}\n}");
     }
 
     @Test
@@ -868,7 +886,7 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
+        assertEquals(edge.getCharacterEdgeString(), "characterEdge {\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}\n}\n}");
     }
 
     @Test
@@ -887,7 +905,7 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}\n}\n}");
     }
 
     @Test
@@ -910,6 +928,6 @@ class CharacterEdgeTest {
                 .buildCharacterEdge();
 
         //then
-        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\n}\n}\n}\n}");
+        assertEquals(edge.getCharacterEdgeWithoutFieldName(), "{\nvoiceActorsRoles(language: GERMAN, sort: [LANGUAGE]) {\nvoiceActor {\nname {\nfirst\nmiddle\nlast\nfull\nnative\n}\n}\n}\n}");
     }
 }
