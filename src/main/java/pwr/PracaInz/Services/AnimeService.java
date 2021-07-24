@@ -4,12 +4,12 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import pwr.PracaInz.Configuration.AnilistProperties;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.*;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Charackters.Character;
 import pwr.PracaInz.Entities.Anime.Query.Parameters.Connections.Media.MediaConnection;
@@ -34,11 +34,14 @@ import java.util.Objects;
 @Log4j2
 @Service
 public class AnimeService {
+    private final AnilistProperties anilistProperties;
     private final WebClient client;
     private final Gson gson;
 
-    AnimeService() {
-        client = WebClient.create("https://graphql.anilist.co");
+    AnimeService(AnilistProperties anilistProperties) {
+        this.anilistProperties = anilistProperties;
+
+        client = WebClient.create(anilistProperties.getApiUrl());
         gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
@@ -61,6 +64,7 @@ public class AnimeService {
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
                         .englishLanguage()
+                        .nativeLanguage()
                         .romajiLanguage()
                         .buildMediaTitle())
                 .coverImage()
@@ -261,9 +265,9 @@ public class AnimeService {
                 .parameter(FieldParameters.favourites)
                 .parameter(FieldParameters.isAdult)
                 .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .romajiLanguage()
-                        .nativeLanguage()
+                        .englishLanguageStylized()
+                        .romajiLanguageStylized()
+                        .nativeLanguageStylized()
                         .buildMediaTitle())
                 .status()
                 .coverImage()
@@ -283,13 +287,14 @@ public class AnimeService {
                                                 .nativeLanguage()
                                                 .buildMediaTitle())
                                         .coverImage()
+                                        .status()
                                         .buildField()).buildMedia())
                                 .relationType(2)
                                 .buildMediaEdge())
                         .buildMediaConnection())
                 .characters(CharacterArguments.getCharacterArgumentsBuilder()
-                                .mediaSort(new CharacterSort[]{CharacterSort.RELEVANCE})
-                                .perPage(6)
+                                .mediaSort(new CharacterSort[]{CharacterSort.ROLE})
+                                .perPage(15)
                                 .buildCharacterMediaArguments()
                         , CharacterConnection.getCharacterConnectionBuilder()
                         .edges(CharacterEdge.getCharacterEdgeBuilder()
@@ -304,6 +309,7 @@ public class AnimeService {
                                 .voiceActors(Staff.getStaffBuilder()
                                         .name()
                                         .image()
+                                        .languageV2()
                                         .buildStaff())
                                 .buildCharacterEdge())
                         .pageInfo(PageInfo.getPageInfoBuilder()
@@ -366,7 +372,7 @@ public class AnimeService {
                     return ResponseEntity.status(HttpStatus.OK).body(res);
                 })
                 .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> log.info("Anilist Server did not Respond!"))
+                .doOnError(e -> log.info(anilistProperties.getErrorMessage()))
                 .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
     }
 
@@ -376,7 +382,7 @@ public class AnimeService {
 
     private JsonObject getErrorMessage() {
         JsonObject error = new JsonObject();
-        error.addProperty("message", "Anilist Server did not Respond");
+        error.addProperty("message", anilistProperties.getErrorMessage());
 
         return error;
     }

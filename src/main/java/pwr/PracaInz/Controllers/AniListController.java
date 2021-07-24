@@ -48,7 +48,7 @@ public class AniListController {
         return animeService.getTopAnimeAiring(pageNumber);
     }
 
-    @GetMapping(value = "/ranking/topMovie/{pageNumber}")
+    @GetMapping(value = "/ranking/topMovies/{pageNumber}")
     @ResponseBody
     public ResponseEntity<JsonObject> getTopAnimeMovies(@PathVariable int pageNumber) {
         return animeService.getTopAnimeMovies(pageNumber);

@@ -34,7 +34,7 @@ public class MediaTitle {
         }
 
         public MediaTitleBuilder romajiLanguageStylized() {
-            languages.add(new ParameterString(TitleLanguages.Romaji.getProperFieldString() + "(stylized: true)"));
+            languages.add(new ParameterString(TitleLanguages.Romaji.getProperFieldString() + "(stylised: true)"));
             return this;
         }
 
@@ -44,7 +44,7 @@ public class MediaTitle {
         }
 
         public MediaTitleBuilder englishLanguageStylized() {
-            languages.add(new ParameterString(TitleLanguages.English.getProperFieldString() + "(stylized: true)"));
+            languages.add(new ParameterString(TitleLanguages.English.getProperFieldString() + "(stylised: true)"));
             return this;
         }
 
@@ -54,7 +54,7 @@ public class MediaTitle {
         }
 
         public MediaTitleBuilder nativeLanguageStylized() {
-            languages.add(new ParameterString(TitleLanguages.Native.getProperFieldString() + "(stylized: true)"));
+            languages.add(new ParameterString(TitleLanguages.Native.getProperFieldString() + "(stylised: true)"));
             return this;
         }
 
