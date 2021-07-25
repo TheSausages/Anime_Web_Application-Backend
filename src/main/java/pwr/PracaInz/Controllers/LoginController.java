@@ -22,7 +22,7 @@ public class LoginController {
     }
 
     @PostMapping("/logoutUser")
-    public ResponseEntity<String> logout(@RequestBody String refreshToken, @RequestHeader("Authorization") String accessToken) {
-        return ResponseEntity.status(keycloakService.logout(refreshToken, accessToken)).body("OK");
+    public ResponseEntity<?> logout(@RequestBody String refreshToken, @RequestHeader("authorization") String accessToken) {
+        return ResponseEntity.status(keycloakService.logout(refreshToken, accessToken)).build();
     }
 }

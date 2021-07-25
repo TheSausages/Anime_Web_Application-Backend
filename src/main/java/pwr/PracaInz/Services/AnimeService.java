@@ -96,7 +96,7 @@ public class AnimeService {
                 .retrieve()
                 .bodyToMono(String.class)
                 .map(body -> gson.fromJson(body, JsonObject.class))
-                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got Current Season Information and Anime", getCurrentSeasonInformation(), "seasonInformation"))
+                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got Current Season Information and Anime", getCurrentSeasonInformation(), "currentSeason"))
                 .block())
                 .block();
     }
