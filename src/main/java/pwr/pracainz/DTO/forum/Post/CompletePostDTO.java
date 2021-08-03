@@ -1,22 +1,19 @@
-package pwr.pracainz.DTO.forum;
+package pwr.pracainz.DTO.forum.Post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import pwr.pracainz.DTO.user.UserDTO;
+import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
 @Getter
-public class PostDTO {
-    private int postId;
-    private String title;
+public class CompletePostDTO {
+    private SimplePostDTO postInformation;
     private String postText;
-    private boolean isBlocked;
     private int nrOfPlus;
     private int nrOfMinus;
-    private UserDTO user;
-    private ThreadDTO thread;
+    private SimpleThreadDTO thread;
 }

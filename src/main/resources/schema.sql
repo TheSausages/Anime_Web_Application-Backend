@@ -43,34 +43,34 @@ CREATE TABLE `UserAchievements`
 
 
 /*Create Tables connected to the Forum*/
-CREATE TABLE `ForumCategory`
+CREATE TABLE `ForumCategories`
 (
-    `CategoryID`          int NOT NULL ,
-    `CategoryName`        varchar(45) NOT NULL ,
+    `CategoryID`          int          NOT NULL,
+    `CategoryName`        varchar(45)  NOT NULL,
     `CategoryDescription` varchar(150) NOT NULL DEFAULT 'No Description Given',
 
     PRIMARY KEY (`CategoryID`)
-) COMMENT='Table Containing the Categories a given Tread can Have';
+) COMMENT ='Table Containing the Categories a given Tread can Have';
 
 CREATE TABLE `Tags`
 (
-    `TagID`         int NOT NULL auto_increment,
-    `TagName`       varchar(45) NOT NULL ,
-    `TagImportance` enum('low','medium','high','admin') NOT NULL DEFAULT 'low',
+    `TagID`         int                                  NOT NULL auto_increment,
+    `TagName`       varchar(45)                          NOT NULL,
+    `TagImportance` enum ('LOW','MEDIUM','HIGH','ADMIN') NOT NULL DEFAULT 'LOW',
 
     PRIMARY KEY (`TagID`)
 ) COMMENT='Table of Tags that a Thread on the forum can have';
 
 CREATE TABLE `Threads`
 (
-    `ThreadID`   int NOT NULL auto_increment,
-    `Title`      varchar(45) NOT NULL ,
-    `Status`     enum('Open','Closed') NOT NULL DEFAULT 'Open',
-    `CategoryID` int NOT NULL ,
+    `ThreadID`   int                    NOT NULL auto_increment,
+    `Title`      varchar(45)            NOT NULL,
+    `Status`     enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
+    `CategoryID` int                    NOT NULL,
 
     PRIMARY KEY (`ThreadID`),
     KEY `FK_Thread_ForumCategory` (`CategoryID`),
-    CONSTRAINT `FK_169` FOREIGN KEY `FK_Thread_ForumCategory` (`CategoryID`) REFERENCES `ForumCategory` (`CategoryID`)
+    CONSTRAINT `FK_169` FOREIGN KEY `FK_Thread_ForumCategory` (`CategoryID`) REFERENCES ForumCategories (`CategoryID`)
 ) COMMENT='Table containing information about a Single Thread on the Forum';
 
 CREATE TABLE `ThreadTags`
@@ -138,17 +138,17 @@ CREATE TABLE `Reviews`
     PRIMARY KEY (`ReviewID`)
 ) COMMENT='Table containing information about the review of a User';
 
-CREATE TABLE `AnimeUserInfo`
+CREATE TABLE `AnimeUserInfos`
 (
-    `UserID`           varchar(45) NOT NULL ,
-    `AnimeID`          int NOT NULL ,
-    `Status`           enum('NO_STATUS','WATCHING', 'COMPLETED','DROPPED','PLAN_TO_WATCH') NOT NULL DEFAULT 'NO_STATUS',
-    `WatchStartDate`   date NULL ,
-    `WatchEndDate`     date NULL ,
-    `NrOfEpisodesSeen` smallint NOT NULL DEFAULT 0,
-    `IsFavourite`      boolean NOT NULL DEFAULT false,
-    `DidReview`        boolean NOT NULL DEFAULT false,
-    `DidGrade`         boolean NOT NULL DEFAULT false,
+    `UserID`           varchar(45)                                                          NOT NULL,
+    `AnimeID`          int                                                                  NOT NULL,
+    `Status`           enum ('NO_STATUS','WATCHING', 'COMPLETED','DROPPED','PLAN_TO_WATCH') NOT NULL DEFAULT 'NO_STATUS',
+    `WatchStartDate`   date                                                                 NULL,
+    `WatchEndDate`     date                                                                 NULL,
+    `NrOfEpisodesSeen` smallint                                                             NOT NULL DEFAULT 0,
+    `IsFavourite`      boolean                                                              NOT NULL DEFAULT false,
+    `DidReview`        boolean                                                              NOT NULL DEFAULT false,
+    `DidGrade`         boolean                                                              NOT NULL DEFAULT false,
     `ReviewID`         int NULL ,
     `GradeID`          int NULL ,
 

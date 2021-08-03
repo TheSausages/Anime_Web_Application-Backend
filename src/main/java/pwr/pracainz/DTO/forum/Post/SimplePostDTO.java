@@ -1,4 +1,4 @@
-package pwr.pracainz.DTO.animeInfo;
+package pwr.pracainz.DTO.forum.Post;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,9 @@ import pwr.pracainz.DTO.user.SimpleUserDTO;
 @NoArgsConstructor
 @Setter
 @Getter
-public class AnimeUserInfoIdDTO {
+public class SimplePostDTO {
+    private int postId;
+    private String title;
+    private boolean isBlocked;
     private SimpleUserDTO user;
-    private int animeId;
 }

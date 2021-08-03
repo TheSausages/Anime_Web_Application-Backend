@@ -6,19 +6,22 @@ import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.GradeDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
-import pwr.pracainz.DTO.forum.PostDTO;
+import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
+import pwr.pracainz.DTO.forum.Post.SimplePostDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
-import pwr.pracainz.DTO.forum.ThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
 import pwr.pracainz.DTO.user.AchievementDTO;
-import pwr.pracainz.DTO.user.UserDTO;
+import pwr.pracainz.DTO.user.CompleteUserDTO;
+import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Grade;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
-import pwr.pracainz.entities.databaseerntities.forum.ForumCategory;
-import pwr.pracainz.entities.databaseerntities.forum.Post;
-import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
+import pwr.pracainz.entities.databaseerntities.forum.*;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 
@@ -26,14 +29,22 @@ import java.util.stream.Collectors;
 
 @Service
 public class DTOConversionService {
-    public UserDTO convertUserToDTO(User user) {
-        return new UserDTO(
+    public CompleteUserDTO convertUserToCompleteDTO(User user) {
+        return new CompleteUserDTO(
+                convertUserToSimpleDTO(user),
+                user.getAchievements().stream().map(this::convertAchievementToDTO).collect(Collectors.toSet()),
+                user.getAnimeUserInfo().stream().map(this::convertAnimeUserInfoToDTO).collect(Collectors.toSet()),
+                user.getThreadUserStatuses().stream().map(this::convertThreadUserStatusToDTO).collect(Collectors.toSet()),
+                user.getPosts().stream().map(this::convertPostToCompleteDTO).collect(Collectors.toSet())
+        );
+    }
+
+    public SimpleUserDTO convertUserToSimpleDTO(User user) {
+        return new SimpleUserDTO(
                 user.getUserId(),
                 user.getNrOfPosts(),
                 user.getWatchTime(),
-                user.getAchievementPoints(),
-                user.getAchievements().stream().map(this::convertAchievementToDTO).collect(Collectors.toSet()),
-                user.getPosts().stream().map(this::convertPostToDTO).collect(Collectors.toSet())
+                user.getAchievementPoints()
         );
     }
 
@@ -48,27 +59,39 @@ public class DTOConversionService {
         );
     }
 
-    public PostDTO convertPostToDTO(Post post) {
-        return new PostDTO(
+    public SimplePostDTO convertPostToSimpleDTO(Post post) {
+        return new SimplePostDTO(
                 post.getPostId(),
                 post.getTitle(),
-                post.getPostText(),
                 post.isBlocked(),
-                post.getNrOfPlus(),
-                post.getNrOfMinus(),
-                convertUserToDTO(post.getUser()),
-                convertThreadToThreadDTO(post.getThread())
+                convertUserToSimpleDTO(post.getUser())
         );
     }
 
-    public ThreadDTO convertThreadToThreadDTO(Thread thread) {
-        return new ThreadDTO(
+    public CompletePostDTO convertPostToCompleteDTO(Post post) {
+        return new CompletePostDTO(
+                convertPostToSimpleDTO(post),
+                post.getPostText(),
+                post.getNrOfPlus(),
+                post.getNrOfMinus(),
+                convertThreadToSimpleDTO(post.getThread())
+        );
+    }
+
+    public SimpleThreadDTO convertThreadToSimpleDTO(Thread thread) {
+        return new SimpleThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),
                 thread.getStatus(),
                 convertForumCategoryToForumDTO(thread.getCategory()),
-                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toSet()),
-                thread.getPosts().stream().map(this::convertPostToDTO).collect(Collectors.toSet())
+                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toSet())
+        );
+    }
+
+    public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread) {
+        return new CompleteThreadDTO(
+                convertThreadToSimpleDTO(thread),
+                thread.getPosts().stream().map(this::convertPostToSimpleDTO).collect(Collectors.toSet())
         );
     }
 
@@ -122,8 +145,23 @@ public class DTOConversionService {
 
     public AnimeUserInfoIdDTO convertAnimeUserInfoIdToDTO(AnimeUserInfoId animeUserInfoId) {
         return new AnimeUserInfoIdDTO(
-                animeUserInfoId.getUserId(),
+                convertUserToSimpleDTO(animeUserInfoId.getUser()),
                 animeUserInfoId.getAnimeId()
+        );
+    }
+
+    public ThreadUserStatusIdDTO convertThreadUserStatusIdToDTO(ThreadUserStatusId threadUserStatusId) {
+        return new ThreadUserStatusIdDTO(
+                convertUserToSimpleDTO(threadUserStatusId.getUser()),
+                convertThreadToSimpleDTO(threadUserStatusId.getThread())
+        );
+    }
+
+    public ThreadUserStatusDTO convertThreadUserStatusToDTO(ThreadUserStatus threadUserStatus) {
+        return new ThreadUserStatusDTO(
+                convertThreadUserStatusIdToDTO(threadUserStatus.getThreadUserStatusId()),
+                threadUserStatus.isWatching(),
+                threadUserStatus.isBlocked()
         );
     }
 }

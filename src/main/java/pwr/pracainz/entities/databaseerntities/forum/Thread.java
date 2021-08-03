@@ -1,5 +1,6 @@
 package pwr.pracainz.entities.databaseerntities.forum;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,8 +13,9 @@ import java.util.Set;
 @NoArgsConstructor
 @Getter
 @Setter
-@Entity
+@AllArgsConstructor
 @Table(name = "Threads")
+@Entity
 public class Thread {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,8 @@ public class Thread {
 
     private String title;
 
-    @ColumnDefault("Open")
+    @Enumerated(EnumType.STRING)
+    @ColumnDefault("OPEN")
     private ThreadStatus status;
 
     @ManyToOne
@@ -31,13 +34,13 @@ public class Thread {
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "ThreadTags",
-            joinColumns = { @JoinColumn(name = "TagId") },
+            joinColumns = {@JoinColumn(name = "TagId")},
             inverseJoinColumns = { @JoinColumn(name = "ThreadId") }
     )
     private Set<Tag> tags;
 
     @OneToMany(
-            mappedBy = "thread",
+            mappedBy = "threadUserStatusId.thread",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

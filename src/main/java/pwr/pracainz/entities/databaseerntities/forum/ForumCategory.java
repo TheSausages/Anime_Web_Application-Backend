@@ -12,7 +12,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Entity
-@Table(name = "ForumCategory")
+@Table(name = "ForumCategories")
 public class ForumCategory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

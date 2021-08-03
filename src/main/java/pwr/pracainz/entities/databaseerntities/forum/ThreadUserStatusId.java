@@ -1,4 +1,4 @@
-package pwr.pracainz.entities.databaseerntities.animeInfo;
+package pwr.pracainz.entities.databaseerntities.forum;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -10,7 +10,6 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,25 +18,28 @@ import java.util.Objects;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class AnimeUserInfoId implements Serializable {
+public class ThreadUserStatusId implements Serializable {
     @NotEmpty
     @ManyToOne
-    @JoinColumn(name = "userId")
+    @JoinColumn(name = "UserID")
     private User user;
 
-    @Positive
-    private int animeId;
+    @NotEmpty
+    @ManyToOne
+    @JoinColumn(name = "threadId")
+    private Thread thread;
+
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        AnimeUserInfoId that = (AnimeUserInfoId) o;
-        return animeId == that.animeId && Objects.equals(user, that.user);
+        ThreadUserStatusId that = (ThreadUserStatusId) o;
+        return Objects.equals(user, that.user) && Objects.equals(thread, that.thread);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(user, animeId);
+        return Objects.hash(user, thread);
     }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
 
@@ -38,7 +39,14 @@ public class User {
     private Set<Achievement> achievements;
 
     @OneToMany(
-            mappedBy = "user",
+            mappedBy = "animeUserInfoId.user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<AnimeUserInfo> animeUserInfo;
+
+    @OneToMany(
+            mappedBy = "threadUserStatusId.user",
             cascade = CascadeType.ALL,
             orphanRemoval = true
     )

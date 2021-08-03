@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.repositories.animeInfo.GradeRepository;
 import pwr.pracainz.repositories.animeInfo.ReviewRepository;
+import pwr.pracainz.repositories.forum.*;
 import pwr.pracainz.repositories.user.AchievementRepository;
 import pwr.pracainz.repositories.user.UserRepository;
 import pwr.pracainz.services.DTOConversionService;
@@ -22,22 +23,33 @@ public class ForumController {
     private final GradeRepository gradeRepository;
     private final ReviewRepository reviewRepository;
     private final AnimeUserInfoRepository animeUserInfoRepository;
+    private final ForumCategoryRepository forumCategoryRepository;
+    private final TagRepository tagRepository;
+    private final ThreadRepository threadRepository;
+    private final PostRepository postRepository;
+    private final ThreadUserStatusRepository threadUserStatusRepository;
     private final DTOConversionService conversionService;
 
     @Autowired
     ForumController(UserRepository userRepository, DTOConversionService conversionService, AchievementRepository achievementRepository
-    , GradeRepository gradeRepository, ReviewRepository reviewRepository, AnimeUserInfoRepository animeUserInfoRepository) {
+            , GradeRepository gradeRepository, ReviewRepository reviewRepository, AnimeUserInfoRepository animeUserInfoRepository, ForumCategoryRepository forumCategoryRepository,
+                    TagRepository tagRepository, ThreadRepository threadRepository, PostRepository postRepository, ThreadUserStatusRepository threadUserStatusRepository) {
         this.userRepository = userRepository;
         this.conversionService = conversionService;
         this.gradeRepository = gradeRepository;
         this.reviewRepository = reviewRepository;
         this.animeUserInfoRepository = animeUserInfoRepository;
         this.achievementRepository = achievementRepository;
+        this.forumCategoryRepository = forumCategoryRepository;
+        this.tagRepository = tagRepository;
+        this.threadRepository = threadRepository;
+        this.postRepository = postRepository;
+        this.threadUserStatusRepository = threadUserStatusRepository;
     }
 
     @GetMapping("/1")
     public List<?> now1() {
-        return userRepository.findAll().stream().map(conversionService::convertUserToDTO).collect(Collectors.toList());
+        return userRepository.findAll().stream().map(conversionService::convertUserToCompleteDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/2")
@@ -58,5 +70,30 @@ public class ForumController {
     @GetMapping("/5")
     public List<?> now5() {
         return animeUserInfoRepository.findAll().stream().map(conversionService::convertAnimeUserInfoToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/6")
+    public List<?> now6() {
+        return tagRepository.findAll().stream().map(conversionService::convertTagToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/7")
+    public List<?> now7() {
+        return forumCategoryRepository.findAll().stream().map(conversionService::convertForumCategoryToForumDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/8")
+    public List<?> now8() {
+        return threadUserStatusRepository.findAll().stream().map(conversionService::convertThreadUserStatusToDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/9")
+    public List<?> now9() {
+        return threadRepository.findAll().stream().map(conversionService::convertThreadToCompleteDTO).collect(Collectors.toList());
+    }
+
+    @GetMapping("/10")
+    public List<?> now10() {
+        return postRepository.findAll().stream().map(conversionService::convertPostToCompleteDTO).collect(Collectors.toList());
     }
 }

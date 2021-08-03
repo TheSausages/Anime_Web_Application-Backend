@@ -13,7 +13,7 @@ import java.time.LocalDate;
 @Setter
 @Getter
 public class AnimeUserInfoDTO {
-    private AnimeUserInfoIdDTO animeUserInfoId;
+    private AnimeUserInfoIdDTO id;
     private AnimeUserStatus status;
     private LocalDate watchStartDate;
     private LocalDate watchEndDate;

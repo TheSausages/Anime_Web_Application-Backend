@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "AnimeUserInfo")
+@Table(name = "AnimeUserInfos")
 @Entity
 public class AnimeUserInfo {
     @EmbeddedId
