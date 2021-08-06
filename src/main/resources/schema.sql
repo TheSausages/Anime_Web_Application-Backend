@@ -1,19 +1,19 @@
 /*Drop the Database*/
-drop database pracinz;
+drop database data;
 
 /*Create the database again*/
-create database pracinz;
-use pracinz;
+create database data;
+use data;
 
 /*Start creating tables*/
 
 /*Create tables connected to the User*/
 CREATE TABLE `Users`
 (
-    `UserID`           varchar(45) NOT NULL ,
-    `NrOfPosts`        smallint NOT NULL DEFAULT 0,
-    `WatchTime`        int NOT NULL DEFAULT 0,
-    `AchievementPoints` mediumint NOT NULL DEFAULT 0,
+    `UserID`            varchar(45) NOT NULL,
+    `NrOfPosts`         smallint    NOT NULL DEFAULT 0,
+    `WatchTime`         int         NOT NULL DEFAULT 0,
+    `AchievementPoints` mediumint   NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`UserID`)
 ) COMMENT='Class contaning a bit of information about a User - the ID a the ID inside keycloak Authorization Server';

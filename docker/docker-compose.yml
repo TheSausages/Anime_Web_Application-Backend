@@ -1,0 +1,43 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql:8.0.26
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql:/var/lib/mysql
+      - ./mysql/mysql_conf.sql:/docker-entrypoint-initdb.d/0_init.sql
+    environment:
+      MYSQL_ROOT_PASSWORD: RootPassword1
+      MYSQL_DATABASE: keycloak
+      MYSQL_USER: keycloakUser
+      MYSQL_PASSWORD: keycloakPassword1
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:15.0.0
+    depends_on:
+      - mysql
+    ports:
+      - 8180:8180
+    command:
+      - "-Djboss.socket.binding.port-offset=100"
+      - "-Dkeycloak.profile.feature.upload_scripts=enabled"
+    volumes:
+      - ./keycloak/realm:/opt/jboss/keycloak/imports
+      - ./keycloak/scripts:/opt/jboss/startup-scripts/
+    environment:
+      KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
+      DB_VENDOR: MYSQL
+      DB_ADDR: mysql
+      DB_DATABASE: keycloak
+      DB_USER: keycloakUser
+      DB_PASSWORD: keycloakPassword1
+      FIRST_USER: user
+      FIRST_PASSWORD: pass
+      #Should be used only when starting
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: Password1
+
+volumes:
+  mysql:

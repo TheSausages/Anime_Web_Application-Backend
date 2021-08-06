@@ -1,4 +1,4 @@
-package pwr.pracainz.entities;
+package pwr.pracainz.DTO;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

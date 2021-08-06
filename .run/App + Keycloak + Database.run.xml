@@ -1,0 +1,7 @@
+<component name="ProjectRunConfigurationManager">
+    <configuration default="false" name="App + Keycloak + Database" type="CompoundRunConfigurationType">
+        <toRun name="Keycloak + Database" type="docker-deploy"/>
+        <toRun name="PracaInzynierskaApplication" type="SpringBootApplicationConfigurationType"/>
+        <method v="2"/>
+    </configuration>
+</component>
