@@ -4,10 +4,13 @@ import com.google.gson.JsonObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pwr.pracainz.DTO.LoginCredentials;
-import pwr.pracainz.DTO.LogoutBody;
+import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
+import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
+import pwr.pracainz.DTO.userauthetification.LogoutBodyDTO;
+import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.services.KeycloakService;
 
+import javax.validation.Valid;
 import javax.ws.rs.core.Response;
 
 @RestController
@@ -21,17 +24,17 @@ public class LoginController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<JsonObject> login(@RequestBody LoginCredentials credentials) {
+    public ResponseEntity<AuthenticationTokenDTO> login(@RequestBody @Valid LoginCredentialsDTO credentials) {
         return keycloakService.login(credentials);
     }
 
-    @PostMapping("/logoutUser")
-    public ResponseEntity<JsonObject> logout(@RequestBody LogoutBody logoutBody, @RequestHeader("authorization") String accessToken) {
-        return keycloakService.logout(logoutBody, accessToken);
+    @PostMapping("/logout")
+    public ResponseEntity<JsonObject> logout(@RequestBody LogoutBodyDTO logoutBodyDTO, @RequestHeader("authorization") String accessToken) {
+        return keycloakService.logout(logoutBodyDTO, accessToken);
     }
 
-    @GetMapping("/registerUser")
-    public Response register() {
-        return keycloakService.register();
+    @PostMapping("/register")
+    public Response register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
+        return keycloakService.register(registrationBodyDTO);
     }
 }

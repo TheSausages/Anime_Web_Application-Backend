@@ -16,6 +16,7 @@ import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
 import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
+import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Grade;
@@ -24,6 +25,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.*;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
 import java.util.stream.Collectors;
 
@@ -162,6 +164,15 @@ public class DTOConversionService {
                 convertThreadUserStatusIdToDTO(threadUserStatus.getThreadUserStatusId()),
                 threadUserStatus.isWatching(),
                 threadUserStatus.isBlocked()
+        );
+    }
+
+    public AuthenticationTokenDTO convertAuthenticationTokenToDTO(AuthenticationToken authenticationToken) {
+        return new AuthenticationTokenDTO(
+                authenticationToken.getAccess_token(),
+                authenticationToken.getRefreshes_expires_in(),
+                authenticationToken.getRefresh_token(),
+                authenticationToken.getToken_type()
         );
     }
 }

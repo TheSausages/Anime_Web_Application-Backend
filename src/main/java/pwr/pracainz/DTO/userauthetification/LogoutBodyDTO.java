@@ -1,4 +1,4 @@
-package pwr.pracainz.DTO;
+package pwr.pracainz.DTO.userauthetification;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +9,6 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class LoginCredentials {
-    private String username;
-    private String password;
+public class LogoutBodyDTO {
+    private String refreshToken;
 }

@@ -1,7 +1,5 @@
 package pwr.pracainz.services;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.google.gson.JsonObject;
 import com.mysql.cj.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
@@ -15,8 +13,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import pwr.pracainz.DTO.LoginCredentials;
-import pwr.pracainz.DTO.LogoutBody;
+import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
+import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
+import pwr.pracainz.DTO.userauthetification.LogoutBodyDTO;
+import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
+import pwr.pracainz.Exceptions.AuthenticationException;
+import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
@@ -26,25 +28,23 @@ import java.util.Objects;
 @Service
 public class KeycloakService {
     private final WebClient client;
-    private final Gson gson;
     private final Keycloak keycloak;
+    private final DTOConversionService dtoConversionService;
 
     @Autowired
-    KeycloakService(Keycloak keycloak) {
+    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService) {
         client = WebClient.create("http://localhost:8180/auth");
-        gson = new GsonBuilder()
-                .setPrettyPrinting()
-                .create();
         this.keycloak = keycloak;
+        this.dtoConversionService = dtoConversionService;
     }
 
-    public ResponseEntity<JsonObject> logout(LogoutBody logoutBody, String accessToken) {
-        String refreshToken = logoutBody.getRefreshToken();
+    public ResponseEntity<JsonObject> logout(LogoutBodyDTO logoutBodyDTO, String accessToken) {
+        String refreshToken = logoutBodyDTO.getRefreshToken();
 
         if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
             log.warn("Could not log out - missing information!");
 
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(getMessage("The credentials are not of correct structure"));
+            throw new AuthenticationException("The credentials are not of correct structure");
         }
 
         ResponseEntity<Void> response = client
@@ -71,7 +71,7 @@ public class KeycloakService {
         return ResponseEntity.status(response.getStatusCode()).body(getMessage("Logout was not successful"));
     }
 
-    public ResponseEntity<JsonObject> login(LoginCredentials credentials) {
+    public ResponseEntity<AuthenticationTokenDTO> login(LoginCredentialsDTO credentials) {
         return client
                 .post()
                 .uri("/realms/PracaInz/protocol/openid-connect/token")
@@ -84,29 +84,28 @@ public class KeycloakService {
                         .with("password", credentials.getPassword())
                         .with("grant_type", "password"))
                 .retrieve()
-                .bodyToMono(String.class)
-                .map(body -> gson.fromJson(body, JsonObject.class))
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .bodyToMono(AuthenticationToken.class)
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(dtoConversionService.convertAuthenticationTokenToDTO(res)))
                 .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
                 .doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
-                .onErrorReturn(ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(getMessage("Given Credentials are not correct!")))
+                .onErrorMap(throwable -> new AuthenticationException("The Credentials are not correct!"))
                 .block();
     }
 
-    public Response register() {
-        //Działa jak poda się unikalne dane
+    public Response register(RegistrationBodyDTO registrationBodyDTO) {
+        if (!registrationBodyDTO.getPassword().equals(registrationBodyDTO.getMatchingPassword())) {
+            throw new AuthenticationException("The Passwords are not matching");
+        }
+
         CredentialRepresentation password = new CredentialRepresentation();
         password.setTemporary(false);
         password.setType(CredentialRepresentation.PASSWORD);
-        password.setValue("testToSeeIfSetIdWorks");
+        password.setValue(registrationBodyDTO.getPassword());
 
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
-        user.setId("08319102-f703-11eb-9a03-0242ac130003");
-        user.setUsername("testToSeeIfSetIdWorks");
-        user.setFirstName("testToSeeIfSetIdWorks");
-        user.setLastName("testToSeeIfSetIdWorks");
-        user.setEmail("testToSeeIfSetIdWorks@test.com");
+        user.setUsername(registrationBodyDTO.getUsername());
+        user.setEmail(registrationBodyDTO.getEmail());
         user.setCredentials(Collections.singletonList(password));
 
         return keycloak.realm("PracaInz").users().create(user);
