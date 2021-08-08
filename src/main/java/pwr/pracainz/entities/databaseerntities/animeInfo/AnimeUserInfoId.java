@@ -1,9 +1,6 @@
 package pwr.pracainz.entities.databaseerntities.animeInfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.Embeddable;
@@ -17,6 +14,7 @@ import java.util.Objects;
 @Embeddable
 @Setter
 @Getter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnimeUserInfoId implements Serializable {

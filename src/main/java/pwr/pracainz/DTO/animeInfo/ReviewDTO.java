@@ -10,7 +10,7 @@ import lombok.Setter;
 @Setter
 @Getter
 public class ReviewDTO {
-    private int reviewId;
+    private int id;
     private String reviewText;
     private int nrOfHelpful;
     private int nrOfPlus;

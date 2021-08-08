@@ -1,6 +1,7 @@
 package pwr.pracainz.services;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysql.cj.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.admin.client.Keycloak;
@@ -29,16 +30,18 @@ import java.util.Objects;
 public class KeycloakService {
     private final WebClient client;
     private final Keycloak keycloak;
+    private final ObjectMapper mapper;
     private final DTOConversionService dtoConversionService;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService) {
+    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService, ObjectMapper mapper) {
         client = WebClient.create("http://localhost:8180/auth");
         this.keycloak = keycloak;
         this.dtoConversionService = dtoConversionService;
+        this.mapper = mapper;
     }
 
-    public ResponseEntity<JsonObject> logout(LogoutBodyDTO logoutBodyDTO, String accessToken) {
+    public ResponseEntity<ObjectNode> logout(LogoutBodyDTO logoutBodyDTO, String accessToken) {
         String refreshToken = logoutBodyDTO.getRefreshToken();
 
         if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
@@ -111,10 +114,7 @@ public class KeycloakService {
         return keycloak.realm("PracaInz").users().create(user);
     }
 
-    private JsonObject getMessage(String message) {
-        JsonObject error = new JsonObject();
-        error.addProperty("message", message);
-
-        return error;
+    private ObjectNode getMessage(String message) {
+        return mapper.createObjectNode().put("message", message);
     }
 }

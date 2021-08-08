@@ -1,6 +1,6 @@
 package pwr.pracainz.controllers;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,12 +29,17 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<JsonObject> logout(@RequestBody LogoutBodyDTO logoutBodyDTO, @RequestHeader("authorization") String accessToken) {
+    public ResponseEntity<ObjectNode> logout(@RequestBody LogoutBodyDTO logoutBodyDTO, @RequestHeader("authorization") String accessToken) {
         return keycloakService.logout(logoutBodyDTO, accessToken);
     }
 
     @PostMapping("/register")
     public Response register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
         return keycloakService.register(registrationBodyDTO);
+    }
+
+    @PostMapping("/liked")
+    public void register(@RequestBody String o) {
+        System.out.println(o);
     }
 }

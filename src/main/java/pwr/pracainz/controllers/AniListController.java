@@ -1,6 +1,6 @@
 package pwr.pracainz.controllers;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,37 +18,37 @@ public class AniListController {
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<JsonObject> getAnimeById(@PathVariable int id) {
+    public ResponseEntity<ObjectNode> getAnimeById(@PathVariable int id) {
         return animeService.getAnimeById(id);
     }
 
     @GetMapping(value = "/season/current")
     @ResponseBody
-    public ResponseEntity<JsonObject> getCurrentSeasonAnime() {
+    public ResponseEntity<ObjectNode> getCurrentSeasonAnime() {
         return animeService.getCurrentSeasonAnime();
     }
 
     @GetMapping(value = "/season/current/info")
     @ResponseBody
-    public JsonObject getCurrentSeasonInformation() {
+    public ObjectNode getCurrentSeasonInformation() {
         return animeService.getCurrentSeasonInformation();
     }
 
     @GetMapping(value = "/ranking/topAllTime/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<JsonObject> getTopAnimeOfAllTime(@PathVariable int pageNumber) {
+    public ResponseEntity<ObjectNode> getTopAnimeOfAllTime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAllTime(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topAiring/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<JsonObject> getTopAiringAnime(@PathVariable int pageNumber) {
+    public ResponseEntity<ObjectNode> getTopAiringAnime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAiring(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topMovies/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<JsonObject> getTopAnimeMovies(@PathVariable int pageNumber) {
+    public ResponseEntity<ObjectNode> getTopAnimeMovies(@PathVariable int pageNumber) {
         return animeService.getTopAnimeMovies(pageNumber);
     }
 }

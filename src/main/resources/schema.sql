@@ -16,15 +16,15 @@ CREATE TABLE `Users`
     `AchievementPoints` mediumint   NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`UserID`)
-) COMMENT='Class contaning a bit of information about a User - the ID a the ID inside keycloak Authorization Server';
+) COMMENT ='Class containing a bit of information about a User - the ID a the ID inside keycloak Authorization Server';
 
 CREATE TABLE `Achievements`
 (
-    `AchievementID`    int NOT NULL ,
-    `Name`             varchar(45) NOT NULL ,
-    `Description`      varchar(600) NOT NULL DEFAULT 'No Description given',
-    `IconPath`         varchar(45) NOT NULL ,
-    `AchievementPoints` int NOT NULL DEFAULT 10,
+    `AchievementID`     int          NOT NULL,
+    `Name`              varchar(45)  NOT NULL,
+    `Description`       varchar(600) NOT NULL DEFAULT 'No Description given',
+    `IconPath`          varchar(45)  NOT NULL,
+    `AchievementPoints` int          NOT NULL DEFAULT 10,
 
     PRIMARY KEY (`AchievementID`)
 ) COMMENT='Table that contains achievements that can be earned by Players. How these achievements can be earned is located inside the Backend';

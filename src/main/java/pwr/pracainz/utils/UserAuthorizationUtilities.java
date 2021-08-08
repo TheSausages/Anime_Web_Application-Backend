@@ -1,6 +1,7 @@
 package pwr.pracainz.utils;
 
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 
 import java.security.Principal;
@@ -20,10 +21,15 @@ public interface UserAuthorizationUtilities {
 
     /**
      * Return the Principal of the Current User - for keycloak it will be the ID (or UUID) of the User on the Keycloak Server
+     *
      * @return ID (UUID) of the Logged User in the form of a Principal Object
      */
     static Principal getPrincipalOfCurrentUser() {
         KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         return (Principal) principal.getPrincipal();
+    }
+
+    static boolean checkIfLoggedUser() {
+        return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }
 }
