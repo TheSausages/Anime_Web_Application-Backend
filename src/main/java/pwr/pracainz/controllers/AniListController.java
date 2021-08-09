@@ -28,12 +28,6 @@ public class AniListController {
         return animeService.getCurrentSeasonAnime();
     }
 
-    @GetMapping(value = "/season/current/info")
-    @ResponseBody
-    public ObjectNode getCurrentSeasonInformation() {
-        return animeService.getCurrentSeasonInformation();
-    }
-
     @GetMapping(value = "/ranking/topAllTime/{pageNumber}")
     @ResponseBody
     public ResponseEntity<ObjectNode> getTopAnimeOfAllTime(@PathVariable int pageNumber) {

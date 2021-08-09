@@ -1,4 +1,4 @@
-package pwr.pracainz.DTO.userauthetification;
+package pwr.pracainz.DTO;
 
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -10,6 +10,6 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class LogoutBodyDTO {
-    String refreshToken;
+public class ResponseBodyWithMessageDTO {
+    String message;
 }

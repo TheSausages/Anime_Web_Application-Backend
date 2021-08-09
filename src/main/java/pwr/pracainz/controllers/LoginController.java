@@ -1,17 +1,16 @@
 package pwr.pracainz.controllers;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
-import pwr.pracainz.DTO.userauthetification.LogoutBodyDTO;
+import pwr.pracainz.DTO.userauthetification.LogoutRequestBodyDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
-import pwr.pracainz.services.KeycloakService;
+import pwr.pracainz.services.Keycloak.KeycloakService;
 
 import javax.validation.Valid;
-import javax.ws.rs.core.Response;
 
 @RestController
 @RequestMapping("/auth")
@@ -29,12 +28,12 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ObjectNode> logout(@RequestBody LogoutBodyDTO logoutBodyDTO, @RequestHeader("authorization") String accessToken) {
-        return keycloakService.logout(logoutBodyDTO, accessToken);
+    public ResponseEntity<ResponseBodyWithMessageDTO> logout(@RequestBody LogoutRequestBodyDTO logoutRequestBodyDTO, @RequestHeader("authorization") String accessToken) {
+        return keycloakService.logout(logoutRequestBodyDTO, accessToken);
     }
 
     @PostMapping("/register")
-    public Response register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
+    public ResponseEntity<ResponseBodyWithMessageDTO> register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
         return keycloakService.register(registrationBodyDTO);
     }
 

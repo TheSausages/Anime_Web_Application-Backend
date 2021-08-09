@@ -34,7 +34,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Objects;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 import static pwr.pracainz.utils.UserAuthorizationUtilities.getPrincipalOfCurrentUser;
@@ -61,7 +60,7 @@ public class AnimeService {
         //this.populateTagFile();
     }
 
-    public ObjectNode getCurrentSeasonInformation() {
+    private ObjectNode getCurrentSeasonInformation() {
         log.info("Get current Season Information");
 
         ObjectNode seasonInformation = mapper.createObjectNode();
@@ -98,17 +97,16 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        return Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(page))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got Current Season Information and Anime", getCurrentSeasonInformation(), "currentSeason"))
-                .block())
+        return client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res.set("currentSeason", getCurrentSeasonInformation()), "Successfully got Current Season Information and Anime"))
                 .block();
     }
 
@@ -137,17 +135,16 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        return Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(page))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                .map(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime from " + season + " of " + year))
-                .block())
+        return client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime from " + season + " of " + year))
                 .block();
     }
 
@@ -174,17 +171,16 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        return Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(page))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Movies"))
-                .block())
+        return client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime Movies"))
                 .block();
     }
 
@@ -211,17 +207,16 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        return Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(page))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Airing Anime"))
-                .block())
+        return client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Airing Anime"))
                 .block();
     }
 
@@ -247,17 +242,16 @@ public class AnimeService {
                         .buildMedia())
                 .buildPage();
 
-        return Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(page))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                .map(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
-                .block())
+        return client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(page))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
                 .block();
     }
 
@@ -349,17 +343,16 @@ public class AnimeService {
                 .id(id)
                 .buildMedia();
 
-        ResponseEntity<ObjectNode> node = Objects.requireNonNull(client
-                        .post()
-                        .headers(httpHeaders -> {
-                            httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                            httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                        })
-                        .body(Query.fromQueryElement(media))
-                        .retrieve()
-                        .bodyToMono(ObjectNode.class)
-                        .mapNotNull(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
-                        .block())
+        ResponseEntity<ObjectNode> node = client
+                .post()
+                .headers(httpHeaders -> {
+                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+                })
+                .body(Query.fromQueryElement(media))
+                .retrieve()
+                .bodyToMono(ObjectNode.class)
+                .flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
                 .block();
 
         if (checkIfLoggedUser()) {
@@ -377,23 +370,10 @@ public class AnimeService {
 
     private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
         return Mono.just(response)
-                .mapNotNull(res -> removeDataAndQueryElementFromJson(res, element))
-                .mapNotNull(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .map(res -> removeDataAndQueryElementFromJson(res, element))
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
                 .doOnSuccess(s -> log.info(positiveResponse))
                 .doOnError(e -> log.info("Anilist Server did not Respond!"))
-                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
-    }
-
-    private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse, ObjectNode additionalBody, String additionalBodyName) {
-        return Mono.just(response)
-                .mapNotNull(res -> removeDataAndQueryElementFromJson(res, element))
-                .mapNotNull(res -> {
-                    res.set(additionalBodyName, additionalBody);
-
-                    return ResponseEntity.status(HttpStatus.OK).body(res);
-                })
-                .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> log.info(anilistProperties.getErrorMessage()))
                 .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
     }
 

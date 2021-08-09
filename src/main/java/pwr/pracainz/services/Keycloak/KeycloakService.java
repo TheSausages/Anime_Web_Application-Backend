@@ -1,7 +1,5 @@
-package pwr.pracainz.services;
+package pwr.pracainz.services.Keycloak;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.mysql.cj.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
 import org.keycloak.admin.client.Keycloak;
@@ -14,45 +12,42 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
+import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
-import pwr.pracainz.DTO.userauthetification.LogoutBodyDTO;
+import pwr.pracainz.DTO.userauthetification.LogoutRequestBodyDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
-import pwr.pracainz.Exceptions.AuthenticationException;
+import pwr.pracainz.Exceptions.Exceptions.AuthenticationException;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
+import pwr.pracainz.services.DTOConversionService;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
-import java.util.Objects;
 
 @Log4j2
 @Service
-public class KeycloakService {
+public class KeycloakService implements KeycloakServiceInterface {
     private final WebClient client;
     private final Keycloak keycloak;
-    private final ObjectMapper mapper;
     private final DTOConversionService dtoConversionService;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService, ObjectMapper mapper) {
-        client = WebClient.create("http://localhost:8180/auth");
+    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService) {
+        client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
         this.keycloak = keycloak;
         this.dtoConversionService = dtoConversionService;
-        this.mapper = mapper;
     }
 
-    public ResponseEntity<ObjectNode> logout(LogoutBodyDTO logoutBodyDTO, String accessToken) {
-        String refreshToken = logoutBodyDTO.getRefreshToken();
-
-        if (StringUtils.isEmptyOrWhitespaceOnly(refreshToken) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
+    public ResponseEntity<ResponseBodyWithMessageDTO> logout(LogoutRequestBodyDTO logoutRequestBody, String accessToken) {
+        if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
             log.warn("Could not log out - missing information!");
 
             throw new AuthenticationException("The credentials are not of correct structure");
         }
 
-        ResponseEntity<Void> response = client
+        return client
                 .post()
-                .uri("/realms/PracaInz/protocol/openid-connect/logout")
+                .uri("/logout")
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_FORM_URLENCODED);
                     httpHeaders.set("Authorization", accessToken);
@@ -60,24 +55,20 @@ public class KeycloakService {
                 .body(BodyInserters
                         .fromFormData("client_id", "ClientServer")
                         .with("client_secret", "cbf2b2ff-6fc9-442b-a80a-61df84886f00")
-                        .with("refresh_token", refreshToken))
+                        .with("refresh_token", logoutRequestBody.getRefreshToken()))
                 .retrieve()
                 .toBodilessEntity()
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(new ResponseBodyWithMessageDTO("Logout was successful!")))
                 .doOnSuccess(s -> log.info("Logged Out Successfully"))
                 .doOnError(s -> log.info("Logged Out was not successful"))
+                .onErrorMap(throwable -> new AuthenticationException("Logout was not successful"))
                 .block();
-
-        if (Objects.requireNonNull(response).getStatusCode().is2xxSuccessful()) {
-            return ResponseEntity.status(response.getStatusCode()).body(getMessage("Logout was successful"));
-        }
-
-        return ResponseEntity.status(response.getStatusCode()).body(getMessage("Logout was not successful"));
     }
 
     public ResponseEntity<AuthenticationTokenDTO> login(LoginCredentialsDTO credentials) {
         return client
                 .post()
-                .uri("/realms/PracaInz/protocol/openid-connect/token")
+                .uri("/token")
                 .headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
                 .body(BodyInserters
                         .fromFormData("client_id", "ClientServer")
@@ -95,26 +86,29 @@ public class KeycloakService {
                 .block();
     }
 
-    public Response register(RegistrationBodyDTO registrationBodyDTO) {
-        if (!registrationBodyDTO.getPassword().equals(registrationBodyDTO.getMatchingPassword())) {
+    // TODO: update when front is ready
+    public ResponseEntity<ResponseBodyWithMessageDTO> register(RegistrationBodyDTO registrationBody) {
+        if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
             throw new AuthenticationException("The Passwords are not matching");
         }
 
         CredentialRepresentation password = new CredentialRepresentation();
         password.setTemporary(false);
         password.setType(CredentialRepresentation.PASSWORD);
-        password.setValue(registrationBodyDTO.getPassword());
+        password.setValue(registrationBody.getPassword());
 
         UserRepresentation user = new UserRepresentation();
         user.setEnabled(true);
-        user.setUsername(registrationBodyDTO.getUsername());
-        user.setEmail(registrationBodyDTO.getEmail());
+        user.setUsername(registrationBody.getUsername());
+        user.setEmail(registrationBody.getEmail());
         user.setCredentials(Collections.singletonList(password));
 
-        return keycloak.realm("PracaInz").users().create(user);
-    }
+        Response response = keycloak.realm("PracaInz").users().create(user);
 
-    private ObjectNode getMessage(String message) {
-        return mapper.createObjectNode().put("message", message);
+        if (response.getStatus() > 100 && response.getStatus() < 300) {
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseBodyWithMessageDTO("Registration was successful!"));
+        }
+
+        throw new AuthenticationException("Registration was not successful!");
     }
 }
