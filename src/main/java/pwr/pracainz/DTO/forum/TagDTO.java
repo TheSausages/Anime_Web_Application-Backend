@@ -1,15 +1,16 @@
 package pwr.pracainz.DTO.forum;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.TagImportance;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class TagDTO {
     private int tagId;
     private String tagName;

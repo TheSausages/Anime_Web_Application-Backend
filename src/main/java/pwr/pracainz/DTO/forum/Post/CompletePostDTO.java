@@ -1,15 +1,16 @@
 package pwr.pracainz.DTO.forum.Post;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompletePostDTO {
     private SimplePostDTO postInformation;
     private String postText;

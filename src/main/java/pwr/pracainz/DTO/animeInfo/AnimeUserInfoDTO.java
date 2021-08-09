@@ -1,17 +1,18 @@
 package pwr.pracainz.DTO.animeInfo;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 
 import java.time.LocalDate;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnimeUserInfoDTO {
     private AnimeUserInfoIdDTO id;
     private AnimeUserStatus status;

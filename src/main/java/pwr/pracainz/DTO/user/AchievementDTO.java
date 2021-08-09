@@ -1,19 +1,20 @@
 package pwr.pracainz.DTO.user;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
-@AllArgsConstructor
+@Data
 @NoArgsConstructor
-@Setter
-@Getter
+@AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AchievementDTO {
-    private int achievementId;
-    private String name;
-    private String description;
-    private String iconPath;
-    private int achievementPoints;
-    private int numberOfUsersThatPosses;
+    int achievementId;
+    String name;
+    String description;
+    String iconPath;
+    int achievementPoints;
+    int numberOfUsersThatPosses;
 }

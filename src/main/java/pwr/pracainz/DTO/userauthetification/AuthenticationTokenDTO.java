@@ -1,17 +1,18 @@
 package pwr.pracainz.DTO.userauthetification;
 
+import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.experimental.FieldDefaults;
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationTokenDTO {
-    private String access_token;
-    private int refreshes_expires_in;
-    private String refresh_token;
-    private String token_type;
+    String access_token;
+    int refreshes_expires_in;
+    String refresh_token;
+    String token_type;
 }
