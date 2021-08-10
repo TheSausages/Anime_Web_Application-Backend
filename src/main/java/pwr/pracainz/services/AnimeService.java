@@ -106,7 +106,7 @@ public class AnimeService {
                 .body(Query.fromQueryElement(page))
                 .retrieve()
                 .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res.set("currentSeason", getCurrentSeasonInformation()), "Successfully got Current Season Information and Anime"))
+                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason", getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
                 .block();
     }
 
@@ -371,6 +371,15 @@ public class AnimeService {
     private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
         return Mono.just(response)
                 .map(res -> removeDataAndQueryElementFromJson(res, element))
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
+                .doOnSuccess(s -> log.info(positiveResponse))
+                .doOnError(e -> log.info("Anilist Server did not Respond!"))
+                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
+    }
+
+    private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
+        return Mono.just(response)
+                .map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
                 .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
                 .doOnSuccess(s -> log.info(positiveResponse))
                 .doOnError(e -> log.info("Anilist Server did not Respond!"))
