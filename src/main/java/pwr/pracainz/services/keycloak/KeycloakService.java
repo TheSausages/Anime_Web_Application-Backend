@@ -1,4 +1,4 @@
-package pwr.pracainz.services.Keycloak;
+package pwr.pracainz.services.keycloak;
 
 import com.mysql.cj.util.StringUtils;
 import lombok.extern.log4j.Log4j2;
@@ -17,9 +17,9 @@ import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.LogoutRequestBodyDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
-import pwr.pracainz.Exceptions.Exceptions.AuthenticationException;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
-import pwr.pracainz.services.DTOConversionService;
+import pwr.pracainz.exceptions.exceptions.AuthenticationException;
+import pwr.pracainz.services.DTOConvension.DTOConversion;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
@@ -29,15 +29,16 @@ import java.util.Collections;
 public class KeycloakService implements KeycloakServiceInterface {
     private final WebClient client;
     private final Keycloak keycloak;
-    private final DTOConversionService dtoConversionService;
+    private final DTOConversion dtoConversion;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversionService dtoConversionService) {
+    KeycloakService(Keycloak keycloak, DTOConversion dtoConversion) {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
         this.keycloak = keycloak;
-        this.dtoConversionService = dtoConversionService;
+        this.dtoConversion = dtoConversion;
     }
 
+    @Override
     public ResponseEntity<ResponseBodyWithMessageDTO> logout(LogoutRequestBodyDTO logoutRequestBody, String accessToken) {
         if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
             log.warn("Could not log out - missing information!");
@@ -65,6 +66,7 @@ public class KeycloakService implements KeycloakServiceInterface {
                 .block();
     }
 
+    @Override
     public ResponseEntity<AuthenticationTokenDTO> login(LoginCredentialsDTO credentials) {
         return client
                 .post()
@@ -79,7 +81,7 @@ public class KeycloakService implements KeycloakServiceInterface {
                         .with("grant_type", "password"))
                 .retrieve()
                 .bodyToMono(AuthenticationToken.class)
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(dtoConversionService.convertAuthenticationTokenToDTO(res)))
+                .map(res -> ResponseEntity.status(HttpStatus.OK).body(dtoConversion.convertAuthenticationTokenToDTO(res)))
                 .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
                 .doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
                 .onErrorMap(throwable -> new AuthenticationException("The Credentials are not correct!"))
@@ -87,6 +89,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     }
 
     // TODO: update when front is ready
+    @Override
     public ResponseEntity<ResponseBodyWithMessageDTO> register(RegistrationBodyDTO registrationBody) {
         if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
             throw new AuthenticationException("The Passwords are not matching");

@@ -8,14 +8,15 @@ import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.LogoutRequestBodyDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
-import pwr.pracainz.services.Keycloak.KeycloakService;
+import pwr.pracainz.services.keycloak.KeycloakService;
+import pwr.pracainz.services.keycloak.KeycloakServiceInterface;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/auth")
 public class LoginController {
-    private final KeycloakService keycloakService;
+    private final KeycloakServiceInterface keycloakService;
 
     @Autowired
     LoginController(KeycloakService keycloakService) {

@@ -2,47 +2,47 @@ package pwr.pracainz.controllers;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import pwr.pracainz.services.AnimeService;
+import pwr.pracainz.services.anime.AnimeService;
+import pwr.pracainz.services.anime.AnimeServiceInterface;
 
 @RestController
 @RequestMapping("/anime")
-public class AniListController {
-    private final AnimeService animeService;
+public class AnimeController {
+    private final AnimeServiceInterface animeService;
 
     @Autowired
-    public AniListController(AnimeService animeService) {
+    public AnimeController(AnimeService animeService) {
         this.animeService = animeService;
     }
 
     @GetMapping(value = "/{id}")
     @ResponseBody
-    public ResponseEntity<ObjectNode> getAnimeById(@PathVariable int id) {
+    public ObjectNode getAnimeById(@PathVariable int id) {
         return animeService.getAnimeById(id);
     }
 
     @GetMapping(value = "/season/current")
     @ResponseBody
-    public ResponseEntity<ObjectNode> getCurrentSeasonAnime() {
+    public ObjectNode getCurrentSeasonAnime() {
         return animeService.getCurrentSeasonAnime();
     }
 
     @GetMapping(value = "/ranking/topAllTime/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<ObjectNode> getTopAnimeOfAllTime(@PathVariable int pageNumber) {
+    public ObjectNode getTopAnimeOfAllTime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAllTime(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topAiring/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<ObjectNode> getTopAiringAnime(@PathVariable int pageNumber) {
+    public ObjectNode getTopAiringAnime(@PathVariable int pageNumber) {
         return animeService.getTopAnimeAiring(pageNumber);
     }
 
     @GetMapping(value = "/ranking/topMovies/{pageNumber}")
     @ResponseBody
-    public ResponseEntity<ObjectNode> getTopAnimeMovies(@PathVariable int pageNumber) {
+    public ObjectNode getTopAnimeMovies(@PathVariable int pageNumber) {
         return animeService.getTopAnimeMovies(pageNumber);
     }
 }

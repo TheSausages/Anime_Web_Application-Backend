@@ -1,4 +1,4 @@
-package pwr.pracainz.services;
+package pwr.pracainz.services.DTOConvension;
 
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
@@ -30,7 +30,8 @@ import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import java.util.stream.Collectors;
 
 @Service
-public class DTOConversionService {
+public class DTOConversion implements DTOConversionInterface {
+    @Override
     public CompleteUserDTO convertUserToCompleteDTO(User user) {
         return new CompleteUserDTO(
                 convertUserToSimpleDTO(user),
@@ -41,6 +42,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public SimpleUserDTO convertUserToSimpleDTO(User user) {
         return new SimpleUserDTO(
                 user.getUserId(),
@@ -50,6 +52,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public AchievementDTO convertAchievementToDTO(Achievement achievement) {
         return new AchievementDTO(
                 achievement.getAchievementId(),
@@ -61,6 +64,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public SimplePostDTO convertPostToSimpleDTO(Post post) {
         return new SimplePostDTO(
                 post.getPostId(),
@@ -70,6 +74,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public CompletePostDTO convertPostToCompleteDTO(Post post) {
         return new CompletePostDTO(
                 convertPostToSimpleDTO(post),
@@ -80,6 +85,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public SimpleThreadDTO convertThreadToSimpleDTO(Thread thread) {
         return new SimpleThreadDTO(
                 thread.getThreadId(),
@@ -90,6 +96,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread) {
         return new CompleteThreadDTO(
                 convertThreadToSimpleDTO(thread),
@@ -97,6 +104,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public ForumCategoryDTO convertForumCategoryToForumDTO(ForumCategory forumCategory) {
         return new ForumCategoryDTO(
                 forumCategory.getCategoryId(),
@@ -105,6 +113,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public TagDTO convertTagToDTO(Tag tag) {
         return new TagDTO(
                 tag.getTagId(),
@@ -113,6 +122,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public ReviewDTO convertReviewToDTO(Review review) {
         return new ReviewDTO(
                 review.getReviewId(),
@@ -123,6 +133,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public GradeDTO convertGradeToDTO(Grade grade) {
         return new GradeDTO(
                 grade.getGradeId(),
@@ -131,20 +142,22 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public AnimeUserInfoDTO convertAnimeUserInfoToDTO(AnimeUserInfo animeUserInfo) {
         return new AnimeUserInfoDTO(
                 convertAnimeUserInfoIdToDTO(animeUserInfo.getAnimeUserInfoId()),
                 animeUserInfo.getStatus(),
-                animeUserInfo.getWatchStartDate(),
-                animeUserInfo.getWatchEndDate(),
+                animeUserInfo.getWatchStartDate() != null ? animeUserInfo.getWatchStartDate() : null,
+                animeUserInfo.getWatchEndDate() != null ? animeUserInfo.getWatchEndDate() : null,
                 animeUserInfo.getNrOfEpisodesSeen(),
                 animeUserInfo.isFavourite(),
                 animeUserInfo.isDidReview(),
-                convertGradeToDTO(animeUserInfo.getGrade()),
-                convertReviewToDTO(animeUserInfo.getReview())
+                animeUserInfo.getGrade() != null ? convertGradeToDTO(animeUserInfo.getGrade()) : null,
+                animeUserInfo.getReview() != null ? convertReviewToDTO(animeUserInfo.getReview()) : null
         );
     }
 
+    @Override
     public AnimeUserInfoIdDTO convertAnimeUserInfoIdToDTO(AnimeUserInfoId animeUserInfoId) {
         return new AnimeUserInfoIdDTO(
                 convertUserToSimpleDTO(animeUserInfoId.getUser()),
@@ -152,6 +165,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public ThreadUserStatusIdDTO convertThreadUserStatusIdToDTO(ThreadUserStatusId threadUserStatusId) {
         return new ThreadUserStatusIdDTO(
                 convertUserToSimpleDTO(threadUserStatusId.getUser()),
@@ -159,6 +173,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public ThreadUserStatusDTO convertThreadUserStatusToDTO(ThreadUserStatus threadUserStatus) {
         return new ThreadUserStatusDTO(
                 convertThreadUserStatusIdToDTO(threadUserStatus.getThreadUserStatusId()),
@@ -167,6 +182,7 @@ public class DTOConversionService {
         );
     }
 
+    @Override
     public AuthenticationTokenDTO convertAuthenticationTokenToDTO(AuthenticationToken authenticationToken) {
         return new AuthenticationTokenDTO(
                 authenticationToken.getAccess_token(),

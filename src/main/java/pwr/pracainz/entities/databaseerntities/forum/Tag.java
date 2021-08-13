@@ -8,6 +8,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.TagImportance;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 
 @NoArgsConstructor
 @Getter
@@ -25,4 +26,17 @@ public class Tag {
     @Enumerated(EnumType.STRING)
     @ColumnDefault("LOW")
     private TagImportance tagImportance;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Tag tag = (Tag) o;
+        return TagId == tag.TagId && Objects.equals(tagName, tag.tagName) && tagImportance == tag.tagImportance;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(TagId, tagName, tagImportance);
+    }
 }

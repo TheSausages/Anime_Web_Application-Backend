@@ -8,6 +8,7 @@ import org.hibernate.annotations.ColumnDefault;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
 import javax.persistence.*;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -52,4 +53,17 @@ public class Thread {
             orphanRemoval = true
     )
     private Set<Post> posts;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Thread thread = (Thread) o;
+        return threadId == thread.threadId && Objects.equals(title, thread.title) && status == thread.status && Objects.equals(category, thread.category) && Objects.equals(tags, thread.tags) && Objects.equals(threadUserStatuses, thread.threadUserStatuses) && Objects.equals(posts, thread.posts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(threadId, title, status, category, tags, threadUserStatuses, posts);
+    }
 }

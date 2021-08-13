@@ -11,6 +11,7 @@ import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -54,4 +55,17 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        User user = (User) o;
+        return nrOfPosts == user.nrOfPosts && watchTime == user.watchTime && achievementPoints == user.achievementPoints && Objects.equals(userId, user.userId) && Objects.equals(achievements, user.achievements) && Objects.equals(animeUserInfo, user.animeUserInfo) && Objects.equals(threadUserStatuses, user.threadUserStatuses) && Objects.equals(posts, user.posts);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints, achievements, animeUserInfo, threadUserStatuses, posts);
+    }
 }

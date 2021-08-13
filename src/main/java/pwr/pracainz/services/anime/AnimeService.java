@@ -1,11 +1,9 @@
-package pwr.pracainz.services;
+package pwr.pracainz.services.anime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.pracainz.configuration.AnilistProperties;
@@ -27,32 +25,25 @@ import pwr.pracainz.entities.anime.query.queryElements.Media.Field;
 import pwr.pracainz.entities.anime.query.queryElements.Media.Media;
 import pwr.pracainz.entities.anime.query.queryElements.Page.Page;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
-import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
-import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
-import pwr.pracainz.repositories.user.UserRepository;
+import pwr.pracainz.exceptions.exceptions.AnilistException;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
-import static pwr.pracainz.utils.UserAuthorizationUtilities.getPrincipalOfCurrentUser;
 
 @Log4j2
 @Service
-public class AnimeService {
+public class AnimeService implements AnimeServiceInterface {
     private final AnilistProperties anilistProperties;
-    private final UserRepository userRepository;
-    private final AnimeUserInfoRepository animeUserInfoRepository;
-    private final DTOConversionService conversionService;
+    private final AnimeUserServiceInterface animeUserService;
     private final WebClient client;
     private final ObjectMapper mapper;
 
-    AnimeService(AnilistProperties anilistProperties, UserRepository userRepository, AnimeUserInfoRepository animeUserInfoRepository, DTOConversionService dtoConversionService, ObjectMapper mapper) {
+    AnimeService(AnilistProperties anilistProperties, AnimeUserServiceInterface animeUserService, ObjectMapper mapper) {
         this.anilistProperties = anilistProperties;
-        this.userRepository = userRepository;
-        this.conversionService = dtoConversionService;
-        this.animeUserInfoRepository = animeUserInfoRepository;
+        this.animeUserService = animeUserService;
         this.mapper = mapper;
 
         client = WebClient.create(anilistProperties.getApiUrl());
@@ -60,17 +51,8 @@ public class AnimeService {
         //this.populateTagFile();
     }
 
-    private ObjectNode getCurrentSeasonInformation() {
-        log.info("Get current Season Information");
-
-        ObjectNode seasonInformation = mapper.createObjectNode();
-        seasonInformation.put("year", LocalDateTime.now().getYear());
-        seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
-
-        return seasonInformation;
-    }
-
-    public ResponseEntity<ObjectNode> getCurrentSeasonAnime() {
+    @Override
+    public ObjectNode getCurrentSeasonAnime() {
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -110,7 +92,8 @@ public class AnimeService {
                 .block();
     }
 
-    public ResponseEntity<ObjectNode> getSeasonAnime(MediaSeason season, int year) {
+    @Override
+    public ObjectNode getSeasonAnime(MediaSeason season, int year) {
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -148,7 +131,8 @@ public class AnimeService {
                 .block();
     }
 
-    public ResponseEntity<ObjectNode> getTopAnimeMovies(int pageNumber) {
+    @Override
+    public ObjectNode getTopAnimeMovies(int pageNumber) {
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -184,7 +168,8 @@ public class AnimeService {
                 .block();
     }
 
-    public ResponseEntity<ObjectNode> getTopAnimeAiring(int pageNumber) {
+    @Override
+    public ObjectNode getTopAnimeAiring(int pageNumber) {
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -220,7 +205,8 @@ public class AnimeService {
                 .block();
     }
 
-    public ResponseEntity<ObjectNode> getTopAnimeAllTime(int pageNumber) {
+    @Override
+    public ObjectNode getTopAnimeAllTime(int pageNumber) {
         Field field = Field.getFieldBuilder()
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
@@ -255,7 +241,8 @@ public class AnimeService {
                 .block();
     }
 
-    public ResponseEntity<ObjectNode> getAnimeById(int id) {
+    @Override
+    public ObjectNode getAnimeById(int id) {
         Field field = Field.getFieldBuilder()
                 .parameter(FieldParameters.id)
                 .parameter(FieldParameters.season)
@@ -343,7 +330,7 @@ public class AnimeService {
                 .id(id)
                 .buildMedia();
 
-        ResponseEntity<ObjectNode> node = client
+        ObjectNode node = client
                 .post()
                 .headers(httpHeaders -> {
                     httpHeaders.setContentType(MediaType.APPLICATION_JSON);
@@ -355,43 +342,46 @@ public class AnimeService {
                 .flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
                 .block();
 
-        if (checkIfLoggedUser()) {
-            node.getBody().set("animeUserInformation",
-                    mapper.valueToTree(conversionService.convertAnimeUserInfoToDTO(
-                            animeUserInfoRepository.findById(AnimeUserInfoId.builder()
-                                    .animeId(node.getBody().get("id").asInt())
-                                    .user(userRepository.getById(getPrincipalOfCurrentUser().toString()))
-                                    .build()).get())
+        if (checkIfLoggedUser() && node != null) {
+            node.set("animeUserInformation",
+                    mapper.valueToTree(
+                            animeUserService.getCurrentUserAnimeInfo(id)
                     ));
         }
 
         return node;
     }
 
-    private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
+    private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
         return Mono.just(response)
                 .map(res -> removeDataAndQueryElementFromJson(res, element))
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
                 .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> log.info("Anilist Server did not Respond!"))
-                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
+                .doOnError(e -> {
+                    throw new AnilistException(anilistProperties.getErrorMessage());
+                });
     }
 
-    private Mono<ResponseEntity<ObjectNode>> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
+    private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
         return Mono.just(response)
                 .map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(res))
                 .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> log.info("Anilist Server did not Respond!"))
-                .onErrorReturn(ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(getErrorMessage()));
+                .doOnError(e -> {
+                    throw new AnilistException(anilistProperties.getErrorMessage());
+                });
     }
 
     private ObjectNode removeDataAndQueryElementFromJson(ObjectNode json, QueryElements element) {
         return json.get("data").get(element.name()).deepCopy();
     }
 
-    private ObjectNode getErrorMessage() {
-        return mapper.createObjectNode().put("message", anilistProperties.getErrorMessage());
+    private ObjectNode getCurrentSeasonInformation() {
+        log.info("Get current Season Information");
+
+        ObjectNode seasonInformation = mapper.createObjectNode();
+        seasonInformation.put("year", LocalDateTime.now().getYear());
+        seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
+
+        return seasonInformation;
     }
 
     /*private void populateTagFile() {

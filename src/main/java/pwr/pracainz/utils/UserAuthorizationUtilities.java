@@ -29,6 +29,10 @@ public interface UserAuthorizationUtilities {
         return (Principal) principal.getPrincipal();
     }
 
+    static String getIdOfCurrentUser() {
+        return getPrincipalOfCurrentUser().toString();
+    }
+
     static boolean checkIfLoggedUser() {
         return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
     }

@@ -6,6 +6,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
+import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
@@ -25,4 +26,17 @@ public class ForumCategory {
 
     @OneToMany(mappedBy = "category")
     private Set<Thread> threads;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ForumCategory that = (ForumCategory) o;
+        return categoryId == that.categoryId && Objects.equals(categoryName, that.categoryName) && Objects.equals(categoryDescription, that.categoryDescription) && Objects.equals(threads, that.threads);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(categoryId, categoryName, categoryDescription, threads);
+    }
 }

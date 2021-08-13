@@ -1,4 +1,4 @@
-package pwr.pracainz.services.Keycloak;
+package pwr.pracainz.services.keycloak;
 
 import org.springframework.http.ResponseEntity;
 import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;

@@ -10,7 +10,7 @@ import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.repositories.forum.*;
 import pwr.pracainz.repositories.user.AchievementRepository;
 import pwr.pracainz.repositories.user.UserRepository;
-import pwr.pracainz.services.DTOConversionService;
+import pwr.pracainz.services.DTOConvension.DTOConversion;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -28,10 +28,10 @@ public class ForumController {
     private final ThreadRepository threadRepository;
     private final PostRepository postRepository;
     private final ThreadUserStatusRepository threadUserStatusRepository;
-    private final DTOConversionService conversionService;
+    private final DTOConversion conversionService;
 
     @Autowired
-    ForumController(UserRepository userRepository, DTOConversionService conversionService, AchievementRepository achievementRepository
+    ForumController(UserRepository userRepository, DTOConversion conversionService, AchievementRepository achievementRepository
             , GradeRepository gradeRepository, ReviewRepository reviewRepository, AnimeUserInfoRepository animeUserInfoRepository, ForumCategoryRepository forumCategoryRepository,
                     TagRepository tagRepository, ThreadRepository threadRepository, PostRepository postRepository, ThreadUserStatusRepository threadUserStatusRepository) {
         this.userRepository = userRepository;
