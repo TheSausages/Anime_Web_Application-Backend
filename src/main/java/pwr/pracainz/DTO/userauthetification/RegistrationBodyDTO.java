@@ -15,18 +15,18 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationBodyDTO {
-    @NotEmpty
+    @NotEmpty(message = "Username Cannot be empty!")
     String username;
 
-    @NotEmpty
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$")
+    @NotEmpty(message = "Password cannot be empty")
+    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password is not of correct structure")
     String password;
 
-    @NotEmpty
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$")
+    @NotEmpty(message = "Matching password cannot be empty")
+    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Matching password is not of correct structure")
     String matchingPassword;
 
-    @NotEmpty
-    @Email
+    @NotEmpty(message = "Mail cannot be empty!")
+    @Email(message = "Mail is not of correct structure")
     String email;
 }

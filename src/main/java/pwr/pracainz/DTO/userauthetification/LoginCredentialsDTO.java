@@ -14,9 +14,9 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginCredentialsDTO {
-    @NotEmpty
+    @NotEmpty(message = "Username cannot be empty!")
     String username;
-    @NotEmpty
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$")
+    @NotEmpty(message = "Password cannot be empty!")
+    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password doesn't have the correct structure")
     String password;
 }

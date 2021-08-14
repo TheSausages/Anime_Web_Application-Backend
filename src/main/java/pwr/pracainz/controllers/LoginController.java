@@ -29,7 +29,7 @@ public class LoginController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<ResponseBodyWithMessageDTO> logout(@RequestBody LogoutRequestBodyDTO logoutRequestBodyDTO, @RequestHeader("authorization") String accessToken) {
+    public ResponseEntity<ResponseBodyWithMessageDTO> logout(@RequestBody @Valid LogoutRequestBodyDTO logoutRequestBodyDTO, @RequestHeader("authorization") String accessToken) {
         return keycloakService.logout(logoutRequestBodyDTO, accessToken);
     }
 

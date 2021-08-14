@@ -13,6 +13,6 @@ import javax.validation.constraints.NotEmpty;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LogoutRequestBodyDTO {
-    @NotEmpty
+    @NotEmpty(message = "Cant log out right now!")
     String refreshToken;
 }
