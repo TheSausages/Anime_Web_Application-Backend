@@ -375,8 +375,6 @@ public class AnimeService implements AnimeServiceInterface {
     }
 
     private ObjectNode getCurrentSeasonInformation() {
-        log.info("Get current Season Information");
-
         ObjectNode seasonInformation = mapper.createObjectNode();
         seasonInformation.put("year", LocalDateTime.now().getYear());
         seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
