@@ -6,7 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
-import pwr.pracainz.configuration.AnilistProperties;
+import pwr.pracainz.configuration.properties.AnilistProperties;
 import pwr.pracainz.entities.anime.query.Query;
 import pwr.pracainz.entities.anime.query.parameters.FieldParameters;
 import pwr.pracainz.entities.anime.query.parameters.connections.PageInfo;
