@@ -12,7 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationTokenDTO {
     String access_token;
-    int refreshes_expires_in;
+    int expires_in;
     String refresh_token;
     String token_type;
 }

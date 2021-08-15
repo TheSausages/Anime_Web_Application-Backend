@@ -186,7 +186,7 @@ public class DTOConversion implements DTOConversionInterface {
     public AuthenticationTokenDTO convertAuthenticationTokenToDTO(AuthenticationToken authenticationToken) {
         return new AuthenticationTokenDTO(
                 authenticationToken.getAccess_token(),
-                authenticationToken.getRefreshes_expires_in(),
+                authenticationToken.getExpires_in(),
                 authenticationToken.getRefresh_token(),
                 authenticationToken.getToken_type()
         );

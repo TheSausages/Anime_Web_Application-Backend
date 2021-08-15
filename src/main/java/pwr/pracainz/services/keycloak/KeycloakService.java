@@ -6,16 +6,14 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
-import pwr.pracainz.DTO.userauthetification.LogoutRequestBodyDTO;
+import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
@@ -39,7 +37,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     }
 
     @Override
-    public ResponseEntity<ResponseBodyWithMessageDTO> logout(LogoutRequestBodyDTO logoutRequestBody, String accessToken) {
+    public ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken) {
         if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
             log.warn("Could not log out - missing information!");
 
@@ -59,7 +57,7 @@ public class KeycloakService implements KeycloakServiceInterface {
                         .with("refresh_token", logoutRequestBody.getRefreshToken()))
                 .retrieve()
                 .toBodilessEntity()
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(new ResponseBodyWithMessageDTO("Logout was successful!")))
+                .map(res -> new ResponseBodyWithMessageDTO("Logout was successful!"))
                 .doOnSuccess(s -> log.info("Logged Out Successfully"))
                 .doOnError(s -> log.info("Logged Out was not successful"))
                 .onErrorMap(throwable -> new AuthenticationException("Logout was not successful"))
@@ -67,7 +65,7 @@ public class KeycloakService implements KeycloakServiceInterface {
     }
 
     @Override
-    public ResponseEntity<AuthenticationTokenDTO> login(LoginCredentialsDTO credentials) {
+    public AuthenticationTokenDTO login(LoginCredentialsDTO credentials) {
         return client
                 .post()
                 .uri("/token")
@@ -81,7 +79,7 @@ public class KeycloakService implements KeycloakServiceInterface {
                         .with("grant_type", "password"))
                 .retrieve()
                 .bodyToMono(AuthenticationToken.class)
-                .map(res -> ResponseEntity.status(HttpStatus.OK).body(dtoConversion.convertAuthenticationTokenToDTO(res)))
+                .map(dtoConversion::convertAuthenticationTokenToDTO)
                 .doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
                 .doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
                 .onErrorMap(throwable -> new AuthenticationException("The Credentials are not correct!"))
@@ -90,7 +88,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 
     // TODO: update when front is ready
     @Override
-    public ResponseEntity<ResponseBodyWithMessageDTO> register(RegistrationBodyDTO registrationBody) {
+    public ResponseBodyWithMessageDTO register(RegistrationBodyDTO registrationBody) {
         if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
             throw new AuthenticationException("The Passwords are not matching");
         }
@@ -109,9 +107,30 @@ public class KeycloakService implements KeycloakServiceInterface {
         Response response = keycloak.realm("PracaInz").users().create(user);
 
         if (response.getStatus() > 100 && response.getStatus() < 300) {
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseBodyWithMessageDTO("Registration was successful!"));
+            return new ResponseBodyWithMessageDTO("Registration was successful!");
         }
 
         throw new AuthenticationException("Registration was not successful!");
+    }
+
+    @Override
+    public AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO) {
+        return client
+                .post()
+                .uri("/token")
+                .headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
+                .body(BodyInserters
+                        .fromFormData("client_id", "ClientServer")
+                        .with("client_secret", "cbf2b2ff-6fc9-442b-a80a-61df84886f00")
+                        .with("scope", "openid")
+                        .with("refresh_token", refreshTokenDTO.getRefreshToken())
+                        .with("grant_type", "refresh_token"))
+                .retrieve()
+                .bodyToMono(AuthenticationToken.class)
+                .map(dtoConversion::convertAuthenticationTokenToDTO)
+                .doOnSuccess(s -> log.info("Tokens has been successful refreshed"))
+                .doOnError(e -> log.info("Tokens was not refreshed"))
+                .onErrorMap(throwable -> new AuthenticationException("Wrong refresh token!"))
+                .block();
     }
 }
