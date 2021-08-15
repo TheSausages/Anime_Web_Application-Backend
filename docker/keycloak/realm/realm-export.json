@@ -5,7 +5,7 @@
   "defaultSignatureAlgorithm": "RS256",
   "revokeRefreshToken": false,
   "refreshTokenMaxReuse": 0,
-  "accessTokenLifespan": 300,
+  "accessTokenLifespan": 600,
   "accessTokenLifespanForImplicitFlow": 900,
   "ssoSessionIdleTimeout": 1800,
   "ssoSessionMaxLifespan": 36000,
@@ -1583,7 +1583,7 @@
     ],
     "org.keycloak.userprofile.UserProfileProvider": [
       {
-        "id": "6d0c986d-6415-4f2f-b365-b30e0533686f",
+        "id": "e1d6c654-b995-44e7-92b1-a170ed40de81",
         "providerId": "declarative-user-profile",
         "subComponents": {},
         "config": {}
