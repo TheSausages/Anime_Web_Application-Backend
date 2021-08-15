@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
-import pwr.pracainz.repositories.animeInfo.GradeRepository;
 import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.repositories.forum.*;
 import pwr.pracainz.repositories.user.AchievementRepository;
@@ -20,7 +19,6 @@ import java.util.stream.Collectors;
 public class ForumController {
     private final UserRepository userRepository;
     private final AchievementRepository achievementRepository;
-    private final GradeRepository gradeRepository;
     private final ReviewRepository reviewRepository;
     private final AnimeUserInfoRepository animeUserInfoRepository;
     private final ForumCategoryRepository forumCategoryRepository;
@@ -32,11 +30,10 @@ public class ForumController {
 
     @Autowired
     ForumController(UserRepository userRepository, DTOConversion conversionService, AchievementRepository achievementRepository
-            , GradeRepository gradeRepository, ReviewRepository reviewRepository, AnimeUserInfoRepository animeUserInfoRepository, ForumCategoryRepository forumCategoryRepository,
+            , ReviewRepository reviewRepository, AnimeUserInfoRepository animeUserInfoRepository, ForumCategoryRepository forumCategoryRepository,
                     TagRepository tagRepository, ThreadRepository threadRepository, PostRepository postRepository, ThreadUserStatusRepository threadUserStatusRepository) {
         this.userRepository = userRepository;
         this.conversionService = conversionService;
-        this.gradeRepository = gradeRepository;
         this.reviewRepository = reviewRepository;
         this.animeUserInfoRepository = animeUserInfoRepository;
         this.achievementRepository = achievementRepository;
@@ -55,11 +52,6 @@ public class ForumController {
     @GetMapping("/2")
     public List<?> now2() {
         return achievementRepository.findAll().stream().map(conversionService::convertAchievementToDTO).collect(Collectors.toList());
-    }
-
-    @GetMapping("/3")
-    public List<?> now3() {
-        return gradeRepository.findAll().stream().map(conversionService::convertGradeToDTO).collect(Collectors.toList());
     }
 
     @GetMapping("/4")

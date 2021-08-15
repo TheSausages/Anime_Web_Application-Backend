@@ -2,7 +2,6 @@ package pwr.pracainz.services.DTOConvension;
 
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
-import pwr.pracainz.DTO.animeInfo.GradeDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
@@ -18,7 +17,6 @@ import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
-import pwr.pracainz.entities.databaseerntities.animeInfo.Grade;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.*;
@@ -46,8 +44,6 @@ public interface DTOConversionInterface {
     TagDTO convertTagToDTO(Tag tag);
 
     ReviewDTO convertReviewToDTO(Review review);
-
-    GradeDTO convertGradeToDTO(Grade grade);
 
     AnimeUserInfoDTO convertAnimeUserInfoToDTO(AnimeUserInfo animeUserInfo);
 

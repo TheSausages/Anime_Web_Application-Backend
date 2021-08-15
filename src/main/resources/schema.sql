@@ -118,14 +118,6 @@ CREATE TABLE `Posts`
 ) COMMENT='Table containing Information about a single Post on the Forum';
 
 /*Create tables connected to Anime Info*/
-CREATE TABLE `Grades`
-(
-    `GradeID`   int NOT NULL auto_increment,
-    `Scale`     int NOT NULL ,
-    `GradeName` varchar(45) NOT NULL ,
-
-    PRIMARY KEY (`GradeID`)
-) COMMENT='Grades that the User can give to an Anime';
 
 CREATE TABLE `Reviews`
 (
@@ -148,13 +140,10 @@ CREATE TABLE `AnimeUserInfos`
     `NrOfEpisodesSeen` smallint                                                             NOT NULL DEFAULT 0,
     `IsFavourite`      boolean                                                              NOT NULL DEFAULT false,
     `DidReview`        boolean                                                              NOT NULL DEFAULT false,
-    `DidGrade`         boolean                                                              NOT NULL DEFAULT false,
-    `ReviewID`         int NULL ,
-    `GradeID`          int NULL ,
+    `Grade`            int                                                                  NULL     DEFAULT 5,
+    `ReviewID`         int                                                                  NULL,
 
     PRIMARY KEY (`UserID`, `AnimeID`),
-    KEY `FK_AnimeUserInfo_Grade` (`GradeID`),
-    CONSTRAINT `FK_180` FOREIGN KEY `FK_AnimeUserInfo_Grade` (`GradeID`) REFERENCES `Grades` (`GradeID`),
     KEY `FK_AnimeUserInfo_Review` (`ReviewID`),
     CONSTRAINT `FK_177` FOREIGN KEY `FK_AnimeUserInfo_Review` (`ReviewID`) REFERENCES `Reviews` (`ReviewID`),
     KEY `FK_AnimeUserInfo_User` (`UserID`),

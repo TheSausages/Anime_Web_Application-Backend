@@ -21,7 +21,7 @@ public class AnimeUserInfoDTO {
     private int nrOfEpisodesSeen;
     private boolean isFavourite;
     private boolean didReview;
-    private GradeDTO grade;
+    private Integer grade;
     private ReviewDTO review;
 }
 

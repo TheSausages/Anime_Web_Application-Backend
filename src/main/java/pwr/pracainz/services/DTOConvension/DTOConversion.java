@@ -3,7 +3,6 @@ package pwr.pracainz.services.DTOConvension;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
-import pwr.pracainz.DTO.animeInfo.GradeDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
@@ -19,7 +18,6 @@ import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
-import pwr.pracainz.entities.databaseerntities.animeInfo.Grade;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.*;
@@ -134,15 +132,6 @@ public class DTOConversion implements DTOConversionInterface {
     }
 
     @Override
-    public GradeDTO convertGradeToDTO(Grade grade) {
-        return new GradeDTO(
-                grade.getGradeId(),
-                grade.getScale(),
-                grade.getGradeName()
-        );
-    }
-
-    @Override
     public AnimeUserInfoDTO convertAnimeUserInfoToDTO(AnimeUserInfo animeUserInfo) {
         return new AnimeUserInfoDTO(
                 convertAnimeUserInfoIdToDTO(animeUserInfo.getAnimeUserInfoId()),
@@ -152,7 +141,7 @@ public class DTOConversion implements DTOConversionInterface {
                 animeUserInfo.getNrOfEpisodesSeen(),
                 animeUserInfo.isFavourite(),
                 animeUserInfo.isDidReview(),
-                animeUserInfo.getGrade() != null ? convertGradeToDTO(animeUserInfo.getGrade()) : null,
+                animeUserInfo.getGrade() != null ? animeUserInfo.getGrade() : null,
                 animeUserInfo.getReview() != null ? convertReviewToDTO(animeUserInfo.getReview()) : null
         );
     }

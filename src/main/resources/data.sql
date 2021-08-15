@@ -7,14 +7,11 @@ values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'noPath
 Insert into UserAchievements
 values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
 
-Insert into Grades
-values (1, 0, 'Worst thing ever');
-
 Insert into Reviews
 values (1, 'Ayyyy thats something', 1, 2, 0);
 
 Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '107717', 'COMPLETED', '2018-09-26',
-                                  '2019-12-12', 2, false, true, true, 1, 1);
+                                  '2019-12-12', 2, false, true, 9, 1);
 
 Insert into Tags value (1, 'Episode Discussion', 'MEDIUM');
 
