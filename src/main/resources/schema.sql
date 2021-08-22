@@ -121,11 +121,12 @@ CREATE TABLE `Posts`
 
 CREATE TABLE `Reviews`
 (
-    `ReviewID`     int NOT NULL auto_increment,
-    `ReviewText`   varchar(300) NOT NULL ,
-    `NrOfHelpful` int NOT NULL DEFAULT 0,
-    `NrOfPlus`     int NOT NULL DEFAULT 0,
-    `NrOfMinus`    int NOT NULL DEFAULT 0,
+    `ReviewID`    int          NOT NULL auto_increment,
+    `ReviewTitle` varchar(100) NOT NULL DEFAULT 'No Title Written',
+    `ReviewText`  varchar(300),
+    `NrOfHelpful` int          NOT NULL DEFAULT 0,
+    `NrOfPlus`    int          NOT NULL DEFAULT 0,
+    `NrOfMinus`   int          NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`ReviewID`)
 ) COMMENT='Table containing information about the review of a User';
