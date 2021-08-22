@@ -6,7 +6,6 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
@@ -18,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AnimeUserInfoId implements Serializable {
-    @NotEmpty
+
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;

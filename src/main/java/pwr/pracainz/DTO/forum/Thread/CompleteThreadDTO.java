@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pwr.pracainz.DTO.forum.Post.SimplePostDTO;
+import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 
 import java.util.Set;
 
@@ -15,5 +15,5 @@ import java.util.Set;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompleteThreadDTO {
     private SimpleThreadDTO threadInformation;
-    private Set<SimplePostDTO> posts;
+    private Set<CompletePostDTO> posts;
 }

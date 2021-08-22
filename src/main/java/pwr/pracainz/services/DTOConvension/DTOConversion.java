@@ -98,7 +98,7 @@ public class DTOConversion implements DTOConversionInterface {
     public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread) {
         return new CompleteThreadDTO(
                 convertThreadToSimpleDTO(thread),
-                thread.getPosts().stream().map(this::convertPostToSimpleDTO).collect(Collectors.toSet())
+                thread.getPosts().stream().map(this::convertPostToCompleteDTO).collect(Collectors.toSet())
         );
     }
 
@@ -124,6 +124,7 @@ public class DTOConversion implements DTOConversionInterface {
     public ReviewDTO convertReviewToDTO(Review review) {
         return new ReviewDTO(
                 review.getReviewId(),
+                review.getReviewTitle(),
                 review.getReviewText(),
                 review.getNrOfHelpful(),
                 review.getNrOfPlus(),

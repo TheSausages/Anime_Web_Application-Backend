@@ -6,6 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -17,6 +18,9 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
+
+    @NotEmpty
+    private String reviewTitle;
 
     private String reviewText;
 
