@@ -33,6 +33,14 @@ public class Review {
     @ColumnDefault("0")
     private int nrOfMinus;
 
+    public Review(String reviewTitle, String reviewText, int nrOfHelpful, int nrOfPlus, int nrOfMinus) {
+        this.reviewTitle = reviewTitle;
+        this.reviewText = reviewText;
+        this.nrOfHelpful = nrOfHelpful;
+        this.nrOfPlus = nrOfPlus;
+        this.nrOfMinus = nrOfMinus;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -30,6 +30,7 @@ dependencies {
 
 	//Keycloak Dependencies
 	implementation 'org.keycloak:keycloak-spring-boot-starter:15.0.0'
+	implementation 'org.keycloak.bom:keycloak-adapter-bom:15.0.0'
 	implementation 'org.keycloak:keycloak-admin-client:15.0.0'
 
 	//Database Dependencies

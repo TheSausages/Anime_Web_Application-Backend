@@ -1,5 +1,6 @@
 package pwr.pracainz.DTO.animeInfo;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -22,6 +23,8 @@ public class AnimeUserInfoDTO {
 
     @Min(0)
     private int nrOfEpisodesSeen;
+
+    @JsonProperty(value = "isFavourite")
     private boolean isFavourite;
     private boolean didReview;
 

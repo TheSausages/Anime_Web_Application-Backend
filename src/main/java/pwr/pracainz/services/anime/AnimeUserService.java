@@ -5,6 +5,9 @@ import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
+import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
+import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
@@ -33,5 +36,41 @@ public class AnimeUserService implements AnimeUserServiceInterface {
                 .findById(animeUserInfoId)
                 .map(dtoConversion::convertAnimeUserInfoToDTO)
                 .orElse(dtoConversion.convertAnimeUserInfoToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
+    }
+
+    @Override
+    public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
+        User currUser = userService.getCurrentUser();
+
+        if (!animeUserInfoDTO.getId().getUser().getUserId().equals(currUser.getUserId())) {
+            throw new AuthenticationException("User Anime Information was not successful - please try again");
+        }
+
+        AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, animeUserInfoDTO.getId().getAnimeId());
+
+        AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
+                .map(animeUserInfo -> animeUserInfo.copyDataFromDTO(animeUserInfoDTO))
+                .orElse(new AnimeUserInfo(
+                        animeUserInfoId,
+                        animeUserInfoDTO.getStatus(),
+                        animeUserInfoDTO.getWatchStartDate(),
+                        animeUserInfoDTO.getWatchEndDate(),
+                        animeUserInfoDTO.getNrOfEpisodesSeen(),
+                        animeUserInfoDTO.isFavourite(),
+                        animeUserInfoDTO.getGrade(),
+                        animeUserInfoDTO.isDidReview(),
+                        animeUserInfoDTO.isDidReview() ?
+                                new Review(
+                                        animeUserInfoDTO.getReview().getReviewTitle(),
+                                        animeUserInfoDTO.getReview().getReviewText(),
+                                        animeUserInfoDTO.getReview().getNrOfHelpful(),
+                                        animeUserInfoDTO.getReview().getNrOfPlus(),
+                                        animeUserInfoDTO.getReview().getNrOfMinus()
+                                )
+                                :
+                                null
+                ));
+
+        return dtoConversion.convertAnimeUserInfoToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
     }
 }

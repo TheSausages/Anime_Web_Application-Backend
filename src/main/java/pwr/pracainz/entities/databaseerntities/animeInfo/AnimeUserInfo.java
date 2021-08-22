@@ -2,6 +2,8 @@ package pwr.pracainz.entities.databaseerntities.animeInfo;
 
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
+import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -48,6 +50,30 @@ public class AnimeUserInfo {
     public static AnimeUserInfo getEmptyAnimeUserInfo(AnimeUserInfoId animeUserInfoId) {
         return new AnimeUserInfo(animeUserInfoId, AnimeUserStatus.NO_STATUS, null, null, 0
                 , false, null, false, null);
+    }
+
+    public AnimeUserInfo copyDataFromDTO(AnimeUserInfoDTO animeUserInfoDTO) {
+        ReviewDTO reviewDTO = animeUserInfoDTO.getReview();
+
+        this.status = animeUserInfoDTO.getStatus();
+        this.watchStartDate = animeUserInfoDTO.getWatchStartDate();
+        this.watchEndDate = animeUserInfoDTO.getWatchEndDate();
+        this.nrOfEpisodesSeen = animeUserInfoDTO.getNrOfEpisodesSeen();
+        this.isFavourite = animeUserInfoDTO.isFavourite();
+        this.grade = animeUserInfoDTO.getGrade();
+        this.didReview = animeUserInfoDTO.isDidReview();
+        this.review = this.didReview ?
+                new Review(
+                        reviewDTO.getReviewTitle(),
+                        reviewDTO.getReviewText(),
+                        reviewDTO.getNrOfHelpful(),
+                        reviewDTO.getNrOfPlus(),
+                        reviewDTO.getNrOfMinus()
+                )
+                :
+                null;
+
+        return this;
     }
 
     @Override

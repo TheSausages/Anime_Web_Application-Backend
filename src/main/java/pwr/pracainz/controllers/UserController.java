@@ -3,7 +3,6 @@ package pwr.pracainz.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
-import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
@@ -41,11 +40,5 @@ public class UserController {
     @PostMapping("/refreshToken")
     public AuthenticationTokenDTO refreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
         return keycloakService.refreshTokens(refreshTokenDTO);
-    }
-
-
-    @PostMapping("/liked")
-    public void register(@RequestBody @Valid AnimeUserInfoDTO o) {
-        System.out.println(o);
     }
 }
