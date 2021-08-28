@@ -62,7 +62,7 @@ public class AnimeUserInfo {
         this.isFavourite = animeUserInfoDTO.isFavourite();
         this.grade = animeUserInfoDTO.getGrade();
         this.didReview = animeUserInfoDTO.isDidReview();
-        this.review = this.didReview ?
+        this.review = this.didReview && Objects.nonNull(reviewDTO) ?
                 new Review(
                         reviewDTO.getReviewTitle(),
                         reviewDTO.getReviewText(),
