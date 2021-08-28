@@ -17,6 +17,8 @@ import pwr.pracainz.services.user.UserServiceInterface;
 
 import java.util.Objects;
 
+import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
+
 @Log4j2
 @Service
 public class AnimeUserService implements AnimeUserServiceInterface {
@@ -47,6 +49,10 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
     @Override
     public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
+        if (checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
         User currUser = userService.getCurrentUserOrInsert();
         AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 

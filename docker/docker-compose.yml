@@ -27,6 +27,7 @@ services:
       - "-Dkeycloak.profile.feature.upload_scripts=enabled"
     volumes:
       - ./keycloak/realm:/opt/jboss/keycloak/imports
+      - ./keycloak/scripts:/opt/jboss/startup-scripts/
     environment:
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
       DB_VENDOR: MYSQL

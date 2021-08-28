@@ -9,7 +9,7 @@ import pwr.pracainz.repositories.user.UserRepository;
 import pwr.pracainz.services.DTOConvension.DTOConversion;
 import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
 
-import static pwr.pracainz.utils.UserAuthorizationUtilities.getPrincipalOfCurrentUser;
+import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
 
 @Log4j2
 @Service
@@ -31,7 +31,11 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User getCurrentUserOrInsert() {
-        String currUserId = getPrincipalOfCurrentUser().toString();
+        if (checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
+        String currUserId = getIdOfCurrentUser();
 
         return userRepository.findById(currUserId)
                 .orElseGet(() -> userRepository.save(new User(currUserId)));
