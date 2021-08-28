@@ -4,4 +4,6 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 
 public interface UserServiceInterface {
     User getCurrentUser();
+
+    User getCurrentUserOrInsert();
 }

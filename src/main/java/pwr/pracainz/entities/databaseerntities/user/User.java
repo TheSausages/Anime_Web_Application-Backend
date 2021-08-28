@@ -56,6 +56,10 @@ public class User {
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;
 
+    public User(String userId) {
+        this.userId = userId;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

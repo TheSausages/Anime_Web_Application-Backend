@@ -28,4 +28,12 @@ public class UserService implements UserServiceInterface {
         return userRepository.findById(getPrincipalOfCurrentUser().toString())
                 .orElseThrow(() -> new AuthenticationException("No User logged in!"));
     }
+
+    @Override
+    public User getCurrentUserOrInsert() {
+        String currUserId = getPrincipalOfCurrentUser().toString();
+
+        return userRepository.findById(currUserId)
+                .orElseGet(() -> userRepository.save(new User(currUserId)));
+    }
 }

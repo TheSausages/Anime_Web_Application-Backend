@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
+import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.user.User;
@@ -13,6 +14,8 @@ import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
 import pwr.pracainz.services.DTOConvension.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
+
+import java.util.Objects;
 
 @Log4j2
 @Service
@@ -34,7 +37,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
     @Override
     public AnimeUserInfoDTO getCurrentUserAnimeInfo(int animeId) {
-        AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUser(), animeId);
+        AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUserOrInsert(), animeId);
 
         return animeUserInfoRepository
                 .findById(animeUserInfoId)
@@ -44,10 +47,11 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
     @Override
     public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
-        User currUser = userService.getCurrentUser();
+        User currUser = userService.getCurrentUserOrInsert();
+        AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 
-        if (!animeUserInfoDTO.getId().getUser().getUserId().equals(currUser.getUserId())) {
-            throw new AuthenticationException("User Anime Information was not successful - please try again");
+        if (Objects.nonNull(requestUserId) && !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
+            throw new AuthenticationException("Updating your anime information was not successful - please try again");
         }
 
         log.info("Update Anime data for User: {}", currUser.getUserId());
