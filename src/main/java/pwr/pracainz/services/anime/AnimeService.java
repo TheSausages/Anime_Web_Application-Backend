@@ -134,6 +134,7 @@ public class AnimeService implements AnimeServiceInterface {
     @Override
     public ObjectNode getTopAnimeMovies(int pageNumber) {
         Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
                         .englishLanguage()
@@ -171,6 +172,7 @@ public class AnimeService implements AnimeServiceInterface {
     @Override
     public ObjectNode getTopAnimeAiring(int pageNumber) {
         Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
                         .englishLanguage()
@@ -208,6 +210,7 @@ public class AnimeService implements AnimeServiceInterface {
     @Override
     public ObjectNode getTopAnimeAllTime(int pageNumber) {
         Field field = Field.getFieldBuilder()
+                .parameter(FieldParameters.id)
                 .coverImage()
                 .title(MediaTitle.getMediaTitleBuilder()
                         .englishLanguage()
