@@ -17,6 +17,7 @@ import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
+import pwr.pracainz.exceptions.exceptions.RegistrationException;
 import pwr.pracainz.services.DTOConvension.DTOConversion;
 
 import javax.ws.rs.core.Response;
@@ -86,9 +87,10 @@ public class KeycloakService implements KeycloakServiceInterface {
                 .block();
     }
 
-    // TODO: update when front is ready
     @Override
-    public ResponseBodyWithMessageDTO register(RegistrationBodyDTO registrationBody) {
+    public AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody) {
+        log.info("Attempt registration for user: {}, with email: {}", registrationBody.getUsername(), registrationBody.getEmail());
+
         if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
             throw new AuthenticationException("The Passwords are not matching");
         }
@@ -107,7 +109,18 @@ public class KeycloakService implements KeycloakServiceInterface {
         Response response = keycloak.realm("PracaInz").users().create(user);
 
         if (response.getStatus() > 100 && response.getStatus() < 300) {
-            return new ResponseBodyWithMessageDTO("Registration was successful!");
+            log.info("Registration was successful. Attempt login for user: {}", registrationBody.getUsername());
+
+            LoginCredentialsDTO login = new LoginCredentialsDTO(
+                    registrationBody.getUsername(),
+                    registrationBody.getPassword()
+            );
+
+            return login(login);
+        }
+
+        if (response.getStatus() == 409) {
+            throw new RegistrationException("This username and/or email are already taken!");
         }
 
         throw new AuthenticationException("Registration was not successful!");

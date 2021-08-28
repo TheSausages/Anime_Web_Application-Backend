@@ -33,7 +33,7 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public ResponseBodyWithMessageDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
+    public AuthenticationTokenDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
         return keycloakService.register(registrationBodyDTO);
     }
 

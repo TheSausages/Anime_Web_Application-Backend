@@ -11,7 +11,7 @@ public interface KeycloakServiceInterface {
 
     ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken);
 
-    ResponseBodyWithMessageDTO register(RegistrationBodyDTO registrationBody);
+    AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody);
 
     AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO);
 }

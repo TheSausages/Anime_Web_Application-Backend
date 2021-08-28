@@ -8,12 +8,14 @@ import org.springframework.lang.NonNull;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
+import pwr.pracainz.exceptions.exceptions.RegistrationException;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -24,13 +26,23 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
     @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     ResponseBodyWithMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
         log.error("An unauthorized access to secured elements occurred: " + ex.getMessage());
 
         return new ResponseBodyWithMessageDTO(ex.getMessage());
     }
 
+    @ExceptionHandler(RegistrationException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    ResponseBodyWithMessageDTO registrationExceptionHandler(RegistrationException ex) {
+        log.error("An error during registration: " + ex.getMessage());
+
+        return new ResponseBodyWithMessageDTO(ex.getMessage());
+    }
+
     @ExceptionHandler(AnilistException.class)
+    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
         log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
 
