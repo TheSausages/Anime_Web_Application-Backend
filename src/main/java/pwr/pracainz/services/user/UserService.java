@@ -1,5 +1,6 @@
 package pwr.pracainz.services.user;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.entities.databaseerntities.user.User;
@@ -10,6 +11,7 @@ import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.getPrincipalOfCurrentUser;
 
+@Log4j2
 @Service
 public class UserService implements UserServiceInterface {
     private final DTOConversionInterface dtoConversion;

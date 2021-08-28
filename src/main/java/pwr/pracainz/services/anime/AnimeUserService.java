@@ -1,5 +1,6 @@
 package pwr.pracainz.services.anime;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
@@ -13,6 +14,7 @@ import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
 import pwr.pracainz.services.DTOConvension.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 
+@Log4j2
 @Service
 public class AnimeUserService implements AnimeUserServiceInterface {
     private final DTOConversionInterface dtoConversion;
@@ -47,6 +49,8 @@ public class AnimeUserService implements AnimeUserServiceInterface {
         if (!animeUserInfoDTO.getId().getUser().getUserId().equals(currUser.getUserId())) {
             throw new AuthenticationException("User Anime Information was not successful - please try again");
         }
+
+        log.info("Update Anime data for User: {}", currUser.getUserId());
 
         AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, animeUserInfoDTO.getId().getAnimeId());
 
