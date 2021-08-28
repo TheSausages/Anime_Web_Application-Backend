@@ -8,6 +8,8 @@ services:
     volumes:
       - mysql:/var/lib/mysql
       - ./mysql/mysql_conf.sql:/docker-entrypoint-initdb.d/0_init.sql
+    security_opt:
+      - seccomp:unconfined
     environment:
       MYSQL_ROOT_PASSWORD: RootPassword1
       MYSQL_DATABASE: keycloak
