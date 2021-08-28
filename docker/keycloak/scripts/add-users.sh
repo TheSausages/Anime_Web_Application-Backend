@@ -1,0 +1,1 @@
+./keycloak/bin/add-user-keycloak.sh -r ClientServer -u ScriptUser -p Password10

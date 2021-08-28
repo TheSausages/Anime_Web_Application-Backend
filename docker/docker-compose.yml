@@ -27,7 +27,6 @@ services:
       - "-Dkeycloak.profile.feature.upload_scripts=enabled"
     volumes:
       - ./keycloak/realm:/opt/jboss/keycloak/imports
-      - ./keycloak/scripts:/opt/jboss/startup-scripts/
     environment:
       KEYCLOAK_IMPORT: /opt/jboss/keycloak/imports/realm-export.json
       DB_VENDOR: MYSQL
@@ -35,11 +34,9 @@ services:
       DB_DATABASE: keycloak
       DB_USER: keycloakUser
       DB_PASSWORD: keycloakPassword1
-      FIRST_USER: user
-      FIRST_PASSWORD: pass
-      #Should be used only when starting
       KEYCLOAK_USER: admin
       KEYCLOAK_PASSWORD: Password1
+
 
 volumes:
   mysql:
