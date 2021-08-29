@@ -19,7 +19,7 @@ Insert into ForumCategories
 values (1, 'Suggestions', 'Category for suggestions for enhancing the site and service');
 
 Insert into Threads
-values (1, 'First Thread on the forum!', 'OPEN', 1);
+values (1, 'First Thread on the forum!', 'OPEN', 1, 1);
 
 Insert into ThreadTags value (1, 1);
 
