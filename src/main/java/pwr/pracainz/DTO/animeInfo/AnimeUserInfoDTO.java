@@ -9,6 +9,7 @@ import lombok.experimental.FieldDefaults;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 
 import javax.validation.constraints.Min;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 
 @Data
@@ -18,7 +19,11 @@ import java.time.LocalDate;
 public class AnimeUserInfoDTO {
     private AnimeUserInfoIdDTO id;
     private AnimeUserStatus status;
+
+    @PastOrPresent
     private LocalDate watchStartDate;
+
+    @PastOrPresent
     private LocalDate watchEndDate;
 
     @Min(0)
