@@ -3,7 +3,6 @@ package pwr.pracainz.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pwr.pracainz.services.anime.Anime.AnimeService;
 import pwr.pracainz.services.anime.Anime.AnimeServiceInterface;
 
 @RestController
@@ -12,7 +11,7 @@ public class AnimeController {
     private final AnimeServiceInterface animeService;
 
     @Autowired
-    public AnimeController(AnimeService animeService) {
+    public AnimeController(AnimeServiceInterface animeService) {
         this.animeService = animeService;
     }
 

@@ -88,6 +88,7 @@ public class DTOConversion implements DTOConversionInterface {
         return new SimpleThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),
+                thread.getNrOfPosts(),
                 thread.getStatus(),
                 convertForumCategoryToForumDTO(thread.getCategory()),
                 thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toSet())

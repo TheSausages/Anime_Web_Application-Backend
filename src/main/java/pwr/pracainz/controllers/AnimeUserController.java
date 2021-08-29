@@ -3,17 +3,17 @@ package pwr.pracainz.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
-import pwr.pracainz.services.anime.AnimeUser.AnimeUserService;
+import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 
 import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/animeUser")
 public class AnimeUserController {
-    private final AnimeUserService animeUserService;
+    private final AnimeUserServiceInterface animeUserService;
 
     @Autowired
-    AnimeUserController(AnimeUserService animeUserService) {
+    AnimeUserController(AnimeUserServiceInterface animeUserService) {
         this.animeUserService = animeUserService;
     }
 

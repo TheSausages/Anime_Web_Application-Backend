@@ -18,7 +18,7 @@ import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
-import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
@@ -28,10 +28,10 @@ import java.util.Collections;
 public class KeycloakService implements KeycloakServiceInterface {
     private final WebClient client;
     private final Keycloak keycloak;
-    private final DTOConversion dtoConversion;
+    private final DTOConversionInterface dtoConversion;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversion dtoConversion) {
+    KeycloakService(Keycloak keycloak, DTOConversionInterface dtoConversion) {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
         this.keycloak = keycloak;
         this.dtoConversion = dtoConversion;

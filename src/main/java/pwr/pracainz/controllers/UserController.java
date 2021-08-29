@@ -7,7 +7,6 @@ import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
-import pwr.pracainz.services.keycloak.KeycloakService;
 import pwr.pracainz.services.keycloak.KeycloakServiceInterface;
 
 import javax.validation.Valid;
@@ -18,7 +17,7 @@ public class UserController {
     private final KeycloakServiceInterface keycloakService;
 
     @Autowired
-    UserController(KeycloakService keycloakService) {
+    UserController(KeycloakServiceInterface keycloakService) {
         this.keycloakService = keycloakService;
     }
 

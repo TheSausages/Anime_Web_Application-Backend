@@ -9,6 +9,7 @@ import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.util.Set;
 
@@ -21,6 +22,8 @@ public class SimpleThreadDTO {
 
     @NotEmpty
     private String title;
+    @Min(value = 0)
+    private long NrOfPosts;
     private ThreadStatus status;
     private ForumCategoryDTO category;
     private Set<TagDTO> tags;
