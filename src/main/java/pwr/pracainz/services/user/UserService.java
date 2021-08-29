@@ -6,8 +6,8 @@ import org.springframework.stereotype.Service;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.user.UserRepository;
-import pwr.pracainz.services.DTOConvension.DTOConversion;
-import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
 

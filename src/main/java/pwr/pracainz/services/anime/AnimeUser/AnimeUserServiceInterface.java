@@ -1,4 +1,4 @@
-package pwr.pracainz.services.anime;
+package pwr.pracainz.services.anime.AnimeUser;
 
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 

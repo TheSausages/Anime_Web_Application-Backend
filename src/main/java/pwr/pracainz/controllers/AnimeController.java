@@ -3,8 +3,8 @@ package pwr.pracainz.controllers;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pwr.pracainz.services.anime.AnimeService;
-import pwr.pracainz.services.anime.AnimeServiceInterface;
+import pwr.pracainz.services.anime.Anime.AnimeService;
+import pwr.pracainz.services.anime.Anime.AnimeServiceInterface;
 
 @RestController
 @RequestMapping("/anime")

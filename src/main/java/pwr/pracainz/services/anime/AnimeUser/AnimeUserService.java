@@ -1,4 +1,4 @@
-package pwr.pracainz.services.anime;
+package pwr.pracainz.services.anime.AnimeUser;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +11,8 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.repositories.animeInfo.ReviewRepository;
-import pwr.pracainz.services.DTOConvension.DTOConversionInterface;
-import pwr.pracainz.services.DTOConvension.DTODeconversionInterface;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
+import pwr.pracainz.services.DTOOperations.DTODeconversion.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 
 import java.util.Objects;

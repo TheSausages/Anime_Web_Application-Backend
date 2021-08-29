@@ -9,7 +9,7 @@ import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.repositories.forum.*;
 import pwr.pracainz.repositories.user.AchievementRepository;
 import pwr.pracainz.repositories.user.UserRepository;
-import pwr.pracainz.services.DTOConvension.DTOConversion;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
 
 import java.util.List;
 import java.util.stream.Collectors;

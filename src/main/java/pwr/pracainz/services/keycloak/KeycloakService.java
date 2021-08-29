@@ -18,7 +18,7 @@ import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
-import pwr.pracainz.services.DTOConvension.DTOConversion;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;

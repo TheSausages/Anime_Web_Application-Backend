@@ -3,7 +3,7 @@ package pwr.pracainz.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
-import pwr.pracainz.services.anime.AnimeUserService;
+import pwr.pracainz.services.anime.AnimeUser.AnimeUserService;
 
 import javax.validation.Valid;
 

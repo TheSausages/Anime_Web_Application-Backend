@@ -1,4 +1,4 @@
-package pwr.pracainz.services.DTOConvension;
+package pwr.pracainz.services.DTOOperations.DTODeconversion;
 
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;

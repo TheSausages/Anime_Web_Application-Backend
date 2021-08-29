@@ -1,4 +1,4 @@
-package pwr.pracainz.services.anime;
+package pwr.pracainz.services.anime.Anime;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -26,6 +26,7 @@ import pwr.pracainz.entities.anime.query.queryElements.Media.Media;
 import pwr.pracainz.entities.anime.query.queryElements.Page.Page;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
+import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
