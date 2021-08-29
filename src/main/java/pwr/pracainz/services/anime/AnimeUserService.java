@@ -49,7 +49,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
     @Override
     public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
-        if (checkIfLoggedUser()) {
+        if (!checkIfLoggedUser()) {
             throw new AuthenticationException("You are not logged in!");
         }
 

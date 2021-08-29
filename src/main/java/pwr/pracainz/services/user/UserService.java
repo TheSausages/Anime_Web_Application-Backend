@@ -31,7 +31,7 @@ public class UserService implements UserServiceInterface {
 
     @Override
     public User getCurrentUserOrInsert() {
-        if (checkIfLoggedUser()) {
+        if (!checkIfLoggedUser()) {
             throw new AuthenticationException("You are not logged in!");
         }
 
