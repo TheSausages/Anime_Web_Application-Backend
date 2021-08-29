@@ -66,6 +66,7 @@ CREATE TABLE `Threads`
     `ThreadID`   int                    NOT NULL auto_increment,
     `Title`      varchar(45)            NOT NULL,
     `Status`     enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
+    `NrOfPosts`  int                    NOT NULL DEFAULT 0,
     `CategoryID` int                    NOT NULL,
 
     PRIMARY KEY (`ThreadID`),

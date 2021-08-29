@@ -8,6 +8,7 @@ import org.hibernate.validator.constraints.Length;
 import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Positive;
 import java.util.Objects;
 
@@ -35,9 +36,11 @@ public class Post {
     private int postId;
 
     @Length(max = 45)
+    @NotEmpty
     private String title;
 
     @Length(max = 600)
+    @NotEmpty
     private String postText;
 
     @ColumnDefault("false")

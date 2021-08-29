@@ -8,6 +8,8 @@ import org.hibernate.annotations.ColumnDefault;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.Set;
 
@@ -22,11 +24,16 @@ public class Thread {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int threadId;
 
+    @NotEmpty
     private String title;
 
     @Enumerated(EnumType.STRING)
     @ColumnDefault("OPEN")
     private ThreadStatus status;
+
+    @ColumnDefault("0")
+    @Min(value = 0)
+    private int NrOfPosts;
 
     @ManyToOne
     @JoinColumn(name = "CategoryId", nullable = false)
@@ -36,7 +43,7 @@ public class Thread {
     @JoinTable(
             name = "ThreadTags",
             joinColumns = {@JoinColumn(name = "TagId")},
-            inverseJoinColumns = { @JoinColumn(name = "ThreadId") }
+            inverseJoinColumns = {@JoinColumn(name = "ThreadId")}
     )
     private Set<Tag> tags;
 
