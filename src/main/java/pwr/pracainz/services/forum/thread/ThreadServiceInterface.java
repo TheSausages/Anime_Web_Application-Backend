@@ -1,9 +1,7 @@
 package pwr.pracainz.services.forum.thread;
 
-import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
-
-import java.util.List;
+import pwr.pracainz.DTO.PageDTO;
 
 public interface ThreadServiceInterface {
-    List<SimpleThreadDTO> getNewestThreads(int pageNumber);
+    PageDTO getNewestThreads(int pageNumber);
 }

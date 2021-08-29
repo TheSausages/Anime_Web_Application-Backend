@@ -1,6 +1,8 @@
 package pwr.pracainz.services.DTOOperations.Conversion;
 
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
+import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
@@ -29,6 +31,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class DTOConversion implements DTOConversionInterface {
+    @Override
+    public PageDTO convertDomainPageToDTO(Page<?> page) {
+        return new PageDTO(
+                page.toList(),
+                page.getNumberOfElements(),
+                page.getSize(),
+                page.getNumber(),
+                page.getTotalPages(),
+                page.isLast(),
+                page.isEmpty()
+        );
+    }
+
     @Override
     public CompleteUserDTO convertUserToCompleteDTO(User user) {
         return new CompleteUserDTO(

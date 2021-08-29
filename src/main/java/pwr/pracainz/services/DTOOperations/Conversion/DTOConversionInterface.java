@@ -1,5 +1,7 @@
 package pwr.pracainz.services.DTOOperations.Conversion;
 
+import org.springframework.data.domain.Page;
+import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
@@ -25,6 +27,8 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
 public interface DTOConversionInterface {
+    PageDTO convertDomainPageToDTO(Page<?> page);
+
     CompleteUserDTO convertUserToCompleteDTO(User user);
 
     SimpleUserDTO convertUserToSimpleDTO(User user);
