@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.lang.NonNull;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -47,6 +48,24 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
 
         return new ResponseBodyWithMessageDTO(ex.getMessage());
+    }
+
+    @Override
+    @NonNull
+    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+        if (ex.getCause() != null) {
+            String innerCauseMessage = ex.getCause().getMessage();
+
+            log.error("Error during deserialization: {}", innerCauseMessage);
+
+            return handleExceptionInternal(
+                    ex, new ResponseBodyWithMessageDTO(innerCauseMessage),
+                    headers, HttpStatus.BAD_REQUEST, request
+            );
+        }
+
+        return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO("Error during deserialization!")
+                , headers, status, request);
     }
 
     @Override
