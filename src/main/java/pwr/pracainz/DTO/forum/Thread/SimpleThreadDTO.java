@@ -23,7 +23,7 @@ public class SimpleThreadDTO {
     @NotEmpty
     private String title;
     @Min(value = 0)
-    private long NrOfPosts;
+    private long nrOfPosts;
     private ThreadStatus status;
     private ForumCategoryDTO category;
     private Set<TagDTO> tags;

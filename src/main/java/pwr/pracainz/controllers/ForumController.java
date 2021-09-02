@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
+import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
 
@@ -31,7 +32,7 @@ public class ForumController {
     }
 
     @GetMapping("/newestThread/{page}")
-    public PageDTO getNewestThread(@PathVariable @Positive int page) {
+    public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Positive int page) {
         return threadService.getNewestThreads(page);
     }
 }

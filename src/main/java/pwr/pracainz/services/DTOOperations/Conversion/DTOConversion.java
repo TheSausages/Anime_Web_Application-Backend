@@ -30,10 +30,10 @@ import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import java.util.stream.Collectors;
 
 @Service
-public class DTOConversion implements DTOConversionInterface {
+public class DTOConversion<T> implements DTOConversionInterface<T> {
     @Override
-    public PageDTO convertDomainPageToDTO(Page<?> page) {
-        return new PageDTO(
+    public PageDTO<T> convertDomainPageToDTO(Page<T> page) {
+        return new PageDTO<>(
                 page.toList(),
                 page.getNumberOfElements(),
                 page.getSize(),

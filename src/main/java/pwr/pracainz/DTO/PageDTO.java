@@ -12,8 +12,8 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class PageDTO {
-    List<?> content;
+public class PageDTO<T> {
+    List<T> content;
     int numberOfElements;
     int pageSize;
     int pageNumber;
