@@ -11,6 +11,7 @@ import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -31,6 +32,7 @@ public class AnimeUserInfoDTO {
 
     @JsonProperty(value = "isFavourite")
     private boolean isFavourite;
+    private LocalDateTime modification;
     private boolean didReview;
 
     @Min(1)

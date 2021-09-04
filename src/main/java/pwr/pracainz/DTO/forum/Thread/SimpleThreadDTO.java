@@ -11,6 +11,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Data
@@ -25,6 +26,8 @@ public class SimpleThreadDTO {
     @Min(value = 0)
     private long nrOfPosts;
     private ThreadStatus status;
+    private LocalDateTime creation;
+    private LocalDateTime modification;
     private ForumCategoryDTO category;
     private Set<TagDTO> tags;
 }

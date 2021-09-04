@@ -63,11 +63,13 @@ CREATE TABLE `Tags`
 
 CREATE TABLE `Threads`
 (
-    `ThreadID`   int                    NOT NULL auto_increment,
-    `Title`      varchar(45)            NOT NULL,
-    `Status`     enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
-    `NrOfPosts`  int                    NOT NULL DEFAULT 0,
-    `CategoryID` int                    NOT NULL,
+    `ThreadID`     int                    NOT NULL auto_increment,
+    `Title`        varchar(45)            NOT NULL,
+    `Status`       enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
+    `NrOfPosts`    int                    NOT NULL DEFAULT 0,
+    `creation`     datetime                        DEFAULT CURRENT_TIMESTAMP,
+    `modification` datetime on update CURRENT_TIMESTAMP,
+    `CategoryID`   int                    NOT NULL,
 
     PRIMARY KEY (`ThreadID`),
     KEY `FK_Thread_ForumCategory` (`CategoryID`),
@@ -88,10 +90,10 @@ CREATE TABLE `ThreadTags`
 
 CREATE TABLE `ThreadUserStatus`
 (
-    `UserID`     varchar(45) NOT NULL ,
-    `ThreadID`   int NOT NULL ,
-    `IsWatching` boolean NOT NULL DEFAULT false,
-    `IsBlocked`  boolean NOT NULL DEFAULT false,
+    `UserID`     varchar(45) NOT NULL,
+    `ThreadID`   int         NOT NULL,
+    `IsWatching` boolean     NOT NULL DEFAULT false,
+    `IsBlocked`  boolean     NOT NULL DEFAULT false,
 
     PRIMARY KEY (`UserID`, `ThreadID`),
     KEY `FK_ThreadUserStatus_thread` (`ThreadID`),
@@ -102,14 +104,16 @@ CREATE TABLE `ThreadUserStatus`
 
 CREATE TABLE `Posts`
 (
-    `PostID`    int NOT NULL auto_increment,
-    `Title`     varchar(45) NOT NULL ,
-    `PostText`  varchar(600) NOT NULL ,
-    `IsBlocked` boolean NOT NULL DEFAULT false,
-    `NrOfPlus`  int NOT NULL DEFAULT 0,
-    `NrOfMinus` int NOT NULL DEFAULT 0,
-    `UserID`    varchar(45) NOT NULL ,
-    `ThreadID`  int NOT NULL ,
+    `PostID`       int          NOT NULL auto_increment,
+    `Title`        varchar(45)  NOT NULL,
+    `PostText`     varchar(600) NOT NULL,
+    `IsBlocked`    boolean      NOT NULL DEFAULT false,
+    `NrOfPlus`     int          NOT NULL DEFAULT 0,
+    `NrOfMinus`    int          NOT NULL DEFAULT 0,
+    `creation`     datetime              DEFAULT CURRENT_TIMESTAMP,
+    `modification` datetime on update CURRENT_TIMESTAMP,
+    `UserID`       varchar(45)  NOT NULL,
+    `ThreadID`     int          NOT NULL,
 
     PRIMARY KEY (`PostID`),
     KEY `FK_Post_Thread` (`ThreadID`),
@@ -141,6 +145,7 @@ CREATE TABLE `AnimeUserInfos`
     `WatchEndDate`     date                                                                 NULL,
     `NrOfEpisodesSeen` smallint                                                             NOT NULL DEFAULT 0,
     `IsFavourite`      boolean                                                              NOT NULL DEFAULT false,
+    `modification`     datetime on update CURRENT_TIMESTAMP,
     `DidReview`        boolean                                                              NOT NULL DEFAULT false,
     `Grade`            int                                                                  NULL     DEFAULT 5,
     `ReviewID`         int                                                                  NULL,

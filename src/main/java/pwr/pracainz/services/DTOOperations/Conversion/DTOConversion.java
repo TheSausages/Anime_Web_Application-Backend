@@ -83,6 +83,8 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 post.getPostId(),
                 post.getTitle(),
                 post.isBlocked(),
+                post.getCreation(),
+                post.getModification(),
                 convertUserToSimpleDTO(post.getUser())
         );
     }
@@ -105,6 +107,8 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 thread.getTitle(),
                 thread.getNrOfPosts(),
                 thread.getStatus(),
+                thread.getCreation(),
+                thread.getModification(),
                 convertForumCategoryToForumDTO(thread.getCategory()),
                 thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toSet())
         );
@@ -157,6 +161,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 animeUserInfo.getWatchEndDate() != null ? animeUserInfo.getWatchEndDate() : null,
                 animeUserInfo.getNrOfEpisodesSeen(),
                 animeUserInfo.isFavourite(),
+                animeUserInfo.getModification(),
                 animeUserInfo.isDidReview(),
                 animeUserInfo.getGrade() != null ? animeUserInfo.getGrade() : null,
                 animeUserInfo.getReview() != null ? convertReviewToDTO(animeUserInfo.getReview()) : null

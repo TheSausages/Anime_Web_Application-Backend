@@ -8,6 +8,7 @@ import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -19,5 +20,7 @@ public class SimplePostDTO {
     @NotEmpty
     private String title;
     private boolean isBlocked;
+    private LocalDateTime creation;
+    private LocalDateTime modification;
     private SimpleUserDTO user;
 }

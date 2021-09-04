@@ -8,8 +8,9 @@ import org.hibernate.validator.constraints.Length;
 import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.Positive;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -47,12 +48,16 @@ public class Post {
     private boolean isBlocked;
 
     @ColumnDefault("0")
-    @Positive
+    @Min(value = 0)
     private int nrOfPlus;
 
     @ColumnDefault("0")
-    @Positive
+    @Min(value = 0)
     private int nrOfMinus;
+
+    private LocalDateTime creation;
+
+    private LocalDateTime modification;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

@@ -8,6 +8,7 @@ import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Builder
@@ -40,6 +41,8 @@ public class AnimeUserInfo {
     @ColumnDefault("5")
     private Integer grade;
 
+    private LocalDateTime modification;
+
     @ColumnDefault("false")
     private boolean didReview;
 
@@ -49,7 +52,7 @@ public class AnimeUserInfo {
 
     public static AnimeUserInfo getEmptyAnimeUserInfo(AnimeUserInfoId animeUserInfoId) {
         return new AnimeUserInfo(animeUserInfoId, AnimeUserStatus.NO_STATUS, null, null, 0
-                , false, null, false, null);
+                , false, null, LocalDateTime.now(), false, null);
     }
 
     public AnimeUserInfo copyDataFromDTO(AnimeUserInfoDTO animeUserInfoDTO) {

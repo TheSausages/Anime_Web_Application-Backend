@@ -10,6 +10,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.Set;
 
@@ -34,6 +35,10 @@ public class Thread {
     @ColumnDefault("0")
     @Min(value = 0)
     private int NrOfPosts;
+
+    private LocalDateTime creation;
+
+    private LocalDateTime modification;
 
     @ManyToOne
     @JoinColumn(name = "CategoryId", nullable = false)

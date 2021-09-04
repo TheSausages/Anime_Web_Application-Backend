@@ -10,20 +10,27 @@ values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
 Insert into Reviews
 values (1, 'Ayy thats a title', 'Ayyyy thats something', 1, 2, 0);
 
-Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '107717', 'COMPLETED', '2021-07-5',
-                                  '2021-07-10', 2, false, true, 9, 1);
+Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '107717', 'COMPLETED', '2021-08-5 00:00:00',
+                                  '2021-07-10', 2, false, '2021-07-5', true, 9, 1);
 
-Insert into Tags value (1, 'Episode Discussion', 'MEDIUM');
+Insert into Tags value (1, 'Episode Discussion', 'LOW'), (2, 'New Studio', 'MEDIUM');
 
 Insert into ForumCategories
-values (1, 'Suggestions', 'Category for suggestions for enhancing the site and service');
+values (1, 'Suggestions', 'Suggestions for enhancing the site and service'),
+       (2, 'News', 'Talks about news from the industry');
 
 Insert into Threads
-values (1, 'First Thread on the forum!', 'OPEN', 1, 1);
+values (1, 'Second Thread on the forum!', 'OPEN', 1, '2021-09-2 14:05:04', '2021-09-4 12:12:12', 1),
+       (2, 'First Thread on the forum!', 'CLOSED', 2, '2021-09-1 12:11:32', '2021-09-2 15:45:40', 2);
 
-Insert into ThreadTags value (1, 1);
+Insert into ThreadTags value (1, 1), (2, 2);
 
-Insert into ThreadUserStatus value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1, true, false);
+Insert into ThreadUserStatus value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1, true, false),
+    ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2, false, false);
 
-Insert into Posts value (1, 'First Post on the forum!', 'Text of the first post on the forum', false, 2, 1,
-                         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1);
+Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second post on the forum', false, 2, 1,
+                         '2021-09-2 15:34:21', '2021-09-2 15:34:21',
+                         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
+    (2, 'First Post on the forum!', 'Text of the first post on the forum', false, 13, 16, '2021-09-1 14:10:12',
+     '2021-09-2 18:30:59',
+     'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2);
