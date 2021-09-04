@@ -12,4 +12,9 @@ import pwr.pracainz.entities.databaseerntities.forum.ForumCategory;
 @Setter
 public class ForumQuery {
     private ForumCategory category;
+
+    @Override
+    public String toString() {
+        return "category=" + category;
+    }
 }

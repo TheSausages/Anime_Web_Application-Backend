@@ -28,10 +28,10 @@ import java.util.Collections;
 public class KeycloakService implements KeycloakServiceInterface {
     private final WebClient client;
     private final Keycloak keycloak;
-    private final DTOConversionInterface dtoConversion;
+    private final DTOConversionInterface<?> dtoConversion;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversionInterface dtoConversion) {
+    KeycloakService(Keycloak keycloak, DTOConversionInterface<?> dtoConversion) {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
         this.keycloak = keycloak;
         this.dtoConversion = dtoConversion;

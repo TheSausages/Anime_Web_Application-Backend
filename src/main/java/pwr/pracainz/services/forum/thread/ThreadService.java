@@ -1,5 +1,6 @@
 package pwr.pracainz.services.forum.thread;
 
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -10,6 +11,7 @@ import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.repositories.forum.ThreadRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
+@Log4j2
 @Service
 public class ThreadService implements ThreadServiceInterface {
     private final ThreadRepository threadRepository;
@@ -23,6 +25,8 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public PageDTO<SimpleThreadDTO> getNewestThreads(int pageNumber) {
+        log.info("Get newest threads - page: {}", pageNumber);
+
         return dtoConversion.convertDomainPageToDTO(
                 threadRepository.findAll(PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertThreadToSimpleDTO)
         );
@@ -30,6 +34,8 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery) {
+        log.info("Get all threads with meet criteria: {}, page: {}", forumQuery, pageNumber);
+
         return dtoConversion.convertDomainPageToDTO(
                 threadRepository.getAllByCategory(forumQuery.getCategory(), PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertThreadToSimpleDTO)
         );

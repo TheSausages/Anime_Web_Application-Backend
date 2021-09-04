@@ -13,11 +13,11 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
 @Log4j2
 @Service
 public class UserService implements UserServiceInterface {
-    private final DTOConversionInterface dtoConversion;
+    private final DTOConversionInterface<?> dtoConversion;
     private final UserRepository userRepository;
 
     @Autowired
-    UserService(DTOConversionInterface dtoConversion, UserRepository userRepository) {
+    UserService(DTOConversionInterface<?> dtoConversion, UserRepository userRepository) {
         this.dtoConversion = dtoConversion;
         this.userRepository = userRepository;
     }
