@@ -59,6 +59,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     public SimpleUserDTO convertUserToSimpleDTO(User user) {
         return new SimpleUserDTO(
                 user.getUserId(),
+                user.getUsername(),
                 user.getNrOfPosts(),
                 user.getWatchTime(),
                 user.getAchievementPoints()
@@ -109,8 +110,9 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 thread.getStatus(),
                 thread.getCreation(),
                 thread.getModification(),
+                convertUserToSimpleDTO(thread.getCreator()),
                 convertForumCategoryToForumDTO(thread.getCategory()),
-                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toSet())
+                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toList())
         );
     }
 
@@ -136,7 +138,8 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
         return new TagDTO(
                 tag.getTagId(),
                 tag.getTagName(),
-                tag.getTagImportance()
+                tag.getTagImportance(),
+                tag.getTagColor()
         );
     }
 

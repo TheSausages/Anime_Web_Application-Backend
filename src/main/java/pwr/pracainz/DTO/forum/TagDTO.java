@@ -19,4 +19,5 @@ public class TagDTO {
     @NotEmpty
     private String tagName;
     private TagImportance tagImportance;
+    private String tagColor;
 }

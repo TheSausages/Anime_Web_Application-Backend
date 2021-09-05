@@ -11,6 +11,7 @@ use data;
 CREATE TABLE `Users`
 (
     `UserID`            varchar(45) NOT NULL,
+    `Username`          varchar(45) NOT NULL DEFAULT 'User',
     `NrOfPosts`         smallint    NOT NULL DEFAULT 0,
     `WatchTime`         int         NOT NULL DEFAULT 0,
     `AchievementPoints` mediumint   NOT NULL DEFAULT 0,
@@ -57,6 +58,7 @@ CREATE TABLE `Tags`
     `TagID`         int                                  NOT NULL auto_increment,
     `TagName`       varchar(45)                          NOT NULL,
     `TagImportance` enum ('LOW','MEDIUM','HIGH','ADMIN') NOT NULL DEFAULT 'LOW',
+    `TagColor`      varchar(18)                                   DEFAULT 'rgb(0, 255, 0)',
 
     PRIMARY KEY (`TagID`)
 ) COMMENT='Table of Tags that a Thread on the forum can have';
@@ -69,6 +71,7 @@ CREATE TABLE `Threads`
     `NrOfPosts`    int                    NOT NULL DEFAULT 0,
     `creation`     datetime                        DEFAULT CURRENT_TIMESTAMP,
     `modification` datetime on update CURRENT_TIMESTAMP,
+    `CreatorID`    varchar(45)            NOT NULL,
     `CategoryID`   int                    NOT NULL,
 
     PRIMARY KEY (`ThreadID`),

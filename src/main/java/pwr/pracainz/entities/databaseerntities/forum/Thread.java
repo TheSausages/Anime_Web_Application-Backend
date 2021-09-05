@@ -6,13 +6,16 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
+import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @NoArgsConstructor
 @Getter
@@ -44,13 +47,13 @@ public class Thread {
     @JoinColumn(name = "CategoryId", nullable = false)
     private ForumCategory category;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
             name = "ThreadTags",
-            joinColumns = {@JoinColumn(name = "TagId")},
-            inverseJoinColumns = {@JoinColumn(name = "ThreadId")}
+            joinColumns = {@JoinColumn(name = "ThreadId")},
+            inverseJoinColumns = {@JoinColumn(name = "TagId")}
     )
-    private Set<Tag> tags;
+    private List<Tag> tags;
 
     @OneToMany(
             mappedBy = "threadUserStatusId.thread",
@@ -65,6 +68,15 @@ public class Thread {
             orphanRemoval = true
     )
     private Set<Post> posts;
+
+    @ManyToOne
+    @JoinColumn(name = "CreatorID", nullable = false)
+    private User creator;
+
+    public List<Tag> getTags() {
+        System.out.println(tags.stream().sorted(new TagComparator()).collect(Collectors.toList()));
+        return tags.stream().sorted(new TagComparator()).collect(Collectors.toList());
+    }
 
     @Override
     public boolean equals(Object o) {

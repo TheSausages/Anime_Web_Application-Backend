@@ -7,12 +7,13 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
+import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -28,6 +29,7 @@ public class SimpleThreadDTO {
     private ThreadStatus status;
     private LocalDateTime creation;
     private LocalDateTime modification;
+    private SimpleUserDTO creator;
     private ForumCategoryDTO category;
-    private Set<TagDTO> tags;
+    private List<TagDTO> tags;
 }

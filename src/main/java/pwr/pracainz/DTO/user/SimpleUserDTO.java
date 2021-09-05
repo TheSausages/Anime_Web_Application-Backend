@@ -12,6 +12,7 @@ import lombok.experimental.FieldDefaults;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimpleUserDTO {
     private String userId;
+    private String username;
     private int nrOfPosts;
     private int watchTime;
     private long achievementPoints;

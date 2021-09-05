@@ -15,25 +15,31 @@ import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
+import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
+import pwr.pracainz.repositories.user.UserRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
+
+import static pwr.pracainz.utils.UserAuthorizationUtilities.getIdOfCurrentUser;
 
 @Log4j2
 @Service
 public class KeycloakService implements KeycloakServiceInterface {
     private final WebClient client;
     private final Keycloak keycloak;
+    private final UserRepository userRepository;
     private final DTOConversionInterface<?> dtoConversion;
 
     @Autowired
-    KeycloakService(Keycloak keycloak, DTOConversionInterface<?> dtoConversion) {
+    KeycloakService(Keycloak keycloak, UserRepository userRepository, DTOConversionInterface<?> dtoConversion) {
         client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
         this.keycloak = keycloak;
+        this.userRepository = userRepository;
         this.dtoConversion = dtoConversion;
     }
 
@@ -116,7 +122,11 @@ public class KeycloakService implements KeycloakServiceInterface {
                     registrationBody.getPassword()
             );
 
-            return login(login);
+            AuthenticationTokenDTO token = login(login);
+
+            userRepository.save(new User(
+                    getIdOfCurrentUser(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null
+            ));
         }
 
         if (response.getStatus() == 409) {

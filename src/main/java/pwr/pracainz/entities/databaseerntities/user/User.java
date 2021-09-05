@@ -1,20 +1,24 @@
 package pwr.pracainz.entities.databaseerntities.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
+import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.Set;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Table(name = "Users")
@@ -23,6 +27,9 @@ public class User {
     @Id
     @NotEmpty
     private String userId;
+
+    @NotBlank
+    private String username;
 
     @Min(value = 0)
     @ColumnDefault("0")
@@ -52,6 +59,9 @@ public class User {
             orphanRemoval = true
     )
     private Set<ThreadUserStatus> threadUserStatuses;
+
+    @OneToMany(mappedBy = "creator")
+    private Set<Thread> threads;
 
     @OneToMany(mappedBy = "user")
     private Set<Post> posts;

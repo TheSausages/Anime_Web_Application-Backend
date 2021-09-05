@@ -27,16 +27,25 @@ public class Tag {
     @ColumnDefault("LOW")
     private TagImportance tagImportance;
 
+    private String tagColor;
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return TagId == tag.TagId && Objects.equals(tagName, tag.tagName) && tagImportance == tag.tagImportance;
+        return TagId == tag.TagId && Objects.equals(tagName, tag.tagName) && tagImportance == tag.tagImportance && Objects.equals(tagColor, tag.tagColor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(TagId, tagName, tagImportance);
+        return Objects.hash(TagId, tagName, tagImportance, tagColor);
+    }
+
+    @Override
+    public String toString() {
+        return "Tag{" +
+                "tagName='" + tagName + '\'' +
+                '}';
     }
 }

@@ -10,14 +10,16 @@ import pwr.pracainz.configuration.customMappers.tagImportanceMapper.TagImportanc
 @JsonSerialize(using = TagImportanceSerializer.class)
 @JsonDeserialize(using = TagImportanceDeserializer.class)
 public enum TagImportance {
-    LOW("Low"),
-    MEDIUM("Medium"),
-    HIGH("High"),
-    ADMIN("Admin");
+    LOW("Low", 1),
+    MEDIUM("Medium", 2),
+    HIGH("High", 3),
+    ADMIN("Admin", 4);
 
     private final String formattedImportance;
+    private final int comparableImportance;
 
-    TagImportance(String formattedImportance) {
+    TagImportance(String formattedImportance, int comparableImportance) {
         this.formattedImportance = formattedImportance;
+        this.comparableImportance = comparableImportance;
     }
 }
