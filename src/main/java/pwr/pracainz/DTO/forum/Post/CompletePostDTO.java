@@ -1,21 +1,29 @@
 package pwr.pracainz.DTO.forum.Post;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import pwr.pracainz.DTO.user.SimpleUserDTO;
 
 import javax.validation.constraints.NotEmpty;
+import java.time.LocalDateTime;
 
+@EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
-@AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class CompletePostDTO {
-    private SimplePostDTO postInformation;
+public class CompletePostDTO extends SimplePostDTO {
     @NotEmpty
     private String postText;
     private int nrOfPlus;
     private int nrOfMinus;
+
+    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String postText, int nrOfPlus, int nrOfMinus) {
+        super(id, title, isBlocked, creation, modification, user);
+        this.postText = postText;
+        this.nrOfPlus = nrOfPlus;
+        this.nrOfMinus = nrOfMinus;
+    }
 }

@@ -31,6 +31,9 @@ public class Thread {
     @NotEmpty
     private String title;
 
+    @NotEmpty
+    private String threadText;
+
     @Enumerated(EnumType.STRING)
     @ColumnDefault("OPEN")
     private ThreadStatus status;
@@ -74,7 +77,6 @@ public class Thread {
     private User creator;
 
     public List<Tag> getTags() {
-        System.out.println(tags.stream().sorted(new TagComparator()).collect(Collectors.toList()));
         return tags.stream().sorted(new TagComparator()).collect(Collectors.toList());
     }
 

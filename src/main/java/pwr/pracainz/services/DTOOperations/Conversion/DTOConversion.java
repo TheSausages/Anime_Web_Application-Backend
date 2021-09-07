@@ -93,7 +93,12 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     @Override
     public CompletePostDTO convertPostToCompleteDTO(Post post) {
         return new CompletePostDTO(
-                convertPostToSimpleDTO(post),
+                post.getPostId(),
+                post.getTitle(),
+                post.isBlocked(),
+                post.getCreation(),
+                post.getModification(),
+                convertUserToSimpleDTO(post.getUser()),
                 post.getPostText(),
                 post.getNrOfPlus(),
                 post.getNrOfMinus()
@@ -118,7 +123,16 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     @Override
     public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread) {
         return new CompleteThreadDTO(
-                convertThreadToSimpleDTO(thread),
+                thread.getThreadId(),
+                thread.getTitle(),
+                thread.getThreadText(),
+                thread.getNrOfPosts(),
+                thread.getStatus(),
+                thread.getCreation(),
+                thread.getModification(),
+                convertUserToSimpleDTO(thread.getCreator()),
+                convertForumCategoryToForumDTO(thread.getCategory()),
+                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toList()),
                 thread.getPosts().stream().map(this::convertPostToCompleteDTO).collect(Collectors.toSet())
         );
     }

@@ -67,6 +67,7 @@ CREATE TABLE `Threads`
 (
     `ThreadID`     int                    NOT NULL auto_increment,
     `Title`        varchar(45)            NOT NULL,
+    `ThreadText`   varchar(600)           NOT NULL DEFAULT 'No Text',
     `Status`       enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
     `NrOfPosts`    int                    NOT NULL DEFAULT 0,
     `creation`     datetime                        DEFAULT CURRENT_TIMESTAMP,

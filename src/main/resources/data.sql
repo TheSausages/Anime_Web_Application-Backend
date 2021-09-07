@@ -21,9 +21,11 @@ values (1, 'Suggestions', 'Suggestions for enhancing the site and service'),
        (2, 'News', 'Talks about news from the industry');
 
 Insert into Threads
-values (1, 'Second Thread on the forum!', 'OPEN', 1, '2021-09-2 14:05:04', '2021-09-4 12:12:12',
+values (1, 'Second Thread on the forum!', 'Text of Second Thread!', 'OPEN', 1, '2021-09-2 14:05:04',
+        '2021-09-4 12:12:12',
         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
-       (2, 'First Thread on the forum!', 'CLOSED', 1, '2021-09-1 12:11:32', '2021-09-2 15:45:40',
+       (2, 'First Thread on the forum!', 'Text of First Thead!', 'CLOSED', 1, '2021-09-1 12:11:32',
+        '2021-09-2 15:45:40',
         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2);
 
 Insert into ThreadTags value (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3);
