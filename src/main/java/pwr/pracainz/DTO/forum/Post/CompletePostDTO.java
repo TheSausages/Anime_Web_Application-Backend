@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 
 import javax.validation.constraints.NotEmpty;
 
@@ -19,5 +18,4 @@ public class CompletePostDTO {
     private String postText;
     private int nrOfPlus;
     private int nrOfMinus;
-    private SimpleThreadDTO thread;
 }

@@ -35,6 +35,6 @@ public class ThreadUserStatus {
 
     @Override
     public int hashCode() {
-        return Objects.hash(threadUserStatusId, isWatching, isBlocked);
+        return Objects.hash(isWatching, isBlocked);
     }
 }

@@ -7,7 +7,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumQuery;
+import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.ThreadRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
@@ -38,6 +40,15 @@ public class ThreadService implements ThreadServiceInterface {
 
         return dtoConversion.convertDomainPageToDTO(
                 threadRepository.getAllByCategory(forumQuery.getCategory(), PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertThreadToSimpleDTO)
+        );
+    }
+
+    @Override
+    public CompleteThreadDTO getThreadById(int id) {
+        log.info("Get thread with id: {}", id);
+
+        return dtoConversion.convertThreadToCompleteDTO(
+                threadRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + id))
         );
     }
 }

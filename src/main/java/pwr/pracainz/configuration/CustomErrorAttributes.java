@@ -26,6 +26,8 @@ public class CustomErrorAttributes extends DefaultErrorAttributes {
         errorInformation.remove("error");
         errorInformation.remove("path");
 
+        errorInformation.putIfAbsent("message", "No error message available! Please contact the administration");
+
         return errorInformation;
     }
 }

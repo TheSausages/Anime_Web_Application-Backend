@@ -88,6 +88,6 @@ public class Thread {
 
     @Override
     public int hashCode() {
-        return Objects.hash(threadId, title, status, category, tags, threadUserStatuses, posts);
+        return Objects.hash(threadId, title, status, tags, threadUserStatuses);
     }
 }

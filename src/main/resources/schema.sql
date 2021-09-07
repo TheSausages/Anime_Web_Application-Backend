@@ -70,7 +70,7 @@ CREATE TABLE `Threads`
     `Status`       enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
     `NrOfPosts`    int                    NOT NULL DEFAULT 0,
     `creation`     datetime                        DEFAULT CURRENT_TIMESTAMP,
-    `modification` datetime on update CURRENT_TIMESTAMP,
+    `modification` datetime ON UPDATE CURRENT_TIMESTAMP,
     `CreatorID`    varchar(45)            NOT NULL,
     `CategoryID`   int                    NOT NULL,
 
@@ -114,7 +114,7 @@ CREATE TABLE `Posts`
     `NrOfPlus`     int          NOT NULL DEFAULT 0,
     `NrOfMinus`    int          NOT NULL DEFAULT 0,
     `creation`     datetime              DEFAULT CURRENT_TIMESTAMP,
-    `modification` datetime on update CURRENT_TIMESTAMP,
+    `modification` datetime ON UPDATE CURRENT_TIMESTAMP,
     `UserID`       varchar(45)  NOT NULL,
     `ThreadID`     int          NOT NULL,
 

@@ -96,8 +96,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 convertPostToSimpleDTO(post),
                 post.getPostText(),
                 post.getNrOfPlus(),
-                post.getNrOfMinus(),
-                convertThreadToSimpleDTO(post.getThread())
+                post.getNrOfMinus()
         );
     }
 

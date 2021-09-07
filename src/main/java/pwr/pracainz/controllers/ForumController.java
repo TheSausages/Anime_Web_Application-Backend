@@ -5,12 +5,14 @@ import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.ForumQuery;
+import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @RestController
@@ -30,13 +32,18 @@ public class ForumController {
         return categoryService.getAllCategories();
     }
 
-    @GetMapping("/newestThreads/{page}")
+    @PostMapping("/search/{page}")
+    public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int page, @RequestBody @Valid ForumQuery query) {
+        return threadService.searchThreads(page, query);
+    }
+
+    @GetMapping("/thread/newest/{page}")
     public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int page) {
         return threadService.getNewestThreads(page);
     }
 
-    @PostMapping("/search/{page}")
-    public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int page, @RequestBody @Valid ForumQuery query) {
-        return threadService.searchThreads(page, query);
+    @GetMapping("/thread/{id}")
+    public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
+        return threadService.getThreadById(id);
     }
 }

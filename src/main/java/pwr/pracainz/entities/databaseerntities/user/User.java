@@ -80,6 +80,6 @@ public class User {
 
     @Override
     public int hashCode() {
-        return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints, achievements, animeUserInfo, threadUserStatuses, posts);
+        return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints, posts);
     }
 }

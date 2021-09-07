@@ -19,19 +19,6 @@ import java.util.Objects;
 @Table(name = "Posts")
 @Entity
 public class Post {
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(user, post.user) && Objects.equals(thread, post.thread);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, user, thread);
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int postId;
@@ -66,4 +53,17 @@ public class Post {
     @ManyToOne
     @JoinColumn(name = "threadId", nullable = false)
     private Thread thread;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Post post = (Post) o;
+        return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(user, post.user) && Objects.equals(thread, post.thread);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, thread);
+    }
 }

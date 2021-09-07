@@ -16,6 +16,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
+import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
 
 import java.time.LocalDateTime;
@@ -46,6 +47,14 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
     @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
     ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
         log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
+
+        return new ResponseBodyWithMessageDTO(ex.getMessage());
+    }
+
+    @ExceptionHandler(ObjectNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(AnilistException ex) {
+        log.error(ex.getMessage());
 
         return new ResponseBodyWithMessageDTO(ex.getMessage());
     }
