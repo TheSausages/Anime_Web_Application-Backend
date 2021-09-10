@@ -12,6 +12,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
 import java.util.Objects;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -45,6 +46,13 @@ public class Post {
     private LocalDateTime creation;
 
     private LocalDateTime modification;
+
+    @OneToMany(
+            mappedBy = "postUserStatusId.post",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<PostUserStatus> postUserStatuses;
 
     @ManyToOne
     @JoinColumn(name = "userId", nullable = false)

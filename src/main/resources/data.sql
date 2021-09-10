@@ -38,4 +38,10 @@ Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second pos
                          'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
     (2, 'First Post on the forum!', 'Text of the first post on the forum', false, 13, 16, '2021-09-1 14:10:12',
      '2021-09-2 18:30:59',
-     'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2);
+     'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2),
+    (3, 'Third Post on the forum!', 'Text of the third post on the forum', true, 0, 35,
+     '2021-09-3 16:45:01', '2021-09-3 16:45:01',
+     'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1);
+
+Insert Into PostUserStatus
+values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1, true, false, false);

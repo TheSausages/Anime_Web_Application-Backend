@@ -5,6 +5,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 
 import javax.validation.constraints.NotEmpty;
@@ -19,11 +20,21 @@ public class CompletePostDTO extends SimplePostDTO {
     private String postText;
     private int nrOfPlus;
     private int nrOfMinus;
+    private PostUserStatusDTO postUserStatus;
 
     public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String postText, int nrOfPlus, int nrOfMinus) {
         super(id, title, isBlocked, creation, modification, user);
         this.postText = postText;
         this.nrOfPlus = nrOfPlus;
         this.nrOfMinus = nrOfMinus;
+        this.postUserStatus = null;
+    }
+
+    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String postText, int nrOfPlus, int nrOfMinus, PostUserStatusDTO postUserStatus) {
+        super(id, title, isBlocked, creation, modification, user);
+        this.postText = postText;
+        this.nrOfPlus = nrOfPlus;
+        this.nrOfMinus = nrOfMinus;
+        this.postUserStatus = postUserStatus;
     }
 }

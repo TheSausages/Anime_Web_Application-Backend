@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
+import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
 
@@ -59,6 +60,13 @@ public class User {
             orphanRemoval = true
     )
     private Set<ThreadUserStatus> threadUserStatuses;
+
+    @OneToMany(
+            mappedBy = "postUserStatusId.user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Set<PostUserStatus> postUserStatuses;
 
     @OneToMany(mappedBy = "creator")
     private Set<Thread> threads;

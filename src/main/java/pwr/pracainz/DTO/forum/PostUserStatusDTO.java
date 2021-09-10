@@ -11,12 +11,15 @@ import lombok.experimental.FieldDefaults;
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ThreadUserStatusDTO {
-    private ThreadUserStatusIdDTO ids;
+public class PostUserStatusDTO {
+    private PostUserStatusIdDTO ids;
 
-    @JsonProperty(value = "isWatching")
-    private boolean isWatching;
+    @JsonProperty(value = "isLiked")
+    private boolean isLiked;
 
-    @JsonProperty(value = "isBlocked")
-    private boolean isBlocked;
+    @JsonProperty(value = "isDisliked")
+    private boolean isDisliked;
+
+    @JsonProperty(value = "isReported")
+    private boolean isReported;
 }

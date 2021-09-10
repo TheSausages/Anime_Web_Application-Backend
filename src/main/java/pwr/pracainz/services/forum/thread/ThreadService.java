@@ -9,19 +9,23 @@ import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumQuery;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.ThreadRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
+import pwr.pracainz.services.forum.post.PostServiceInterface;
 
 @Log4j2
 @Service
 public class ThreadService implements ThreadServiceInterface {
     private final ThreadRepository threadRepository;
+    private final PostServiceInterface postService;
     private final DTOConversionInterface<SimpleThreadDTO> dtoConversion;
 
     @Autowired
-    ThreadService(ThreadRepository threadRepository, DTOConversionInterface<SimpleThreadDTO> dtoConversion) {
+    ThreadService(ThreadRepository threadRepository, PostServiceInterface postService, DTOConversionInterface<SimpleThreadDTO> dtoConversion) {
         this.threadRepository = threadRepository;
+        this.postService = postService;
         this.dtoConversion = dtoConversion;
     }
 
@@ -47,8 +51,11 @@ public class ThreadService implements ThreadServiceInterface {
     public CompleteThreadDTO getThreadById(int id) {
         log.info("Get thread with id: {}", id);
 
+        Thread thread = threadRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + id));
+
+
         return dtoConversion.convertThreadToCompleteDTO(
-                threadRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + id))
+                thread, postService.findPostsByThread(0, thread.getThreadId())
         );
     }
 }

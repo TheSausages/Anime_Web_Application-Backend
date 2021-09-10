@@ -32,14 +32,14 @@ CREATE TABLE `Achievements`
 
 CREATE TABLE `UserAchievements`
 (
-    `AchievementID` int NOT NULL ,
-    `UserID`        varchar(45) NOT NULL ,
+    `AchievementID` int         NOT NULL,
+    `UserID`        varchar(45) NOT NULL,
 
     PRIMARY KEY (`UserID`, `AchievementID`),
     KEY `FK_UserAchievements_Achievements` (`AchievementID`),
-    CONSTRAINT `FK_39` FOREIGN KEY `FK_UserAchievements_Achievements` (`AchievementID`) REFERENCES `Achievements` (`AchievementID`),
+    CONSTRAINT `FK_1` FOREIGN KEY `FK_UserAchievements_Achievements` (`AchievementID`) REFERENCES `Achievements` (`AchievementID`),
     KEY `FK_UserAchievements_User` (`UserID`),
-    CONSTRAINT `FK_46` FOREIGN KEY `FK_UserAchievements_User` (`UserID`) REFERENCES `Users` (`UserID`)
+    CONSTRAINT `FK_2` FOREIGN KEY `FK_UserAchievements_User` (`UserID`) REFERENCES `Users` (`UserID`)
 ) COMMENT='Table that contains what Achievements a given User has';
 
 
@@ -77,19 +77,19 @@ CREATE TABLE `Threads`
 
     PRIMARY KEY (`ThreadID`),
     KEY `FK_Thread_ForumCategory` (`CategoryID`),
-    CONSTRAINT `FK_169` FOREIGN KEY `FK_Thread_ForumCategory` (`CategoryID`) REFERENCES ForumCategories (`CategoryID`)
+    CONSTRAINT `FK_3` FOREIGN KEY `FK_Thread_ForumCategory` (`CategoryID`) REFERENCES ForumCategories (`CategoryID`)
 ) COMMENT='Table containing information about a Single Thread on the Forum';
 
 CREATE TABLE `ThreadTags`
 (
-    `ThreadID` int NOT NULL ,
-    `TagID`    int NOT NULL ,
+    `ThreadID` int NOT NULL,
+    `TagID`    int NOT NULL,
 
     PRIMARY KEY (`ThreadID`, `TagID`),
     KEY `FK_ThreadTags_Tags` (`TagID`),
-    CONSTRAINT `FK_158` FOREIGN KEY `FK_ThreadTags_Tags` (`TagID`) REFERENCES `Tags` (`TagID`),
+    CONSTRAINT `FK_4` FOREIGN KEY `FK_ThreadTags_Tags` (`TagID`) REFERENCES `Tags` (`TagID`),
     KEY `FK_ThreadTags_Thread` (`ThreadID`),
-    CONSTRAINT `FK_154` FOREIGN KEY `FK_ThreadTags_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`)
+    CONSTRAINT `FK_5` FOREIGN KEY `FK_ThreadTags_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`)
 ) COMMENT='Table that contains information what tags a thread has';
 
 CREATE TABLE `ThreadUserStatus`
@@ -101,9 +101,9 @@ CREATE TABLE `ThreadUserStatus`
 
     PRIMARY KEY (`UserID`, `ThreadID`),
     KEY `FK_ThreadUserStatus_thread` (`ThreadID`),
-    CONSTRAINT `FK_133` FOREIGN KEY `FK_ThreadUserStatus_thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`),
+    CONSTRAINT `FK_6` FOREIGN KEY `FK_ThreadUserStatus_thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`),
     KEY `FK_ThreadUserStatus_User` (`UserID`),
-    CONSTRAINT `FK_129` FOREIGN KEY `FK_ThreadUserStatus_User` (`UserID`) REFERENCES `Users` (`UserID`)
+    CONSTRAINT `FK_7` FOREIGN KEY `FK_ThreadUserStatus_User` (`UserID`) REFERENCES `Users` (`UserID`)
 ) COMMENT='Table that contains a users settings on a thread';
 
 CREATE TABLE `Posts`
@@ -121,10 +121,25 @@ CREATE TABLE `Posts`
 
     PRIMARY KEY (`PostID`),
     KEY `FK_Post_Thread` (`ThreadID`),
-    CONSTRAINT `FK_183` FOREIGN KEY `FK_Post_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`),
+    CONSTRAINT `FK_8` FOREIGN KEY `FK_Post_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`),
     KEY `FK_Post_User` (`UserID`),
-    CONSTRAINT `FK_142` FOREIGN KEY `FK_Post_User` (`UserID`) REFERENCES `Users` (`UserID`)
-) COMMENT='Table containing Information about a single Post on the Forum';
+    CONSTRAINT `FK_9` FOREIGN KEY `FK_Post_User` (`UserID`) REFERENCES `Users` (`UserID`)
+) COMMENT ='Table containing Information about a single Post on the Forum';
+
+CREATE TABLE `PostUserStatus`
+(
+    `UserID`     varchar(45) NOT NULL,
+    `PostID`     int         NOT NULL,
+    `IsLiked`    boolean     NOT NULL DEFAULT false,
+    `IsDisliked` boolean     NOT NULL DEFAULT false,
+    `IsReported` boolean     NOT NULL DEFAULT false,
+
+    PRIMARY KEY (`UserID`, `PostID`),
+    KEY `FK_PostUserStatus_User` (`UserID`),
+    CONSTRAINT `FK_10` FOREIGN KEY `FK_PostUserStatus_User` (`UserID`) REFERENCES `Users` (`UserID`),
+    KEY `FK_PostUserStatus_Post` (`PostID`),
+    CONSTRAINT `FK_11` FOREIGN KEY `FK_PostUserStatus_Post` (`PostID`) REFERENCES `Posts` (`PostID`)
+) COMMENT ='Table containing status of a User on a Post';
 
 /*Create tables connected to Anime Info*/
 

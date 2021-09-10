@@ -5,9 +5,11 @@ import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.ForumQuery;
+import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
+import pwr.pracainz.services.forum.post.PostServiceInterface;
 import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
 
 import javax.validation.Valid;
@@ -20,11 +22,13 @@ import java.util.List;
 public class ForumController {
     private final ForumCategoryServiceInterface categoryService;
     private final ThreadServiceInterface threadService;
+    private final PostServiceInterface postService;
 
     @Autowired
-    ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService) {
+    ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService, PostServiceInterface postService) {
         this.categoryService = forumCategoryServiceInterface;
         this.threadService = threadService;
+        this.postService = postService;
     }
 
     @GetMapping("/categories")
@@ -45,5 +49,11 @@ public class ForumController {
     @GetMapping("/thread/{id}")
     public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
         return threadService.getThreadById(id);
+    }
+
+    @GetMapping("/posts/thread/{threadId}/{page}")
+    public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
+                                                         @PathVariable @Positive int page) {
+        return postService.findPostsByThread(page, threadId);
     }
 }

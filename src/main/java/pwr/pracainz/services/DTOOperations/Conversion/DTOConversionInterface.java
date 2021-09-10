@@ -5,14 +5,11 @@ import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
-import pwr.pracainz.DTO.forum.ForumCategoryDTO;
+import pwr.pracainz.DTO.forum.*;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Post.SimplePostDTO;
-import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
-import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
-import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
 import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
@@ -39,9 +36,11 @@ public interface DTOConversionInterface<T> {
 
     CompletePostDTO convertPostToCompleteDTO(Post post);
 
+    CompletePostDTO convertPostWithUserStatusToCompleteDTO(Post post, PostUserStatus status);
+
     SimpleThreadDTO convertThreadToSimpleDTO(Thread thread);
 
-    CompleteThreadDTO convertThreadToCompleteDTO(Thread thread);
+    CompleteThreadDTO convertThreadToCompleteDTO(Thread thread, PageDTO<CompletePostDTO> posts);
 
     ForumCategoryDTO convertForumCategoryToForumDTO(ForumCategory forumCategory);
 
@@ -56,6 +55,10 @@ public interface DTOConversionInterface<T> {
     ThreadUserStatusIdDTO convertThreadUserStatusIdToDTO(ThreadUserStatusId threadUserStatusId);
 
     ThreadUserStatusDTO convertThreadUserStatusToDTO(ThreadUserStatus threadUserStatus);
+
+    PostUserStatusIdDTO convertPostUserStatusIdToDTO(PostUserStatusId postUserStatusId);
+
+    PostUserStatusDTO convertPostUserStatusToDTO(PostUserStatus postUserStatus);
 
     AuthenticationTokenDTO convertAuthenticationTokenToDTO(AuthenticationToken authenticationToken);
 }

@@ -6,14 +6,11 @@ import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
-import pwr.pracainz.DTO.forum.ForumCategoryDTO;
+import pwr.pracainz.DTO.forum.*;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Post.SimplePostDTO;
-import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
-import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
-import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
 import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
@@ -106,6 +103,22 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
+    public CompletePostDTO convertPostWithUserStatusToCompleteDTO(Post post, PostUserStatus status) {
+        return new CompletePostDTO(
+                post.getPostId(),
+                post.getTitle(),
+                post.isBlocked(),
+                post.getCreation(),
+                post.getModification(),
+                convertUserToSimpleDTO(post.getUser()),
+                post.getPostText(),
+                post.getNrOfPlus(),
+                post.getNrOfMinus(),
+                this.convertPostUserStatusToDTO(status)
+        );
+    }
+
+    @Override
     public SimpleThreadDTO convertThreadToSimpleDTO(Thread thread) {
         return new SimpleThreadDTO(
                 thread.getThreadId(),
@@ -121,7 +134,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread) {
+    public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
         return new CompleteThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),
@@ -133,7 +146,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 convertUserToSimpleDTO(thread.getCreator()),
                 convertForumCategoryToForumDTO(thread.getCategory()),
                 thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toList()),
-                thread.getPosts().stream().map(this::convertPostToCompleteDTO).collect(Collectors.toSet())
+                posts
         );
     }
 
@@ -206,6 +219,24 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 convertThreadUserStatusIdToDTO(threadUserStatus.getThreadUserStatusId()),
                 threadUserStatus.isWatching(),
                 threadUserStatus.isBlocked()
+        );
+    }
+
+    @Override
+    public PostUserStatusIdDTO convertPostUserStatusIdToDTO(PostUserStatusId postUserStatusId) {
+        return new PostUserStatusIdDTO(
+                convertUserToSimpleDTO(postUserStatusId.getUser()),
+                convertPostToSimpleDTO(postUserStatusId.getPost())
+        );
+    }
+
+    @Override
+    public PostUserStatusDTO convertPostUserStatusToDTO(PostUserStatus postUserStatus) {
+        return new PostUserStatusDTO(
+                convertPostUserStatusIdToDTO(postUserStatus.getPostUserStatusId()),
+                postUserStatus.isLiked(),
+                postUserStatus.isDisliked(),
+                postUserStatus.isReported()
         );
     }
 

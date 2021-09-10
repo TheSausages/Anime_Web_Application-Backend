@@ -125,7 +125,7 @@ public class KeycloakService implements KeycloakServiceInterface {
             AuthenticationTokenDTO token = login(login);
 
             userRepository.save(new User(
-                    getIdOfCurrentUser(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null
+                    getIdOfCurrentUser(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null, null
             ));
         }
 
