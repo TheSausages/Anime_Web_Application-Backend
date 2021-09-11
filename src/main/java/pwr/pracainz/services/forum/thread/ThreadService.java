@@ -33,8 +33,8 @@ public class ThreadService implements ThreadServiceInterface {
     public PageDTO<SimpleThreadDTO> getNewestThreads(int pageNumber) {
         log.info("Get newest threads - page: {}", pageNumber);
 
-        return dtoConversion.convertDomainPageToDTO(
-                threadRepository.findAll(PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertThreadToSimpleDTO)
+        return dtoConversion.convertToDTO(
+                threadRepository.findAll(PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
         );
     }
 
@@ -42,8 +42,8 @@ public class ThreadService implements ThreadServiceInterface {
     public PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery) {
         log.info("Get all threads with meet criteria: {}, page: {}", forumQuery, pageNumber);
 
-        return dtoConversion.convertDomainPageToDTO(
-                threadRepository.getAllByCategory(forumQuery.getCategory(), PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertThreadToSimpleDTO)
+        return dtoConversion.convertToDTO(
+                threadRepository.getAllByCategory(forumQuery.getCategory(), PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
         );
     }
 
@@ -54,7 +54,7 @@ public class ThreadService implements ThreadServiceInterface {
         Thread thread = threadRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + id));
 
 
-        return dtoConversion.convertThreadToCompleteDTO(
+        return dtoConversion.convertToDTO(
                 thread, postService.findPostsByThread(0, thread.getThreadId())
         );
     }

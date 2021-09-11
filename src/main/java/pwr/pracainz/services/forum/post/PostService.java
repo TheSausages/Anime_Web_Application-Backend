@@ -49,9 +49,9 @@ public class PostService implements PostServiceInterface {
     public PageDTO<CompletePostDTO> findPostsByThread(int pageNumber, int threadId) {
         log.info("Get page {} of posts from thread {} and for user {}", pageNumber, threadId, getIdOfCurrentUser());
 
-        return dtoConversion.convertDomainPageToDTO(
+        return dtoConversion.convertToDTO(
                 postRepository.getAllByThread_ThreadId(threadId, PageRequest.of(pageNumber, 30, Sort.by("creation").descending()))
-                        .map(post -> dtoConversion.convertPostWithUserStatusToCompleteDTO(
+                        .map(post -> dtoConversion.convertToDTO(
                                 post, post.getPostUserStatuses().stream().filter(postUserStatus -> postUserStatus.getPostUserStatusId().getUser().equals(userService.getCurrentUser())).findFirst()
                                         .orElseGet(() -> PostUserStatus.getEmptyPostUserStatus(post, userService.getCurrentUserOrInsert(), false, false, false))
                         ))
@@ -80,6 +80,6 @@ public class PostService implements PostServiceInterface {
                 .map(postUserStatus -> postUserStatus.copyDataFromDTO(status))
                 .orElse(dtoDeconversion.convertFromDTO(status, postUserId));
 
-        return dtoConversion.convertPostUserStatusToDTO(postUserStatusRepository.save(userStatus));
+        return dtoConversion.convertToDTO(postUserStatusRepository.save(userStatus));
     }
 }

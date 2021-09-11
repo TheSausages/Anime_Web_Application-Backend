@@ -28,6 +28,6 @@ public class ForumCategoryService implements ForumCategoryServiceInterface {
         log.info("Get all Forum Categories");
 
         return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "categoryName"))
-                .stream().map(dtoConversion::convertForumCategoryToForumDTO).collect(Collectors.toList());
+                .stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
     }
 }

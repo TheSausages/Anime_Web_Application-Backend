@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @Service
 public class DTOConversion<T> implements DTOConversionInterface<T> {
     @Override
-    public PageDTO<T> convertDomainPageToDTO(Page<T> page) {
+    public PageDTO<T> convertToDTO(Page<T> page) {
         return new PageDTO<>(
                 page.toList(),
                 page.getNumberOfElements(),
@@ -42,18 +42,18 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public CompleteUserDTO convertUserToCompleteDTO(User user) {
+    public CompleteUserDTO convertToDTO(User user) {
         return new CompleteUserDTO(
-                convertUserToSimpleDTO(user),
-                user.getAchievements().stream().map(this::convertAchievementToDTO).collect(Collectors.toSet()),
-                user.getAnimeUserInfo().stream().map(this::convertAnimeUserInfoToDTO).collect(Collectors.toSet()),
-                user.getThreadUserStatuses().stream().map(this::convertThreadUserStatusToDTO).collect(Collectors.toSet()),
-                user.getPosts().stream().map(this::convertPostToCompleteDTO).collect(Collectors.toSet())
+                convertToSimpleDTO(user),
+                user.getAchievements().stream().map(this::convertToDTO).collect(Collectors.toSet()),
+                user.getAnimeUserInfo().stream().map(this::convertToDTO).collect(Collectors.toSet()),
+                user.getThreadUserStatuses().stream().map(this::convertToDTO).collect(Collectors.toSet()),
+                user.getPosts().stream().map(this::convertToDTO).collect(Collectors.toSet())
         );
     }
 
     @Override
-    public SimpleUserDTO convertUserToSimpleDTO(User user) {
+    public SimpleUserDTO convertToSimpleDTO(User user) {
         return new SimpleUserDTO(
                 user.getUserId(),
                 user.getUsername(),
@@ -64,7 +64,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public AchievementDTO convertAchievementToDTO(Achievement achievement) {
+    public AchievementDTO convertToDTO(Achievement achievement) {
         return new AchievementDTO(
                 achievement.getAchievementId(),
                 achievement.getName(),
@@ -76,26 +76,26 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public SimplePostDTO convertPostToSimpleDTO(Post post) {
+    public SimplePostDTO convertToSimpleDTO(Post post) {
         return new SimplePostDTO(
                 post.getPostId(),
                 post.getTitle(),
                 post.isBlocked(),
                 post.getCreation(),
                 post.getModification(),
-                convertUserToSimpleDTO(post.getUser())
+                convertToSimpleDTO(post.getUser())
         );
     }
 
     @Override
-    public CompletePostDTO convertPostToCompleteDTO(Post post) {
+    public CompletePostDTO convertToDTO(Post post) {
         return new CompletePostDTO(
                 post.getPostId(),
                 post.getTitle(),
                 post.isBlocked(),
                 post.getCreation(),
                 post.getModification(),
-                convertUserToSimpleDTO(post.getUser()),
+                convertToSimpleDTO(post.getUser()),
                 post.getPostText(),
                 post.getNrOfPlus(),
                 post.getNrOfMinus()
@@ -103,23 +103,23 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public CompletePostDTO convertPostWithUserStatusToCompleteDTO(Post post, PostUserStatus status) {
+    public CompletePostDTO convertToDTO(Post post, PostUserStatus status) {
         return new CompletePostDTO(
                 post.getPostId(),
                 post.getTitle(),
                 post.isBlocked(),
                 post.getCreation(),
                 post.getModification(),
-                convertUserToSimpleDTO(post.getUser()),
+                convertToSimpleDTO(post.getUser()),
                 post.getPostText(),
                 post.getNrOfPlus(),
                 post.getNrOfMinus(),
-                this.convertPostUserStatusToDTO(status)
+                this.convertToDTO(status)
         );
     }
 
     @Override
-    public SimpleThreadDTO convertThreadToSimpleDTO(Thread thread) {
+    public SimpleThreadDTO convertToSimpleDTO(Thread thread) {
         return new SimpleThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),
@@ -127,14 +127,14 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 thread.getStatus(),
                 thread.getCreation(),
                 thread.getModification(),
-                convertUserToSimpleDTO(thread.getCreator()),
-                convertForumCategoryToForumDTO(thread.getCategory()),
-                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toList())
+                convertToSimpleDTO(thread.getCreator()),
+                convertToDTO(thread.getCategory()),
+                thread.getTags().stream().map(this::convertToDTO).collect(Collectors.toList())
         );
     }
 
     @Override
-    public CompleteThreadDTO convertThreadToCompleteDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
+    public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
         return new CompleteThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),
@@ -143,15 +143,15 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 thread.getStatus(),
                 thread.getCreation(),
                 thread.getModification(),
-                convertUserToSimpleDTO(thread.getCreator()),
-                convertForumCategoryToForumDTO(thread.getCategory()),
-                thread.getTags().stream().map(this::convertTagToDTO).collect(Collectors.toList()),
+                convertToSimpleDTO(thread.getCreator()),
+                convertToDTO(thread.getCategory()),
+                thread.getTags().stream().map(this::convertToDTO).collect(Collectors.toList()),
                 posts
         );
     }
 
     @Override
-    public ForumCategoryDTO convertForumCategoryToForumDTO(ForumCategory forumCategory) {
+    public ForumCategoryDTO convertToDTO(ForumCategory forumCategory) {
         return new ForumCategoryDTO(
                 forumCategory.getCategoryId(),
                 forumCategory.getCategoryName(),
@@ -160,7 +160,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public TagDTO convertTagToDTO(Tag tag) {
+    public TagDTO convertToDTO(Tag tag) {
         return new TagDTO(
                 tag.getTagId(),
                 tag.getTagName(),
@@ -170,7 +170,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public ReviewDTO convertReviewToDTO(Review review) {
+    public ReviewDTO convertToDTO(Review review) {
         return new ReviewDTO(
                 review.getReviewId(),
                 review.getReviewTitle(),
@@ -182,9 +182,9 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public AnimeUserInfoDTO convertAnimeUserInfoToDTO(AnimeUserInfo animeUserInfo) {
+    public AnimeUserInfoDTO convertToDTO(AnimeUserInfo animeUserInfo) {
         return new AnimeUserInfoDTO(
-                convertAnimeUserInfoIdToDTO(animeUserInfo.getAnimeUserInfoId()),
+                convertToDTO(animeUserInfo.getAnimeUserInfoId()),
                 animeUserInfo.getStatus(),
                 animeUserInfo.getWatchStartDate() != null ? animeUserInfo.getWatchStartDate() : null,
                 animeUserInfo.getWatchEndDate() != null ? animeUserInfo.getWatchEndDate() : null,
@@ -193,47 +193,47 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
                 animeUserInfo.getModification(),
                 animeUserInfo.isDidReview(),
                 animeUserInfo.getGrade() != null ? animeUserInfo.getGrade() : null,
-                animeUserInfo.getReview() != null ? convertReviewToDTO(animeUserInfo.getReview()) : null
+                animeUserInfo.getReview() != null ? convertToDTO(animeUserInfo.getReview()) : null
         );
     }
 
     @Override
-    public AnimeUserInfoIdDTO convertAnimeUserInfoIdToDTO(AnimeUserInfoId animeUserInfoId) {
+    public AnimeUserInfoIdDTO convertToDTO(AnimeUserInfoId animeUserInfoId) {
         return new AnimeUserInfoIdDTO(
-                convertUserToSimpleDTO(animeUserInfoId.getUser()),
+                convertToSimpleDTO(animeUserInfoId.getUser()),
                 animeUserInfoId.getAnimeId()
         );
     }
 
     @Override
-    public ThreadUserStatusIdDTO convertThreadUserStatusIdToDTO(ThreadUserStatusId threadUserStatusId) {
+    public ThreadUserStatusIdDTO convertToDTO(ThreadUserStatusId threadUserStatusId) {
         return new ThreadUserStatusIdDTO(
-                convertUserToSimpleDTO(threadUserStatusId.getUser()),
-                convertThreadToSimpleDTO(threadUserStatusId.getThread())
+                convertToSimpleDTO(threadUserStatusId.getUser()),
+                convertToSimpleDTO(threadUserStatusId.getThread())
         );
     }
 
     @Override
-    public ThreadUserStatusDTO convertThreadUserStatusToDTO(ThreadUserStatus threadUserStatus) {
+    public ThreadUserStatusDTO convertToDTO(ThreadUserStatus threadUserStatus) {
         return new ThreadUserStatusDTO(
-                convertThreadUserStatusIdToDTO(threadUserStatus.getThreadUserStatusId()),
+                convertToDTO(threadUserStatus.getThreadUserStatusId()),
                 threadUserStatus.isWatching(),
                 threadUserStatus.isBlocked()
         );
     }
 
     @Override
-    public PostUserStatusIdDTO convertPostUserStatusIdToDTO(PostUserStatusId postUserStatusId) {
+    public PostUserStatusIdDTO convertToDTO(PostUserStatusId postUserStatusId) {
         return new PostUserStatusIdDTO(
-                convertUserToSimpleDTO(postUserStatusId.getUser()),
-                convertPostToSimpleDTO(postUserStatusId.getPost())
+                convertToSimpleDTO(postUserStatusId.getUser()),
+                convertToSimpleDTO(postUserStatusId.getPost())
         );
     }
 
     @Override
-    public PostUserStatusDTO convertPostUserStatusToDTO(PostUserStatus postUserStatus) {
+    public PostUserStatusDTO convertToDTO(PostUserStatus postUserStatus) {
         return new PostUserStatusDTO(
-                convertPostUserStatusIdToDTO(postUserStatus.getPostUserStatusId()),
+                convertToDTO(postUserStatus.getPostUserStatusId()),
                 postUserStatus.isLiked(),
                 postUserStatus.isDisliked(),
                 postUserStatus.isReported()
@@ -241,7 +241,7 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     }
 
     @Override
-    public AuthenticationTokenDTO convertAuthenticationTokenToDTO(AuthenticationToken authenticationToken) {
+    public AuthenticationTokenDTO convertToDTO(AuthenticationToken authenticationToken) {
         return new AuthenticationTokenDTO(
                 authenticationToken.getAccess_token(),
                 authenticationToken.getExpires_in(),

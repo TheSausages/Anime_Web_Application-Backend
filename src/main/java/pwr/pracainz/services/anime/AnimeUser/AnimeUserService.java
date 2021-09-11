@@ -43,8 +43,8 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
         return animeUserInfoRepository
                 .findById(animeUserInfoId)
-                .map(dtoConversion::convertAnimeUserInfoToDTO)
-                .orElse(dtoConversion.convertAnimeUserInfoToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
+                .map(dtoConversion::convertToDTO)
+                .orElse(dtoConversion.convertToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
     }
 
     @Override
@@ -68,6 +68,6 @@ public class AnimeUserService implements AnimeUserServiceInterface {
                 .map(animeUserInfo -> animeUserInfo.copyDataFromDTO(animeUserInfoDTO))
                 .orElse(dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId));
 
-        return dtoConversion.convertAnimeUserInfoToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
+        return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
     }
 }
