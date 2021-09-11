@@ -2,9 +2,12 @@ package pwr.pracainz.services.DTOOperations.DTODeconversion;
 
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
+import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
+import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
+import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
 
 @Service
 public class DTODeconversion implements DTODeconversionInterface {
@@ -31,5 +34,15 @@ public class DTODeconversion implements DTODeconversionInterface {
                         )
                         :
                         null);
+    }
+
+    @Override
+    public PostUserStatus convertFromDTO(PostUserStatusDTO postUserStatusDTO, PostUserStatusId postUserStatusId) {
+        return new PostUserStatus(
+                postUserStatusId,
+                postUserStatusDTO.isLiked(),
+                postUserStatusDTO.isDisliked(),
+                postUserStatusDTO.isReported()
+        );
     }
 }

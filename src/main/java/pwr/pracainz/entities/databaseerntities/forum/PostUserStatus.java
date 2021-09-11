@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.EmbeddedId;
@@ -50,5 +51,13 @@ public class PostUserStatus {
         return new PostUserStatus(
                 id, isLiked, isDisliked, isReported
         );
+    }
+
+    public PostUserStatus copyDataFromDTO(PostUserStatusDTO status) {
+        this.isLiked = status.isLiked();
+        this.isDisliked = status.isDisliked();
+        this.isReported = status.isReported();
+
+        return this;
     }
 }
