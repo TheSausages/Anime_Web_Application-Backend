@@ -43,6 +43,10 @@ public class Post {
     @Min(value = 0)
     private int nrOfMinus;
 
+    @ColumnDefault("0")
+    @Min(value = 0)
+    private int nrOfReports;
+
     private LocalDateTime creation;
 
     private LocalDateTime modification;

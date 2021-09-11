@@ -21,6 +21,7 @@ import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserService;
 
+import javax.transaction.Transactional;
 import java.util.Objects;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
@@ -59,6 +60,7 @@ public class PostService implements PostServiceInterface {
     }
 
     @Override
+    @Transactional
     public PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status) {
         if (!checkIfLoggedUser()) {
             throw new AuthenticationException("You are not logged in!");
@@ -71,15 +73,71 @@ public class PostService implements PostServiceInterface {
             throw new AuthenticationException("Updating the post information was not successful - please try again");
         }
 
+        if (status.getIds().getPost().getPostId() != postId) {
+            throw new IllegalArgumentException("Error occurred during update!");
+        }
+
         Post post = postRepository.findById(status.getIds().getPost().getPostId())
                 .orElseThrow(() -> new ObjectNotFoundException("Selected post not found!"));
+
+        log.info("Update post user status for post with id: {}, and for user {}", postId, currUser.getUserId());
 
         PostUserStatusId postUserId = new PostUserStatusId(currUser, post);
 
         PostUserStatus userStatus = postUserStatusRepository.findById(postUserId)
-                .map(postUserStatus -> postUserStatus.copyDataFromDTO(status))
-                .orElse(dtoDeconversion.convertFromDTO(status, postUserId));
+                .map(postUserStatus -> {
+                    if (postUserStatus.isLiked() != status.isLiked()) {
+                        updateNrOfPlus(postId, status);
+                    }
+                    if (postUserStatus.isDisliked() != status.isDisliked()) {
+                        updateNrOfMinus(postId, status);
+                    }
+                    if (!postUserStatus.isReported() && status.isReported()) {
+                        reportPost(postId, status);
+                    }
+
+                    return postUserStatus.copyDataFromDTO(status);
+                })
+                .orElseGet(() -> {
+                    updateFields(postId, status);
+
+                    return dtoDeconversion.convertFromDTO(status, postUserId);
+                });
 
         return dtoConversion.convertToDTO(postUserStatusRepository.save(userStatus));
+    }
+
+    private void updateFields(int postId, PostUserStatusDTO status) {
+        if (status.isLiked()) {
+            postRepository.incrementNrOfPlusByPostId(postId);
+        }
+        if (status.isDisliked()) {
+            postRepository.incrementNrOfMinusByPostId(postId);
+        }
+        if (status.isReported()) {
+            postRepository.reportPostByPostId(postId);
+        }
+    }
+
+    private void updateNrOfPlus(int postId, PostUserStatusDTO status) {
+        if (status.isLiked()) {
+            postRepository.incrementNrOfPlusByPostId(postId);
+        } else {
+            postRepository.decrementNrOfPlusByPostId(postId);
+        }
+    }
+
+    private void updateNrOfMinus(int postId, PostUserStatusDTO status) {
+        if (status.isDisliked()) {
+            postRepository.incrementNrOfMinusByPostId(postId);
+        } else {
+            postRepository.decrementNrOfMinusByPostId(postId);
+        }
+    }
+
+    private void reportPost(int postId, PostUserStatusDTO status) {
+        if (status.isReported()) {
+            postRepository.reportPostByPostId(postId);
+        }
     }
 }

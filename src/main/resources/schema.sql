@@ -114,6 +114,7 @@ CREATE TABLE `Posts`
     `IsBlocked`    boolean      NOT NULL DEFAULT false,
     `NrOfPlus`     int          NOT NULL DEFAULT 0,
     `NrOfMinus`    int          NOT NULL DEFAULT 0,
+    `NrOfReports`  int          NOT NULL DEFAULT 0,
     `creation`     datetime              DEFAULT CURRENT_TIMESTAMP,
     `modification` datetime ON UPDATE CURRENT_TIMESTAMP,
     `UserID`       varchar(45)  NOT NULL,

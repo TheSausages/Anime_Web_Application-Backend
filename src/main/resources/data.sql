@@ -1,5 +1,7 @@
 Insert into Users
-values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'User', 0, 0, 0);
+values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'User', 0, 0, 0),
+       ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'Username2', 0, 0, 0);
+
 
 Insert into Achievements
 values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'noPathForNow', 10);
@@ -33,13 +35,13 @@ Insert into ThreadTags value (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3);
 Insert into ThreadUserStatus value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1, true, false),
     ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2, false, false);
 
-Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second post on the forum', false, 2, 1,
+Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second post on the forum', false, 2, 1, 0,
                          '2021-09-2 15:34:21', '2021-09-2 15:34:21',
                          'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
-    (2, 'First Post on the forum!', 'Text of the first post on the forum', false, 13, 16, '2021-09-1 14:10:12',
+    (2, 'First Post on the forum!', 'Text of the first post on the forum', false, 13, 16, 0, '2021-09-1 14:10:12',
      '2021-09-2 18:30:59',
      'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 2),
-    (3, 'Third Post on the forum!', 'Text of the third post on the forum', true, 0, 35,
+    (3, 'Third Post on the forum!', 'Text of the third post on the forum', true, 0, 35, 0,
      '2021-09-3 16:45:01', '2021-09-3 16:45:01',
      'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1);
 

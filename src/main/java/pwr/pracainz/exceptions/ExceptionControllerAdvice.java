@@ -59,6 +59,14 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         return new ResponseBodyWithMessageDTO(ex.getMessage());
     }
 
+    @ExceptionHandler(IllegalArgumentException.class)
+    @ResponseStatus(HttpStatus.CONFLICT)
+    ResponseBodyWithMessageDTO illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+        log.error("Error during post user updating: {}", ex.getMessage());
+
+        return new ResponseBodyWithMessageDTO(ex.getMessage());
+    }
+
     @Override
     @NonNull
     protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {

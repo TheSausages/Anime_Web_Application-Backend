@@ -30,6 +30,7 @@ public class User {
     private String userId;
 
     @NotBlank
+    @ColumnDefault("Default Username")
     private String username;
 
     @Min(value = 0)

@@ -6,19 +6,16 @@ import org.springframework.stereotype.Service;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.user.UserRepository;
-import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
 
 @Log4j2
 @Service
 public class UserService implements UserServiceInterface {
-    private final DTOConversionInterface<?> dtoConversion;
     private final UserRepository userRepository;
 
     @Autowired
-    UserService(DTOConversionInterface<?> dtoConversion, UserRepository userRepository) {
-        this.dtoConversion = dtoConversion;
+    UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
 
