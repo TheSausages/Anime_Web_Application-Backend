@@ -1,4 +1,4 @@
-package pwr.pracainz.services.DTOOperations.DTODeconversion;
+package pwr.pracainz.services.DTOOperations.Deconversion;
 
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;

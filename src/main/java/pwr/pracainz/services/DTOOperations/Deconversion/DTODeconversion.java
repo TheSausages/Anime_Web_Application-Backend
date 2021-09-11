@@ -1,4 +1,4 @@
-package pwr.pracainz.services.DTOOperations.DTODeconversion;
+package pwr.pracainz.services.DTOOperations.Deconversion;
 
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;

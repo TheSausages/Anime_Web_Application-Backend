@@ -12,7 +12,7 @@ import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.repositories.animeInfo.ReviewRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
-import pwr.pracainz.services.DTOOperations.DTODeconversion.DTODeconversionInterface;
+import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 
 import java.util.Objects;

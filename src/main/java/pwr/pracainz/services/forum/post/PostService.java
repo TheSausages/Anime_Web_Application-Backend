@@ -18,7 +18,7 @@ import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.PostRepository;
 import pwr.pracainz.repositories.forum.PostUserStatusRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
-import pwr.pracainz.services.DTOOperations.DTODeconversion.DTODeconversionInterface;
+import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserService;
 
 import java.util.Objects;
