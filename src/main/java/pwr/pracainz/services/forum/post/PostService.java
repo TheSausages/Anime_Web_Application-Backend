@@ -7,11 +7,14 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
+import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
+import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusIdDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
+import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
@@ -19,9 +22,11 @@ import pwr.pracainz.repositories.forum.PostRepository;
 import pwr.pracainz.repositories.forum.PostUserStatusRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
-import pwr.pracainz.services.user.UserService;
+import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
+import pwr.pracainz.services.user.UserServiceInterface;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
@@ -32,12 +37,14 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.getIdOfCurrentUser;
 public class PostService implements PostServiceInterface {
     private final PostRepository postRepository;
     private final PostUserStatusRepository postUserStatusRepository;
-    private final UserService userService;
+    private final UserServiceInterface userService;
+    private final ThreadServiceInterface threadService;
     private final DTOConversionInterface<CompletePostDTO> dtoConversion;
     private final DTODeconversionInterface dtoDeconversion;
 
     @Autowired
-    PostService(PostRepository postRepository, PostUserStatusRepository postUserStatusRepository, UserService userService, DTOConversionInterface<CompletePostDTO> dtoConversion, DTODeconversionInterface dtoDeconversion) {
+    PostService(ThreadServiceInterface threadService, PostRepository postRepository, PostUserStatusRepository postUserStatusRepository, UserServiceInterface userService, DTOConversionInterface<CompletePostDTO> dtoConversion, DTODeconversionInterface dtoDeconversion) {
+        this.threadService = threadService;
         this.dtoConversion = dtoConversion;
         this.postUserStatusRepository = postUserStatusRepository;
         this.userService = userService;
@@ -105,6 +112,47 @@ public class PostService implements PostServiceInterface {
                 });
 
         return dtoConversion.convertToDTO(postUserStatusRepository.save(userStatus));
+    }
+
+    @Override
+    public CompletePostDTO createPostForThread(int threadId, CreatePostDTO createPost) {
+        if (!checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
+        User currUser = userService.getCurrentUser();
+        Thread thread = threadService.getPureThreadById(threadId);
+
+        log.info("Create post for thread with id {}(id: {}) created by user {}", thread.getTitle(), threadId, currUser.getUsername());
+
+        Post post = Post.builder()
+                .title(createPost.getTitle())
+                .postText(createPost.getPostText())
+                .creation(LocalDateTime.now())
+                .modification(LocalDateTime.now())
+                .user(currUser)
+                .thread(thread)
+                .build();
+
+        return dtoConversion.convertToDTO(postRepository.save(post));
+    }
+
+    @Override
+    public CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post) {
+        if (!checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
+        User currUser = userService.getCurrentUser();
+        Post oldPost = postRepository.findById(post.getPostId())
+                .orElseThrow(() -> new ObjectNotFoundException("No post found for id: " + post.getPostId()));
+
+        log.info("Update post {}(id: {}) created by user {}", post.getPostId(), threadId, currUser.getUsername());
+
+        oldPost.setTitle(post.getTitle());
+        oldPost.setPostText(post.getPostText());
+
+        return dtoConversion.convertToDTO(postRepository.save(oldPost));
     }
 
     private void updateFields(int postId, PostUserStatusDTO status) {

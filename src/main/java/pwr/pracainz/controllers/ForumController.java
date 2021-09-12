@@ -6,6 +6,8 @@ import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.ForumQuery;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
+import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
+import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
@@ -52,7 +54,7 @@ public class ForumController {
         return threadService.getThreadById(id);
     }
 
-    @GetMapping("/post/thread/{threadId}/{page}")
+    @GetMapping("/thread/{threadId}/posts/{page}")
     public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
                                                          @PathVariable @Positive int page) {
         return postService.findPostsByThread(page, threadId);
@@ -62,5 +64,17 @@ public class ForumController {
     public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int id,
                                                   @RequestBody PostUserStatusDTO status) {
         return postService.updatePostUserStatus(id, status);
+    }
+
+    @PostMapping("/thread/{threadId}/post")
+    public CompletePostDTO createPostForThread(@PathVariable @Positive int threadId,
+                                               @RequestBody CreatePostDTO post) {
+        return postService.createPostForThread(threadId, post);
+    }
+
+    @PutMapping("/thread/{threadId}/post")
+    public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
+                                               @RequestBody UpdatePostDTO post) {
+        return postService.updatePostForThread(threadId, post);
     }
 }

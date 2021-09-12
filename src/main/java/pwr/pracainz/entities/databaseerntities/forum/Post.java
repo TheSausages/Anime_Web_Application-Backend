@@ -1,5 +1,6 @@
 package pwr.pracainz.entities.databaseerntities.forum;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -18,6 +19,7 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "Posts")
+@Builder
 @Entity
 public class Post {
     @Id

@@ -5,22 +5,21 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pwr.pracainz.DTO.user.SimpleUserDTO;
 
 import javax.validation.constraints.NotBlank;
-import java.time.LocalDateTime;
+import javax.validation.constraints.Positive;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class SimplePostDTO {
+public class UpdatePostDTO {
+    @Positive
     private int postId;
 
     @NotBlank
     private String title;
-    private boolean isBlocked;
-    private LocalDateTime creation;
-    private LocalDateTime modification;
-    private SimpleUserDTO user;
+
+    @NotBlank
+    private String postText;
 }
