@@ -23,7 +23,7 @@ values (1, 'Suggestions', 'Suggestions for enhancing the site and service'),
        (2, 'News', 'Talks about news from the industry');
 
 Insert into Threads
-values (1, 'Second Thread on the forum!', 'Text of Second Thread!', 'OPEN', 1, '2021-09-2 14:05:04',
+values (1, 'Second Thread on the forum!', 'Text of Second Thread!', 'OPEN', 3, '2021-09-2 14:05:04',
         '2021-09-4 12:12:12',
         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
        (2, 'First Thread on the forum!', 'Text of First Thead!', 'CLOSED', 1, '2021-09-1 12:11:32',
@@ -46,9 +46,9 @@ Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second pos
      'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
     (4, 'Fourth Post on the forum!', 'Text of the fourth post on the forum', false, 10, 5, 2,
      '2021-09-4 16:45:01', '2021-09-5 16:45:01',
-     'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1);
+     '467a809a-d893-48c2-85e2-82f9ce4b1560', 1);
 
 Insert Into PostUserStatus
-values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1, true, false, false),
-       ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 3, false, true, false),
+values ('467a809a-d893-48c2-85e2-82f9ce4b1560', 1, true, false, false),
+       ('467a809a-d893-48c2-85e2-82f9ce4b1560', 3, false, true, false),
        ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 4, false, false, true);

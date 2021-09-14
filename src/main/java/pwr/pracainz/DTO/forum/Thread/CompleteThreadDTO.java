@@ -20,12 +20,12 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompleteThreadDTO extends SimpleThreadDTO {
-    private String threadText;
+    private String text;
     private PageDTO<CompletePostDTO> posts;
 
-    public CompleteThreadDTO(int id, String title, String threadText, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts) {
+    public CompleteThreadDTO(int id, String title, String text, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts) {
         super(id, title, NrOfPosts, status, creation, modification, creator, category, tags);
-        this.threadText = threadText;
+        this.text = text;
         this.posts = posts;
     }
 }

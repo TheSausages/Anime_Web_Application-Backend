@@ -17,5 +17,5 @@ public class CreatePostDTO {
     private String title;
 
     @NotBlank
-    private String postText;
+    private String text;
 }

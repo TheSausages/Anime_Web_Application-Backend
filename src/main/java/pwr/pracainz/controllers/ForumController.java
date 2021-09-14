@@ -67,8 +67,8 @@ public class ForumController {
     }
 
     @PostMapping("/thread/{threadId}/post")
-    public CompletePostDTO createPostForThread(@PathVariable @Positive int threadId,
-                                               @RequestBody CreatePostDTO post) {
+    public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
+                                                        @RequestBody CreatePostDTO post) {
         return postService.createPostForThread(threadId, post);
     }
 

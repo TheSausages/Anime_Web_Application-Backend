@@ -21,5 +21,5 @@ public class UpdatePostDTO {
     private String title;
 
     @NotBlank
-    private String postText;
+    private String text;
 }

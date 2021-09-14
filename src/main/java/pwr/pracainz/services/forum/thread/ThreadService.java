@@ -54,7 +54,6 @@ public class ThreadService implements ThreadServiceInterface {
     public CompleteThreadDTO getThreadById(int id) {
         Thread thread = getPureThreadById(id);
 
-
         return dtoConversion.convertToDTO(
                 thread, postService.findPostsByThread(0, thread.getThreadId())
         );

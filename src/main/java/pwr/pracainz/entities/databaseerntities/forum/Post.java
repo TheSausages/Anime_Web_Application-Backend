@@ -1,6 +1,5 @@
 package pwr.pracainz.entities.databaseerntities.forum;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,6 +11,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
@@ -19,7 +19,6 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(name = "Posts")
-@Builder
 @Entity
 public class Post {
     @Id
@@ -79,5 +78,9 @@ public class Post {
     @Override
     public int hashCode() {
         return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, thread);
+    }
+
+    public Set<PostUserStatus> getPostUserStatuses() {
+        return Objects.isNull(postUserStatuses) ? Collections.emptySet() : postUserStatuses;
     }
 }

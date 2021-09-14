@@ -6,7 +6,7 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
 @NoArgsConstructor
@@ -19,7 +19,7 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int reviewId;
 
-    @NotEmpty
+    @NotBlank
     private String reviewTitle;
 
     private String reviewText;

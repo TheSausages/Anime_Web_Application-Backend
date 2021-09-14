@@ -11,7 +11,7 @@ public interface PostServiceInterface {
 
     PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status);
 
-    CompletePostDTO createPostForThread(int threadId, CreatePostDTO post);
+    PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO post);
 
     CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post);
 }

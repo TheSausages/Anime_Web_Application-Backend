@@ -17,22 +17,22 @@ import java.time.LocalDateTime;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompletePostDTO extends SimplePostDTO {
     @NotEmpty
-    private String postText;
+    private String text;
     private int nrOfPlus;
     private int nrOfMinus;
     private PostUserStatusDTO postUserStatus;
 
-    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String postText, int nrOfPlus, int nrOfMinus) {
+    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String text, int nrOfPlus, int nrOfMinus) {
         super(id, title, isBlocked, creation, modification, user);
-        this.postText = postText;
+        this.text = text;
         this.nrOfPlus = nrOfPlus;
         this.nrOfMinus = nrOfMinus;
         this.postUserStatus = null;
     }
 
-    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String postText, int nrOfPlus, int nrOfMinus, PostUserStatusDTO postUserStatus) {
+    public CompletePostDTO(int id, String title, boolean isBlocked, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO user, String text, int nrOfPlus, int nrOfMinus, PostUserStatusDTO postUserStatus) {
         super(id, title, isBlocked, creation, modification, user);
-        this.postText = postText;
+        this.text = text;
         this.nrOfPlus = nrOfPlus;
         this.nrOfMinus = nrOfMinus;
         this.postUserStatus = postUserStatus;
