@@ -18,7 +18,7 @@ import java.util.Objects;
 public class Tag {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int TagId;
+    private int tagId;
 
     @NotEmpty
     private String tagName;
@@ -34,12 +34,12 @@ public class Tag {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Tag tag = (Tag) o;
-        return TagId == tag.TagId && Objects.equals(tagName, tag.tagName) && tagImportance == tag.tagImportance && Objects.equals(tagColor, tag.tagColor);
+        return tagId == tag.tagId && Objects.equals(tagName, tag.tagName) && tagImportance == tag.tagImportance && Objects.equals(tagColor, tag.tagColor);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(TagId, tagName, tagImportance, tagColor);
+        return Objects.hash(tagId, tagName, tagImportance, tagColor);
     }
 
     @Override

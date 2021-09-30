@@ -53,7 +53,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ObjectNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(AnilistException ex) {
+    ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
         log.error(ex.getMessage());
 
         return new ResponseBodyWithMessageDTO(ex.getMessage());

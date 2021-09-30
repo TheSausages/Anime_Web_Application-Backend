@@ -26,7 +26,6 @@ import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface
 import pwr.pracainz.services.user.UserServiceInterface;
 
 import javax.transaction.Transactional;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
@@ -126,11 +125,7 @@ public class PostService implements PostServiceInterface {
 
         log.info("Create post for thread with id {}(id: {}) created by user {}", thread.getTitle(), threadId, currUser.getUsername());
 
-        Post post = new Post();
-        post.setTitle(createPost.getTitle());
-        post.setPostText(createPost.getText());
-        post.setCreation(LocalDateTime.now());
-        post.setModification(LocalDateTime.now());
+        Post post = dtoDeconversion.convertFromDTO(createPost);
         post.setUser(currUser);
         post.setThread(thread);
 

@@ -10,6 +10,7 @@ import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
 import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.post.PostServiceInterface;
@@ -76,5 +77,10 @@ public class ForumController {
     public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
                                                @RequestBody UpdatePostDTO post) {
         return postService.updatePostForThread(threadId, post);
+    }
+
+    @PostMapping("/thread")
+    public CompleteThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
+        return threadService.createThread(newThread);
     }
 }
