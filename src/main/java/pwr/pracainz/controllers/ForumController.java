@@ -12,6 +12,7 @@ import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.post.PostServiceInterface;
 import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
@@ -63,24 +64,30 @@ public class ForumController {
 
     @PutMapping("/post/{id}")
     public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int id,
-                                                  @RequestBody PostUserStatusDTO status) {
+                                                  @RequestBody @Valid PostUserStatusDTO status) {
         return postService.updatePostUserStatus(id, status);
     }
 
     @PostMapping("/thread/{threadId}/post")
     public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
-                                                        @RequestBody CreatePostDTO post) {
+                                                        @RequestBody @Valid CreatePostDTO post) {
         return postService.createPostForThread(threadId, post);
     }
 
     @PutMapping("/thread/{threadId}/post")
     public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
-                                               @RequestBody UpdatePostDTO post) {
+                                               @RequestBody @Valid UpdatePostDTO post) {
         return postService.updatePostForThread(threadId, post);
     }
 
     @PostMapping("/thread")
-    public CompleteThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
+    public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
         return threadService.createThread(newThread);
+    }
+
+    @PutMapping("/thread/{threadId}")
+    public SimpleThreadDTO updateThread(@PathVariable @Positive int threadId,
+                                        @RequestBody @Valid UpdateThreadDTO thread) {
+        return threadService.updateThread(threadId, thread);
     }
 }

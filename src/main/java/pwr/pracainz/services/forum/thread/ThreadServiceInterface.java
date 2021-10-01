@@ -5,6 +5,7 @@ import pwr.pracainz.DTO.forum.ForumQuery;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 
 public interface ThreadServiceInterface {
@@ -16,5 +17,7 @@ public interface ThreadServiceInterface {
 
     Thread getNonDTOThreadById(int id);
 
-    CompleteThreadDTO createThread(CreateThreadDTO thread);
+    SimpleThreadDTO createThread(CreateThreadDTO thread);
+
+    SimpleThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
 }

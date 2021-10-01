@@ -10,7 +10,10 @@ import pwr.pracainz.DTO.forum.ForumQuery;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
+import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
+import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.ThreadRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
@@ -22,6 +25,8 @@ import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
 import java.util.stream.Collectors;
+
+import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 
 @Log4j2
 @Service
@@ -87,7 +92,11 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public CompleteThreadDTO createThread(CreateThreadDTO newThread) {
+    public SimpleThreadDTO createThread(CreateThreadDTO newThread) {
+        if (!checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
         log.info("Create thread with title '{}' by user with id {}", newThread.getTitle(), UserAuthorizationUtilities.getIdOfCurrentUser());
 
         Thread thread = dtoDeconversion.convertFromDTO(newThread);
@@ -95,8 +104,31 @@ public class ThreadService implements ThreadServiceInterface {
         thread.setTags(newThread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
         thread.setCreator(userService.getCurrentUserOrInsert());
 
-        return dtoConversion.convertToDTO(
-                threadRepository.save(thread), null
-        );
+        return dtoConversion.convertToSimpleDTO(threadRepository.save(thread));
+    }
+
+    @Override
+    public SimpleThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
+        if (!checkIfLoggedUser()) {
+            throw new AuthenticationException("You are not logged in!");
+        }
+
+        User currUser = userService.getCurrentUser();
+        Thread oldThread = threadRepository.findById(threadId)
+                .orElseThrow(() -> new ObjectNotFoundException("No thread with id " + threadId + " found!"));
+
+        if (!currUser.equals(oldThread.getCreator())) {
+            throw new AuthenticationException("You can't update another persons thread!");
+        }
+
+        log.info("Update thread {}(id: {}), created by user {}", oldThread.getTitle(), oldThread.getThreadId(), currUser.getUsername());
+
+        oldThread.setTitle(thread.getTitle());
+        oldThread.setThreadText(thread.getText());
+        oldThread.setStatus(thread.getStatus());
+        oldThread.setCategory(forumCategoryService.findCategoryByIdAndName(thread.getCategory().getCategoryId(), thread.getCategory().getCategoryName()));
+        oldThread.setTags(thread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
+
+        return dtoConversion.convertToSimpleDTO(threadRepository.save(oldThread));
     }
 }
