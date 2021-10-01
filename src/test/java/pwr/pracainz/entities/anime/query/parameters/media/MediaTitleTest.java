@@ -54,7 +54,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nromaji(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nromaji(stylised: true)\n}");
     }
 
     @Test
@@ -68,7 +68,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nromaji(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nromaji(stylised: true)\n}");
     }
 
     @Test
@@ -109,7 +109,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nenglish(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nenglish(stylised: true)\n}");
     }
 
     @Test
@@ -124,7 +124,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nenglish(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nenglish(stylised: true)\n}");
     }
 
     @Test
@@ -165,7 +165,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nnative(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nnative(stylised: true)\n}");
     }
 
     @Test
@@ -180,7 +180,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nnative(stylized: true)\n}");
+        assertEquals(mediaTitle.toString(), "title {\nnative(stylised: true)\n}");
     }
 
     @Test
@@ -194,7 +194,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nnative(stylized: true)\nenglish\n}");
+        assertEquals(mediaTitle.toString(), "title {\nnative(stylised: true)\nenglish\n}");
     }
 
     @Test
@@ -209,7 +209,7 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nromaji\nnative(stylized: true)\nenglish\n}");
+        assertEquals(mediaTitle.toString(), "title {\nromaji\nnative(stylised: true)\nenglish\n}");
     }
 
     @Test
@@ -226,6 +226,6 @@ class MediaTitleTest {
                 .buildMediaTitle();
 
         //then
-        assertEquals(mediaTitle.toString(), "title {\nromaji\nnative(stylized: true)\nenglish\n}");
+        assertEquals(mediaTitle.toString(), "title {\nromaji\nnative(stylised: true)\nenglish\n}");
     }
 }

@@ -107,7 +107,7 @@ class FieldTest {
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\ntitle {\nenglish\nromaji(stylized: true)\n}\n}");
+        assertEquals(field.toString(), "{\ntitle {\nenglish\nromaji(stylised: true)\n}\n}");
     }
 
     @Test
@@ -128,7 +128,7 @@ class FieldTest {
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\ntitle {\nenglish\nromaji(stylized: true)\n}\n}");
+        assertEquals(field.toString(), "{\ntitle {\nenglish\nromaji(stylised: true)\n}\n}");
     }
 
     @Test
@@ -931,7 +931,7 @@ class FieldTest {
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\nid\ntitle {\nenglish\nromaji(stylized: true)\n}\n}");
+        assertEquals(field.toString(), "{\nid\ntitle {\nenglish\nromaji(stylised: true)\n}\n}");
     }
 
     @Test
@@ -1016,7 +1016,7 @@ class FieldTest {
                 .buildField();
 
         //then
-        assertEquals(field.toString(), "{\nid\naverageScore\ntitle {\nenglish\nromaji(stylized: true)\n}\ntrailer {\nid\nsite\nthumbnail\n}\n" +
+        assertEquals(field.toString(), "{\nid\naverageScore\ntitle {\nenglish\nromaji(stylised: true)\n}\ntrailer {\nid\nsite\nthumbnail\n}\n" +
                 "tags {\nid\nname\ndescription\ncategory\nrank\nisGeneralSpoiler\nisMediaSpoiler\nisAdult\n}\nnextAiringEpisode {\nid\nairingAt\ntimeUntilAiring\nepisode\nmediaId\n}\n" +
                 "status(version: 2)\ndescription\nsource\nexternalLinks {\nid\nurl\n}\nranking {\nrank\nyear\nseason\n}\nstartDate {\nyear\nmonth\nday\n}\nendDate {\nyear\nmonth\nday\n}\n" +
                 "streamingEpisodes {\ntitle\nthumbnail\nurl\n}\nisLicensed\ncharacters(role: MAIN) {\nedges {\nid\n}\nnodes {\nname {\nfirst\nmiddle\nlast\nfull\nnative\nalternative\nalternativeSpoiler\n}\nage\n}\n}\n}");
