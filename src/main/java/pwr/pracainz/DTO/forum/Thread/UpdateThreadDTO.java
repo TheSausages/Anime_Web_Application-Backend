@@ -9,6 +9,7 @@ import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
+import javax.validation.constraints.Positive;
 import java.util.List;
 
 @EqualsAndHashCode(callSuper = true)
@@ -16,10 +17,14 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateThreadDTO extends CreateThreadDTO {
+    @Positive
+    private int threadId;
+
     private ThreadStatus status;
 
-    public UpdateThreadDTO(String title, String text, ForumCategoryDTO category, List<TagDTO> tags, ThreadStatus status) {
+    public UpdateThreadDTO(int threadId, String title, String text, ForumCategoryDTO category, List<TagDTO> tags, ThreadStatus status) {
         super(title, text, category, tags);
+        this.threadId = threadId;
         this.status = status;
     }
 }

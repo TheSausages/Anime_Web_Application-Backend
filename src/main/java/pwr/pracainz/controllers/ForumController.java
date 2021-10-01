@@ -1,6 +1,7 @@
 package pwr.pracainz.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
@@ -9,12 +10,14 @@ import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
 import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
+import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.post.PostServiceInterface;
+import pwr.pracainz.services.forum.tag.TagServiceInterface;
 import pwr.pracainz.services.forum.thread.ThreadServiceInterface;
 
 import javax.validation.Valid;
@@ -28,12 +31,19 @@ public class ForumController {
     private final ForumCategoryServiceInterface categoryService;
     private final ThreadServiceInterface threadService;
     private final PostServiceInterface postService;
+    private final TagServiceInterface tagService;
 
     @Autowired
-    ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService, PostServiceInterface postService) {
+    ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService, PostServiceInterface postService, TagServiceInterface tagService) {
         this.categoryService = forumCategoryServiceInterface;
         this.threadService = threadService;
         this.postService = postService;
+        this.tagService = tagService;
+    }
+
+    @GetMapping("/tags")
+    public List<TagDTO> getTags() {
+        return tagService.getAllTags();
     }
 
     @GetMapping("/categories")
@@ -86,8 +96,10 @@ public class ForumController {
     }
 
     @PutMapping("/thread/{threadId}")
-    public SimpleThreadDTO updateThread(@PathVariable @Positive int threadId,
-                                        @RequestBody @Valid UpdateThreadDTO thread) {
-        return threadService.updateThread(threadId, thread);
+    public ResponseEntity<Void> updateThread(@PathVariable @Positive int threadId,
+                                             @RequestBody @Valid UpdateThreadDTO thread) {
+        threadService.updateThread(threadId, thread);
+
+        return ResponseEntity.ok().build();
     }
 }
