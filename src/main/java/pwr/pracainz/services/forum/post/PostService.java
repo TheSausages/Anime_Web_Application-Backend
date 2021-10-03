@@ -11,6 +11,7 @@ import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
 import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusIdDTO;
+import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
@@ -122,6 +123,10 @@ public class PostService implements PostServiceInterface {
         User currUser = userService.getCurrentUser();
         Thread thread = threadRepository.findById(threadId)
                 .orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + threadId));
+
+        if (thread.getStatus().equals(ThreadStatus.CLOSED)) {
+            throw new IllegalStateException("Posts cannot be added for a closed thread!");
+        }
 
         log.info("Create post for thread with id {}(id: {}) created by user {}", thread.getTitle(), threadId, currUser.getUsername());
 

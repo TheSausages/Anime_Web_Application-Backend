@@ -4,5 +4,6 @@
 - Add anime statistics for this app (ex. favourites and average Score) (back)
 - Write Tests for backend and frontend
 - Add state for (<any>, error, loading)  (front)
+- check if all snackbar colors are ok for situations (front)
 - Add user picture (back + front)
 - Adjust dto to whats needed (back + front)
