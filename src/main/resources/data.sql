@@ -12,8 +12,8 @@ values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
 Insert into Reviews
 values (1, 'Ayy thats a title', 'Ayyyy thats something', 1, 2, 0);
 
-Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '127720', 'WATCHING', '2021-08-5 00:00:00',
-                                  '2021-07-10', 1, false, '2021-07-5', true, 9, 1);
+Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '127720', 'WATCHING', '2021-10-10 00:00:00',
+                                  '2021-10-11', 0, false, '2021-07-5', true, 9, 1);
 
 Insert into Tags value (1, 'Episode Discussion', 'LOW', 'rgb(0, 183, 255)'), (2, 'New Studio', 'MEDIUM', 'rgb(255, 112, 112)'),
     (3, 'Best Girl', 'HIGH', 'rgb(255, 180, 112)'), (4, 'Best Boy', 'LOW', 'rgb(112, 180, 79)');

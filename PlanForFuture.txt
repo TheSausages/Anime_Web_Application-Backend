@@ -1,0 +1,5 @@
+- Add thread Search
+- Add user profile
+- Add anime statistics for this app (ex. favourites and average Score)
+- Add state for (<any>, error, loading)
+- Add user picture

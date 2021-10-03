@@ -108,7 +108,7 @@ public class ThreadService implements ThreadServiceInterface {
     }
 
     @Override
-    public SimpleThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
+    public CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
         if (!checkIfLoggedUser()) {
             throw new AuthenticationException("You are not logged in!");
         }
@@ -129,6 +129,7 @@ public class ThreadService implements ThreadServiceInterface {
         oldThread.setCategory(forumCategoryService.findCategoryByIdAndName(thread.getCategory().getCategoryId(), thread.getCategory().getCategoryName()));
         oldThread.setTags(thread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
 
-        return dtoConversion.convertToSimpleDTO(threadRepository.save(oldThread));
+        return dtoConversion.convertToDTO(threadRepository.save(oldThread),
+                postService.findPostsByThread(0, thread.getThreadId()));
     }
 }

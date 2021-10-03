@@ -135,6 +135,8 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
 
     @Override
     public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
+        System.out.println("thread:" + thread);
+        System.out.println("posts:" + posts);
         return new CompleteThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),

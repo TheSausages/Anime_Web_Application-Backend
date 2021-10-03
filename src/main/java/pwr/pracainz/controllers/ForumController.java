@@ -1,7 +1,6 @@
 package pwr.pracainz.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
@@ -96,10 +95,8 @@ public class ForumController {
     }
 
     @PutMapping("/thread/{threadId}")
-    public ResponseEntity<Void> updateThread(@PathVariable @Positive int threadId,
-                                             @RequestBody @Valid UpdateThreadDTO thread) {
-        threadService.updateThread(threadId, thread);
-
-        return ResponseEntity.ok().build();
+    public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
+                                          @RequestBody @Valid UpdateThreadDTO thread) {
+        return threadService.updateThread(threadId, thread);
     }
 }

@@ -19,5 +19,5 @@ public interface ThreadServiceInterface {
 
     SimpleThreadDTO createThread(CreateThreadDTO thread);
 
-    SimpleThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
+    CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
 }
