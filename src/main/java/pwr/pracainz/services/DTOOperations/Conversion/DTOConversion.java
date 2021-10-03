@@ -44,7 +44,11 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
     @Override
     public CompleteUserDTO convertToDTO(User user) {
         return new CompleteUserDTO(
-                convertToSimpleDTO(user),
+                user.getUserId(),
+                user.getUsername(),
+                user.getNrOfPosts(),
+                user.getWatchTime(),
+                user.getAchievementPoints(),
                 user.getAchievements().stream().map(this::convertToDTO).collect(Collectors.toSet()),
                 user.getAnimeUserInfo().stream().map(this::convertToDTO).collect(Collectors.toSet()),
                 user.getThreadUserStatuses().stream().map(this::convertToDTO).collect(Collectors.toSet()),
@@ -135,8 +139,6 @@ public class DTOConversion<T> implements DTOConversionInterface<T> {
 
     @Override
     public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
-        System.out.println("thread:" + thread);
-        System.out.println("posts:" + posts);
         return new CompleteThreadDTO(
                 thread.getThreadId(),
                 thread.getTitle(),

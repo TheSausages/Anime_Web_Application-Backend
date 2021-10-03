@@ -10,8 +10,8 @@ use data;
 /*Create tables connected to the User*/
 CREATE TABLE `Users`
 (
-    `UserID`            varchar(45) NOT NULL,
-    `Username`          varchar(45) NOT NULL DEFAULT 'User',
+    `UserID`            varchar(36) NOT NULL,
+    `Username`          varchar(45) NOT NULL UNIQUE,
     `NrOfPosts`         smallint    NOT NULL DEFAULT 0,
     `WatchTime`         int         NOT NULL DEFAULT 0,
     `AchievementPoints` mediumint   NOT NULL DEFAULT 0,
@@ -21,7 +21,7 @@ CREATE TABLE `Users`
 
 CREATE TABLE `Achievements`
 (
-    `AchievementID`     int          NOT NULL,
+    `AchievementID`     int          NOT NULL auto_increment,
     `Name`              varchar(45)  NOT NULL,
     `Description`       varchar(600) NOT NULL DEFAULT 'No Description given',
     `IconPath`          varchar(45)  NOT NULL,
@@ -46,9 +46,9 @@ CREATE TABLE `UserAchievements`
 /*Create Tables connected to the Forum*/
 CREATE TABLE `ForumCategories`
 (
-    `CategoryID`          int          NOT NULL,
-    `CategoryName`        varchar(45)  NOT NULL,
-    `CategoryDescription` varchar(150) NOT NULL DEFAULT 'No Description Given',
+    `CategoryID`          int         NOT NULL auto_increment,
+    `CategoryName`        varchar(45) NOT NULL,
+    `CategoryDescription` varchar(150) DEFAULT 'No Description Given',
 
     PRIMARY KEY (`CategoryID`)
 ) COMMENT ='Table Containing the Categories a given Tread can Have';
@@ -66,7 +66,7 @@ CREATE TABLE `Tags`
 CREATE TABLE `Threads`
 (
     `ThreadID`     int                    NOT NULL auto_increment,
-    `Title`        varchar(45)            NOT NULL,
+    `Title`        varchar(80)            NOT NULL,
     `ThreadText`   varchar(600)           NOT NULL DEFAULT 'No Text',
     `Status`       enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
     `NrOfPosts`    int                    NOT NULL DEFAULT 0,
@@ -109,7 +109,7 @@ CREATE TABLE `ThreadUserStatus`
 CREATE TABLE `Posts`
 (
     `PostID`       int          NOT NULL auto_increment,
-    `Title`        varchar(45)  NOT NULL,
+    `Title`        varchar(80)  NOT NULL,
     `PostText`     varchar(600) NOT NULL,
     `IsBlocked`    boolean      NOT NULL DEFAULT false,
     `NrOfPlus`     int          NOT NULL DEFAULT 0,

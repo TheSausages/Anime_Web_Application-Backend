@@ -9,6 +9,7 @@ import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
@@ -17,9 +18,10 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateThreadDTO extends CreateThreadDTO {
-    @Positive
+    @Positive(message = "Thread Id must be positive")
     private int threadId;
 
+    @NotNull(message = "Status cannot be null")
     private ThreadStatus status;
 
     public UpdateThreadDTO(int threadId, String title, String text, ForumCategoryDTO category, List<TagDTO> tags, ThreadStatus status) {

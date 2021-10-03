@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 
@@ -16,9 +17,10 @@ import javax.validation.constraints.Positive;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnimeUserInfoIdDTO {
 
-    @NotNull
+    @NotNull(message = "User id Anime User Information cannot be null")
+    @Valid
     private SimpleUserDTO user;
 
-    @Positive
+    @Positive(message = "Anime Id must be positive!")
     private int animeId;
 }

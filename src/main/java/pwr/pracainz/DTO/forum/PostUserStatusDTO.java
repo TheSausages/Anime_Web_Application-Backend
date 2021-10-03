@@ -7,11 +7,16 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostUserStatusDTO {
+    @NotNull(message = "Post User Status id cannot be null")
+    @Valid
     private PostUserStatusIdDTO ids;
 
     @JsonProperty(value = "isLiked")

@@ -8,11 +8,19 @@ import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.forum.Post.SimplePostDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostUserStatusIdDTO {
+    @NotNull(message = "User in Post User Status cannot be empty")
+    @Valid
     private SimpleUserDTO user;
+
+    @NotNull(message = "Post in Post User Status cannot be empty")
+    @Valid
     private SimplePostDTO post;
 }

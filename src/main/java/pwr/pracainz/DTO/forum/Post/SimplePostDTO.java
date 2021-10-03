@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 
-import javax.validation.constraints.NotBlank;
+import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
 @Data
@@ -15,12 +16,22 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimplePostDTO {
+    @Positive(message = "Post Id must be positive!")
     private int postId;
 
-    @NotBlank
+    @NotBlank(message = "Post title cannot be blank")
+    @Size(max = 80, message = "Post title is to long")
     private String title;
+
     private boolean isBlocked;
+
+    @PastOrPresent(message = "Creation date cannot be in the future")
     private LocalDateTime creation;
+
+    @PastOrPresent(message = "Modification date cannot be in the future")
     private LocalDateTime modification;
+
+    @NotNull(message = "Creator cannot be null")
+    @Valid
     private SimpleUserDTO user;
 }
