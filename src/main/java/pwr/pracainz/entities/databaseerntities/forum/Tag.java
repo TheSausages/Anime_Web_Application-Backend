@@ -45,7 +45,10 @@ public class Tag {
     @Override
     public String toString() {
         return "Tag{" +
-                "tagName='" + tagName + '\'' +
+                "tagId=" + tagId +
+                ", tagName='" + tagName + '\'' +
+                ", tagImportance=" + tagImportance +
+                ", tagColor='" + tagColor + '\'' +
                 '}';
     }
 }

@@ -40,7 +40,7 @@ public class Thread {
 
     @ColumnDefault("0")
     @Min(value = 0)
-    private int NrOfPosts;
+    private int nrOfPosts;
 
     private LocalDateTime creation;
 

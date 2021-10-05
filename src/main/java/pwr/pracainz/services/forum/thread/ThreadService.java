@@ -11,6 +11,7 @@ import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
+import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
@@ -24,6 +25,7 @@ import pwr.pracainz.services.forum.tag.TagServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
@@ -67,10 +69,26 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery) {
-        log.info("Get all threads with meet criteria: {}, page: {}", forumQuery, pageNumber);
+        log.info("Get all threads with meet criteria: {},\n page: {}", forumQuery, pageNumber);
+
+        List<Tag> tags = forumQuery.getTags().stream()
+                .map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName()))
+                .collect(Collectors.toList());
 
         return dtoConversion.convertToDTO(
-                threadRepository.getAllByCategory(forumQuery.getCategory(), PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
+                threadRepository.findAllByForumQuery(
+                        forumQuery.getMinCreation(),
+                        forumQuery.getMaxCreation(),
+                        forumQuery.getMinModification(),
+                        forumQuery.getMaxModification(),
+                        forumQuery.getMinNrOfPosts(),
+                        forumQuery.getMaxNrOfPosts(),
+                        forumQuery.getTitle(),
+                        forumQuery.getCreatorUsername(),
+                        forumQuery.getCategory(),
+                        forumQuery.getStatus(),
+                        tags,
+                        PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
         );
     }
 

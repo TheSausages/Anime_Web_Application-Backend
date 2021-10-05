@@ -33,9 +33,11 @@ public class SimpleThreadDTO {
     @NotNull(message = "Status cannot be null")
     private ThreadStatus status;
 
+    @NotNull(message = "Creation date cannot be null")
     @PastOrPresent(message = "Creation date cannot be in the future")
     private LocalDateTime creation;
 
+    @NotNull(message = "Modification date cannot be null")
     @PastOrPresent(message = "Modification date cannot be in the future")
     private LocalDateTime modification;
 

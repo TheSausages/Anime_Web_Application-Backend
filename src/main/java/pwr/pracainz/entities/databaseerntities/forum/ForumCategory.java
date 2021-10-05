@@ -39,4 +39,12 @@ public class ForumCategory {
     public int hashCode() {
         return Objects.hash(categoryId, categoryName, categoryDescription, threads);
     }
+
+    @Override
+    public String toString() {
+        return "ForumCategory \n" +
+                "   categoryId=" + categoryId + "\n" +
+                "   categoryName='" + categoryName + "\n" +
+                "categoryDescription='" + categoryDescription;
+    }
 }
