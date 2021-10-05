@@ -69,7 +69,7 @@ public class ThreadService implements ThreadServiceInterface {
 
     @Override
     public PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery) {
-        log.info("Get all threads with meet criteria: {},\n page: {}", forumQuery, pageNumber);
+        log.info("Get all threads that meet criteria: {},\n page: {}", forumQuery, pageNumber);
 
         List<Tag> tags = forumQuery.getTags().stream()
                 .map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName()))

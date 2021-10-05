@@ -36,17 +36,17 @@ public class ForumQuery {
     @PastOrPresent(message = "Maximal modification time cannot be in the future")
     private LocalDateTime maxModification = queryCreationTime;
 
+    @Min(value = 0, message = "Minimal number of posts cannot be negative")
+    private int maxNrOfPosts = Integer.MAX_VALUE;
+
+    @Min(value = 0, message = "Maximal number of posts cannot be negative")
+    private int minNrOfPosts = 0;
+
     private ForumCategory category;
 
     private String title = "";
 
     private String creatorUsername = "";
-
-    @Min(0)
-    private int maxNrOfPosts = Integer.MAX_VALUE;
-
-    @Min(0)
-    private int minNrOfPosts = 0;
 
     private ThreadStatus status;
 
