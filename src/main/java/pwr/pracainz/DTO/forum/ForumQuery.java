@@ -81,6 +81,18 @@ public class ForumQuery {
             }
         }
 
+        if (minNrOfPosts != 0 && maxNrOfPosts != Integer.MAX_VALUE) {
+            builder.append("\n nr. of posts between ").append(minNrOfPosts).append(" and ").append(maxNrOfPosts);
+        } else {
+            if (minNrOfPosts != 0) {
+                builder.append("\n nr. of posts at least ").append(minNrOfPosts);
+            }
+
+            if (maxNrOfPosts != Integer.MAX_VALUE) {
+                builder.append("\n nr. of posts at most ").append(maxNrOfPosts);
+            }
+        }
+
         if (Objects.nonNull(category)) {
             builder.append("\n category = '").append(category).append("'");
         }
@@ -95,6 +107,10 @@ public class ForumQuery {
 
         if (!tags.isEmpty()) {
             builder.append("\n tags = ").append(tags);
+        }
+
+        if (Objects.nonNull(status)) {
+            builder.append("\n status = ").append(status);
         }
 
         return builder.toString();

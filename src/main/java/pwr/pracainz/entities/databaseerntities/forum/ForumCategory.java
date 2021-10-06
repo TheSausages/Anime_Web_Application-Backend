@@ -45,6 +45,6 @@ public class ForumCategory {
         return "ForumCategory \n" +
                 "   categoryId=" + categoryId + "\n" +
                 "   categoryName='" + categoryName + "\n" +
-                "categoryDescription='" + categoryDescription;
+                "   categoryDescription='" + categoryDescription;
     }
 }
