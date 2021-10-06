@@ -1,6 +1,4 @@
 - Add logout reload when too long (front)
-- Make inputs classes use FormControl, so no need for one each time (front)
-- Add thread Search (front)
 - Make input component even more customable (front)
 - Add achievements (front)
 - Add user profile (front)
@@ -8,7 +6,8 @@
 - Add more variables as properties
 - set setValueOptions as global constant (front)
 - Write Tests for backend and frontend
-- Add state for (<any>, error, loading)  (front)
+- Add state for (<any>, error, loading, snackbar)  (front)
+- Check if setError is placed evrywhere when needed
 - make backend calls cancelable (front)
 - check if all snackbar colors are ok for situations (front)
 - Add user picture (back + front)
