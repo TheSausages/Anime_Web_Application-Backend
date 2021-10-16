@@ -24,8 +24,7 @@ import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import javax.ws.rs.core.Response;
 import java.util.Collections;
-
-import static pwr.pracainz.utils.UserAuthorizationUtilities.getIdOfCurrentUser;
+import java.util.Optional;
 
 @Log4j2
 @Service
@@ -117,16 +116,23 @@ public class KeycloakService implements KeycloakServiceInterface {
         if (response.getStatus() > 100 && response.getStatus() < 300) {
             log.info("Registration was successful. Attempt login for user: {}", registrationBody.getUsername());
 
+            Optional<UserRepresentation> newUser = keycloak.realm("PracaInz").users().search(registrationBody.getUsername())
+                    .stream().filter(userRep -> userRep.getEmail().equals(registrationBody.getEmail())).findAny();
+
+            if (newUser.isEmpty()) {
+                throw new RegistrationException("An error occurred while registration was underway - please contact the administration!");
+            }
+
+            userRepository.save(new User(
+                    newUser.get().getId(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null, null
+            ));
+
             LoginCredentialsDTO login = new LoginCredentialsDTO(
                     registrationBody.getUsername(),
                     registrationBody.getPassword()
             );
 
-            AuthenticationTokenDTO token = login(login);
-
-            userRepository.save(new User(
-                    getIdOfCurrentUser(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null, null
-            ));
+            return login(login);
         }
 
         if (response.getStatus() == 409) {

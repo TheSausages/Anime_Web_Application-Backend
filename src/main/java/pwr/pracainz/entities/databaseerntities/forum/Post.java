@@ -6,6 +6,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
 import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.eventlisteners.PostListener;
+import pwr.pracainz.eventlisteners.achievementlisteners.NrOfPostsAchievements;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -15,11 +17,15 @@ import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Order of Entity listeners is determined by the order in the annotation - PostListener should always be last
+ */
 @NoArgsConstructor
 @Getter
 @Setter
 @Table(name = "Posts")
 @Entity
+@EntityListeners({NrOfPostsAchievements.class, PostListener.class})
 public class Post {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -45,7 +45,12 @@ public class User {
     @ColumnDefault("0")
     private long achievementPoints;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(
+            name = "UserAchievements",
+            joinColumns = {@JoinColumn(name = "UserID")},
+            inverseJoinColumns = {@JoinColumn(name = "AchievementID")}
+    )
     private Set<Achievement> achievements;
 
     @OneToMany(
@@ -79,6 +84,14 @@ public class User {
         this.userId = userId;
     }
 
+    public void incrementNrOfPosts() {
+        nrOfPosts++;
+    }
+
+    public void addAchievementPoints(int points) {
+        this.achievementPoints += points;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -90,5 +103,22 @@ public class User {
     @Override
     public int hashCode() {
         return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints, posts);
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "userId='" + userId + '\'' +
+                ", username='" + username + '\'' +
+                ", nrOfPosts=" + nrOfPosts +
+                ", watchTime=" + watchTime +
+                ", achievementPoints=" + achievementPoints +
+                ", achievements=" + achievements +
+                ", animeUserInfo=" + animeUserInfo +
+                ", threadUserStatuses=" + threadUserStatuses +
+                ", postUserStatuses=" + postUserStatuses +
+                ", threads=" + threads +
+                ", posts=" + posts +
+                '}';
     }
 }

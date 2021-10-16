@@ -33,12 +33,7 @@ public class Achievement {
     @Positive
     private int achievementPoints;
 
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "UserAchievements",
-            joinColumns = {@JoinColumn(name = "AchievementID")},
-            inverseJoinColumns = {@JoinColumn(name = "UserID")}
-    )
+    @ManyToMany(mappedBy = "achievements", fetch = FetchType.LAZY)
     private Set<User> users;
 
     @Override

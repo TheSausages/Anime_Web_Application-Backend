@@ -1,10 +1,12 @@
 Insert into Users
 values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'User', 0, 0, 0),
-       ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'Username2', 0, 0, 0);
+       ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'Username2', 0, 0, 0),
+       ('dd685bf7-3715-4d00-a457-065700597b22', 'ToPost', 0, 0, 0);
 
 
 Insert into Achievements
-values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'noPathForNow', 10);
+values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'noPathForNow', 10),
+       (2, 'First Post!', 'Welcome aboard', 'noPathForNow', 15);
 
 Insert into UserAchievements
 values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
