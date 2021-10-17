@@ -1,11 +1,18 @@
 plugins {
-	id 'org.springframework.boot' version '2.5.3'
-	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
-	id 'java'
+	id "org.springframework.boot" version "2.5.3"
+	id "io.spring.dependency-management" version "1.0.11.RELEASE"
+	id "java"
 }
 
-group = 'pwr'
-version = '0.0.1-SNAPSHOT'
+ext {
+    springVersion = "2.5.3"
+    keycloakVersion = "15.0.0"
+    mysqlConnectorVersion = "8.0.25"
+    lombokVersion = "1.18.20"
+}
+
+group = "pwr"
+version = "0.0.1-SNAPSHOT"
 sourceCompatibility = "14"
 
 configurations {
@@ -20,33 +27,33 @@ repositories {
 
 dependencies {
 	//Spring Boot Dependencies
-	implementation 'org.springframework.boot:spring-boot-starter-data-jpa:2.5.3'
-	implementation 'org.springframework.boot:spring-boot-starter-data-rest:2.5.3'
-	implementation 'org.springframework.boot:spring-boot-starter-security:2.5.3'
-	implementation 'org.springframework.boot:spring-boot-starter-web:2.5.3'
-	implementation 'org.springframework.boot:spring-boot-starter-webflux:2.5.3'
-	implementation 'org.springframework.boot:spring-boot-starter-validation:2.5.3'
-	annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor:2.5.3'
+	implementation "org.springframework.boot:spring-boot-starter-data-jpa:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-data-rest:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-security:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-web:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-webflux:${springVersion}"
+	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
+	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
 
 	//Keycloak Dependencies
-	implementation 'org.keycloak:keycloak-spring-boot-starter:15.0.0'
-	implementation 'org.keycloak.bom:keycloak-adapter-bom:15.0.0'
-	implementation 'org.keycloak:keycloak-admin-client:15.0.0'
+	implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
+	implementation "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
+	implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
 
 	//Database Dependencies
-	implementation 'mysql:mysql-connector-java:8.0.25'
+	implementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
 
 	//Other Dependencies
-	compileOnly 'org.projectlombok:lombok:1.18.20'
-	annotationProcessor 'org.projectlombok:lombok:1.18.20'
-	implementation 'org.apache.commons:commons-lang3:3.12.0'
-	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0-rc1'
+	compileOnly "org.projectlombok:lombok:${lombokVersion}"
+	annotationProcessor "org.projectlombok:lombok:${lombokVersion}"
+	implementation "org.apache.commons:commons-lang3:3.12.0"
+	implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.0'
 
 	//Testing Dependencies
-	testImplementation 'org.springframework.boot:spring-boot-starter-test:2.5.3'
-	testImplementation 'io.projectreactor:reactor-test:3.4.8'
-	testImplementation 'org.springframework.security:spring-security-test:5.5.1'
-	testImplementation 'mysql:mysql-connector-java:8.0.25'
+	testImplementation "org.springframework.boot:spring-boot-starter-test:${springVersion}"
+	testImplementation "io.projectreactor:reactor-test:3.4.8"
+	testImplementation "org.springframework.security:spring-security-test:5.5.1"
+	testImplementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
 }
 
 test {
