@@ -27,9 +27,9 @@ import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import java.util.stream.Collectors;
 
 @Service
-public class DTOConversion<T> implements DTOConversionInterface<T> {
+public class DTOConversion implements DTOConversionInterface {
 	@Override
-	public PageDTO<T> convertToDTO(Page<T> page) {
+	public <T> PageDTO<T> convertToDTO(Page<T> page) {
 		return new PageDTO<>(
 				page.toList(),
 				page.getNumberOfElements(),

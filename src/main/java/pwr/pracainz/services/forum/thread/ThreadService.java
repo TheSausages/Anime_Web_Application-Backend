@@ -38,7 +38,7 @@ public class ThreadService implements ThreadServiceInterface {
 	private final ForumCategoryServiceInterface forumCategoryService;
 	private final PostServiceInterface postService;
 	private final UserServiceInterface userService;
-	private final DTOConversionInterface<SimpleThreadDTO> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
 
 	@Autowired
@@ -47,7 +47,7 @@ public class ThreadService implements ThreadServiceInterface {
 	              ForumCategoryServiceInterface forumCategoryService,
 	              PostServiceInterface postService,
 	              UserServiceInterface userService,
-	              DTOConversionInterface<SimpleThreadDTO> dtoConversion,
+	              DTOConversionInterface dtoConversion,
 	              DTODeconversionInterface dtoDeconversion) {
 		this.threadRepository = threadRepository;
 		this.tagService = tagService;

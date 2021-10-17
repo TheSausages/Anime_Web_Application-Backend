@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 @Service
 public class ForumCategoryService implements ForumCategoryServiceInterface {
 	private final ForumCategoryRepository categoryRepository;
-	private final DTOConversionInterface<?> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 
 	@Autowired
-	ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface<?> dtoConversion) {
+	ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface dtoConversion) {
 		categoryRepository = forumCategoryRepository;
 		this.dtoConversion = dtoConversion;
 	}

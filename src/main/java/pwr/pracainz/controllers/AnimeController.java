@@ -27,19 +27,19 @@ public class AnimeController {
 		return animeService.getCurrentSeasonAnime();
 	}
 
-	@GetMapping(value = "/ranking    opAllTime/{pageNumber}")
+	@GetMapping(value = "/ranking/topAllTime/{pageNumber}")
 	@ResponseBody
 	public ObjectNode getTopAnimeOfAllTime(@PathVariable int pageNumber) {
 		return animeService.getTopAnimeAllTime(pageNumber);
 	}
 
-	@GetMapping(value = "/ranking    opAiring/{pageNumber}")
+	@GetMapping(value = "/ranking/topAiring/{pageNumber}")
 	@ResponseBody
 	public ObjectNode getTopAiringAnime(@PathVariable int pageNumber) {
 		return animeService.getTopAnimeAiring(pageNumber);
 	}
 
-	@GetMapping(value = "/ranking    opMovies/{pageNumber}")
+	@GetMapping(value = "/ranking/topMovies/{pageNumber}")
 	@ResponseBody
 	public ObjectNode getTopAnimeMovies(@PathVariable int pageNumber) {
 		return animeService.getTopAnimeMovies(pageNumber);

@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
 @Log4j2
 public class TagService implements TagServiceInterface {
 	private final TagRepository tagRepository;
-	private final DTOConversionInterface<Tag> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 
 	@Autowired
-	TagService(TagRepository tagRepository, DTOConversionInterface<Tag> dtoConversion) {
+	TagService(TagRepository tagRepository, DTOConversionInterface dtoConversion) {
 		this.tagRepository = tagRepository;
 		this.dtoConversion = dtoConversion;
 	}

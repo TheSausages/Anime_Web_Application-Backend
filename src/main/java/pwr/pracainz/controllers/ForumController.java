@@ -40,7 +40,7 @@ public class ForumController {
 		this.tagService = tagService;
 	}
 
-	@GetMapping("    ags")
+	@GetMapping("tags")
 	public List<TagDTO> getTags() {
 		return tagService.getAllTags();
 	}
@@ -55,17 +55,17 @@ public class ForumController {
 		return threadService.searchThreads(page, query);
 	}
 
-	@GetMapping("    hread/newest/{page}")
+	@GetMapping("thread/newest/{page}")
 	public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int page) {
 		return threadService.getNewestThreads(page);
 	}
 
-	@GetMapping("    hread/{id}")
+	@GetMapping("thread/{id}")
 	public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
 		return threadService.getThreadById(id);
 	}
 
-	@GetMapping("    hread/{threadId}/posts/{page}")
+	@GetMapping("thread/{threadId}/posts/{page}")
 	public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
 	                                                     @PathVariable @Positive int page) {
 		return postService.findPostsByThread(page, threadId);
@@ -77,24 +77,24 @@ public class ForumController {
 		return postService.updatePostUserStatus(id, status);
 	}
 
-	@PostMapping("    hread/{threadId}/post")
+	@PostMapping("thread/{threadId}/post")
 	public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
 	                                                    @RequestBody @Valid CreatePostDTO post) {
 		return postService.createPostForThread(threadId, post);
 	}
 
-	@PutMapping("    hread/{threadId}/post")
+	@PutMapping("thread/{threadId}/post")
 	public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
 	                                           @RequestBody @Valid UpdatePostDTO post) {
 		return postService.updatePostForThread(threadId, post);
 	}
 
-	@PostMapping("    hread")
+	@PostMapping("thread")
 	public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
 		return threadService.createThread(newThread);
 	}
 
-	@PutMapping("    hread/{threadId}")
+	@PutMapping("thread/{threadId}")
 	public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
 	                                      @RequestBody @Valid UpdateThreadDTO thread) {
 		return threadService.updateThread(threadId, thread);

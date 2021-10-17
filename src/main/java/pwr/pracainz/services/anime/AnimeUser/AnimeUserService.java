@@ -22,14 +22,14 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 @Log4j2
 @Service
 public class AnimeUserService implements AnimeUserServiceInterface {
-	private final DTOConversionInterface<?> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
 	private final UserServiceInterface userService;
 	private final AnimeUserInfoRepository animeUserInfoRepository;
 	private final ReviewRepository reviewRepository;
 
 	@Autowired
-	AnimeUserService(DTOConversionInterface<?> dtoConversion, DTODeconversionInterface dtoDeconversion, UserServiceInterface userService, AnimeUserInfoRepository animeUserInfoRepository, ReviewRepository reviewRepository) {
+	AnimeUserService(DTOConversionInterface dtoConversion, DTODeconversionInterface dtoDeconversion, UserServiceInterface userService, AnimeUserInfoRepository animeUserInfoRepository, ReviewRepository reviewRepository) {
 		this.dtoConversion = dtoConversion;
 		this.dtoDeconversion = dtoDeconversion;
 		this.userService = userService;

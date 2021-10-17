@@ -1,3 +1,4 @@
+- change all static imports
 - better min/max itp for yups
 - Add achievements (front)
 - Add user profile (front)

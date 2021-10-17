@@ -32,10 +32,10 @@ public class KeycloakService implements KeycloakServiceInterface {
 	private final WebClient client;
 	private final Keycloak keycloak;
 	private final UserRepository userRepository;
-	private final DTOConversionInterface<?> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 
 	@Autowired
-	KeycloakService(Keycloak keycloak, UserRepository userRepository, DTOConversionInterface<?> dtoConversion) {
+	KeycloakService(Keycloak keycloak, UserRepository userRepository, DTOConversionInterface dtoConversion) {
 		client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
 		this.keycloak = keycloak;
 		this.userRepository = userRepository;
@@ -74,7 +74,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 	public AuthenticationTokenDTO login(LoginCredentialsDTO credentials) {
 		return client
 				.post()
-				.uri("    oken")
+				.uri("/token")
 				.headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
 				.body(BodyInserters
 						.fromFormData("client_id", "ClientServer")

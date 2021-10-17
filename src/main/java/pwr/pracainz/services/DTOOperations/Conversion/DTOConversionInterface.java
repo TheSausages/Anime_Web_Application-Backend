@@ -23,8 +23,8 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
-public interface DTOConversionInterface<T> {
-	PageDTO<T> convertToDTO(Page<T> page);
+public interface DTOConversionInterface {
+	<T> PageDTO<T> convertToDTO(Page<T> page);
 
 	CompleteUserDTO convertToDTO(User user);
 

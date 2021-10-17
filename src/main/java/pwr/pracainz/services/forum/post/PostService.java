@@ -39,11 +39,11 @@ public class PostService implements PostServiceInterface {
 	private final PostUserStatusRepository postUserStatusRepository;
 	private final ThreadRepository threadRepository;
 	private final UserServiceInterface userService;
-	private final DTOConversionInterface<CompletePostDTO> dtoConversion;
+	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
 
 	@Autowired
-	PostService(PostRepository postRepository, ThreadRepository threadRepository, PostUserStatusRepository postUserStatusRepository, UserServiceInterface userService, DTOConversionInterface<CompletePostDTO> dtoConversion, DTODeconversionInterface dtoDeconversion) {
+	PostService(PostRepository postRepository, ThreadRepository threadRepository, PostUserStatusRepository postUserStatusRepository, UserServiceInterface userService, DTOConversionInterface dtoConversion, DTODeconversionInterface dtoDeconversion) {
 		this.dtoConversion = dtoConversion;
 		this.postUserStatusRepository = postUserStatusRepository;
 		this.userService = userService;
