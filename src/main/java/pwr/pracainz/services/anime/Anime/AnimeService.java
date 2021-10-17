@@ -27,12 +27,11 @@ import pwr.pracainz.entities.anime.query.queryElements.Page.Page;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
 import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
+import pwr.pracainz.utils.UserAuthorizationUtilities;
 import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
-
-import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 
 @Log4j2
 @Service
@@ -346,7 +345,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
 				.block();
 
-		if (checkIfLoggedUser() && node != null) {
+		if (UserAuthorizationUtilities.checkIfLoggedUser() && node != null) {
 			node.set("animeUserInformation",
 					mapper.valueToTree(
 							animeUserService.getCurrentUserAnimeInfo(id)

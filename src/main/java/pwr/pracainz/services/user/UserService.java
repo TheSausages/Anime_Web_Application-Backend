@@ -6,8 +6,7 @@ import org.springframework.stereotype.Service;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.user.UserRepository;
-
-import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
+import pwr.pracainz.utils.UserAuthorizationUtilities;
 
 @Log4j2
 @Service
@@ -21,19 +20,24 @@ public class UserService implements UserServiceInterface {
 
 	@Override
 	public User getCurrentUser() {
-		return userRepository.findById(getPrincipalOfCurrentUser().toString())
+		return userRepository.findById(UserAuthorizationUtilities.getIdOfCurrentUser())
 				.orElseThrow(() -> new AuthenticationException("No User logged in!"));
 	}
 
 	@Override
 	public User getCurrentUserOrInsert() {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 
-		String currUserId = getIdOfCurrentUser();
+		String currUserId = UserAuthorizationUtilities.getIdOfCurrentUser();
 
 		return userRepository.findById(currUserId)
 				.orElseGet(() -> userRepository.save(new User(currUserId)));
+	}
+
+	@Override
+	public String getUsernameOfCurrentUser() {
+		return getCurrentUser().getUsername();
 	}
 }

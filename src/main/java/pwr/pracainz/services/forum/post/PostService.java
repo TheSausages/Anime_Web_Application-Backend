@@ -25,12 +25,10 @@ import pwr.pracainz.repositories.forum.ThreadRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
+import pwr.pracainz.utils.UserAuthorizationUtilities;
 
 import javax.transaction.Transactional;
 import java.util.Objects;
-
-import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
-import static pwr.pracainz.utils.UserAuthorizationUtilities.getIdOfCurrentUser;
 
 @Log4j2
 @Service
@@ -55,7 +53,7 @@ public class PostService implements PostServiceInterface {
 
 	@Override
 	public PageDTO<CompletePostDTO> findPostsByThread(int pageNumber, int threadId) {
-		log.info("Get page {} of posts from thread {} and for user with id {}", pageNumber, threadId, getIdOfCurrentUser());
+		log.info("Get page {} of posts from thread {} and for user {}", pageNumber, threadId, userService.getUsernameOfCurrentUser());
 
 		return dtoConversion.convertToDTO(
 				postRepository.getAllByThread_ThreadId(threadId, PageRequest.of(pageNumber, 30, Sort.by("creation").descending()))
@@ -69,7 +67,7 @@ public class PostService implements PostServiceInterface {
 	@Override
 	@Transactional
 	public PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status) {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 
@@ -87,7 +85,7 @@ public class PostService implements PostServiceInterface {
 		Post post = postRepository.findById(status.getIds().getPost().getPostId())
 				.orElseThrow(() -> new ObjectNotFoundException("Selected post not found!"));
 
-		log.info("Update post user status for post with id: {}, and for user {}", postId, currUser.getUserId());
+		log.info("Update post user status for post with id: {}, and for user {}", postId, currUser.getUsername());
 
 		PostUserStatusId postUserId = new PostUserStatusId(currUser, post);
 
@@ -116,7 +114,7 @@ public class PostService implements PostServiceInterface {
 
 	@Override
 	public PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO createPost) {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 
@@ -141,7 +139,7 @@ public class PostService implements PostServiceInterface {
 
 	@Override
 	public CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post) {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 

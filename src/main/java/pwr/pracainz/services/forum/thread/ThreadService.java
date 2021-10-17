@@ -28,8 +28,6 @@ import pwr.pracainz.utils.UserAuthorizationUtilities;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
-
 @Log4j2
 @Service
 public class ThreadService implements ThreadServiceInterface {
@@ -111,11 +109,11 @@ public class ThreadService implements ThreadServiceInterface {
 
 	@Override
 	public SimpleThreadDTO createThread(CreateThreadDTO newThread) {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 
-		log.info("Create thread with title '{}' by user with id {}", newThread.getTitle(), UserAuthorizationUtilities.getIdOfCurrentUser());
+		log.info("Create thread with title '{}' by user {}", newThread.getTitle(), userService.getUsernameOfCurrentUser());
 
 		Thread thread = dtoDeconversion.convertFromDTO(newThread);
 		thread.setCategory(forumCategoryService.findCategoryByIdAndName(newThread.getCategory().getCategoryId(), newThread.getCategory().getCategoryName()));
@@ -127,7 +125,7 @@ public class ThreadService implements ThreadServiceInterface {
 
 	@Override
 	public CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
-		if (!checkIfLoggedUser()) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException("You are not logged in!");
 		}
 

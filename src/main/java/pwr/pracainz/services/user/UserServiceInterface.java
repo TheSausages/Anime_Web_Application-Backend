@@ -6,4 +6,6 @@ public interface UserServiceInterface {
 	User getCurrentUser();
 
 	User getCurrentUserOrInsert();
+
+	String getUsernameOfCurrentUser();
 }
