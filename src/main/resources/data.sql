@@ -6,7 +6,9 @@ values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'User', 0, 0, 0),
 
 Insert into Achievements
 values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'noPathForNow', 10),
-       (2, 'First Post!', 'Welcome aboard', 'noPathForNow', 15);
+       (2, 'First Post!', 'Welcome aboard', 'noPathForNow', 15),
+       (3, '10 Posts!', 'Getting the hang of it', 'noPathForNow', 15),
+       (4, '50 posts!', 'Seasoned forum veteran', 'noPathForNow', 15);
 
 Insert into UserAchievements
 values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
