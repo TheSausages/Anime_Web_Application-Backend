@@ -12,28 +12,28 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.*;
 @Log4j2
 @Service
 public class UserService implements UserServiceInterface {
-    private final UserRepository userRepository;
+	private final UserRepository userRepository;
 
-    @Autowired
-    UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+	@Autowired
+	UserService(UserRepository userRepository) {
+		this.userRepository = userRepository;
+	}
 
-    @Override
-    public User getCurrentUser() {
-        return userRepository.findById(getPrincipalOfCurrentUser().toString())
-                .orElseThrow(() -> new AuthenticationException("No User logged in!"));
-    }
+	@Override
+	public User getCurrentUser() {
+		return userRepository.findById(getPrincipalOfCurrentUser().toString())
+				.orElseThrow(() -> new AuthenticationException("No User logged in!"));
+	}
 
-    @Override
-    public User getCurrentUserOrInsert() {
-        if (!checkIfLoggedUser()) {
-            throw new AuthenticationException("You are not logged in!");
-        }
+	@Override
+	public User getCurrentUserOrInsert() {
+		if (!checkIfLoggedUser()) {
+			throw new AuthenticationException("You are not logged in!");
+		}
 
-        String currUserId = getIdOfCurrentUser();
+		String currUserId = getIdOfCurrentUser();
 
-        return userRepository.findById(currUserId)
-                .orElseGet(() -> userRepository.save(new User(currUserId)));
-    }
+		return userRepository.findById(currUserId)
+				.orElseGet(() -> userRepository.save(new User(currUserId)));
+	}
 }

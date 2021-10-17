@@ -28,52 +28,52 @@ import java.util.Arrays;
 @ComponentScan(basePackageClasses = KeycloakSecurityComponents.class)
 public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter {
 
-    @Override
-    protected void configure(AuthenticationManagerBuilder auth) {
-        KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
-        keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
+	@Override
+	protected void configure(AuthenticationManagerBuilder auth) {
+		KeycloakAuthenticationProvider keycloakAuthenticationProvider = keycloakAuthenticationProvider();
+		keycloakAuthenticationProvider.setGrantedAuthoritiesMapper(new SimpleAuthorityMapper());
 
-        auth.authenticationProvider(keycloakAuthenticationProvider);
-    }
+		auth.authenticationProvider(keycloakAuthenticationProvider);
+	}
 
-    @Bean
-    public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
-        return new KeycloakSpringBootConfigResolver();
-    }
+	@Bean
+	public KeycloakSpringBootConfigResolver KeycloakConfigResolver() {
+		return new KeycloakSpringBootConfigResolver();
+	}
 
-    @Bean
-    @Override
-    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
-        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
-    }
+	@Bean
+	@Override
+	protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+		return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+	}
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        super.configure(http);
-        http
-                .csrf().disable()
-                .cors().and()
-                .headers().frameOptions().sameOrigin()
-                .and()
-                .authorizeRequests()
-                .mvcMatchers("/auth**", "/auth/**", "/anime/**", "/anime**").permitAll()
-                .mvcMatchers("/forum/**", "/forum**", "/animeUser**", "/animeUser/**").authenticated()
-                .anyRequest().authenticated()
-        ;
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		super.configure(http);
+		http
+				.csrf().disable()
+				.cors().and()
+				.headers().frameOptions().sameOrigin()
+				.and()
+				.authorizeRequests()
+				.mvcMatchers("/auth**", "/auth/**", "/anime/**", "/anime**").permitAll()
+				.mvcMatchers("/forum/**", "/forum**", "/animeUser**", "/animeUser/**").authenticated()
+				.anyRequest().authenticated()
+		;
 
-    }
+	}
 
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8180", "http://192.168.0.245:3000"));
-        configuration.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT"));
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION));
-        configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
+	@Bean
+	public CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration();
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8180", "http://192.168.0.245:3000"));
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT"));
+		configuration.setAllowCredentials(true);
+		configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION));
+		configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
 
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
+		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+		source.registerCorsConfiguration("/**", configuration);
+		return source;
+	}
 }

@@ -12,11 +12,11 @@ import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 
 public interface DTODeconversionInterface {
-    AnimeUserInfo convertFromDTO(AnimeUserInfoDTO animeUserInfoDTO, AnimeUserInfoId animeUserInfoId);
+	AnimeUserInfo convertFromDTO(AnimeUserInfoDTO animeUserInfoDTO, AnimeUserInfoId animeUserInfoId);
 
-    PostUserStatus convertFromDTO(PostUserStatusDTO postUserStatusDTO, PostUserStatusId postUserStatusId);
+	PostUserStatus convertFromDTO(PostUserStatusDTO postUserStatusDTO, PostUserStatusId postUserStatusId);
 
-    Post convertFromDTO(CreatePostDTO postDTO);
+	Post convertFromDTO(CreatePostDTO postDTO);
 
-    Thread convertFromDTO(CreateThreadDTO threadDTO);
+	Thread convertFromDTO(CreateThreadDTO threadDTO);
 }

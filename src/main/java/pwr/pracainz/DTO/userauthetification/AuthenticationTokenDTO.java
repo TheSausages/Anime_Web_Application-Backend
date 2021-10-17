@@ -15,15 +15,15 @@ import javax.validation.constraints.Positive;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AuthenticationTokenDTO {
-    @Pattern(regexp = "\\w{1,120}", message = "Access token does not have the correct structure")
-    String access_token;
+	@Pattern(regexp = "\\w{1,120}", message = "Access token does not have the correct structure")
+	String access_token;
 
-    @Positive(message = "Token expiration time cannot be negative")
-    int expires_in;
+	@Positive(message = "Token expiration time cannot be negative")
+	int expires_in;
 
-    @Pattern(regexp = "\\w{1,120}", message = "Refresh token does not have the correct structure")
-    String refresh_token;
+	@Pattern(regexp = "\\w{1,120}", message = "Refresh token does not have the correct structure")
+	String refresh_token;
 
-    @NotBlank(message = "Token type cannot be blank")
-    String token_type;
+	@NotBlank(message = "Token type cannot be blank")
+	String token_type;
 }

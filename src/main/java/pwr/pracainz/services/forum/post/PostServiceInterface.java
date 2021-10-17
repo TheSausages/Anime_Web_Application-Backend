@@ -7,11 +7,11 @@ import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
 import pwr.pracainz.DTO.forum.PostUserStatusDTO;
 
 public interface PostServiceInterface {
-    PageDTO<CompletePostDTO> findPostsByThread(int pageNumber, int threadId);
+	PageDTO<CompletePostDTO> findPostsByThread(int pageNumber, int threadId);
 
-    PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status);
+	PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status);
 
-    PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO post);
+	PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO post);
 
-    CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post);
+	CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post);
 }

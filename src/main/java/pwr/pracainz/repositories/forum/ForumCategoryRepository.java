@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface ForumCategoryRepository extends JpaRepository<ForumCategory, Integer> {
-    Optional<ForumCategory> findForumCategoryByCategoryIdAndCategoryName(int id, String name);
+	Optional<ForumCategory> findForumCategoryByCategoryIdAndCategoryName(int id, String name);
 }

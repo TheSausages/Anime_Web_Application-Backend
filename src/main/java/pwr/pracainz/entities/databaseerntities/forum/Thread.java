@@ -24,72 +24,72 @@ import java.util.stream.Collectors;
 @Table(name = "Threads")
 @Entity
 public class Thread {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int threadId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int threadId;
 
-    @NotEmpty
-    private String title;
+	@NotEmpty
+	private String title;
 
-    @NotEmpty
-    private String threadText;
+	@NotEmpty
+	private String threadText;
 
-    @Enumerated(EnumType.STRING)
-    @ColumnDefault("OPEN")
-    private ThreadStatus status;
+	@Enumerated(EnumType.STRING)
+	@ColumnDefault("OPEN")
+	private ThreadStatus status;
 
-    @ColumnDefault("0")
-    @Min(value = 0)
-    private int nrOfPosts;
+	@ColumnDefault("0")
+	@Min(value = 0)
+	private int nrOfPosts;
 
-    private LocalDateTime creation;
+	private LocalDateTime creation;
 
-    private LocalDateTime modification;
+	private LocalDateTime modification;
 
-    @ManyToOne
-    @JoinColumn(name = "CategoryId", nullable = false)
-    private ForumCategory category;
+	@ManyToOne
+	@JoinColumn(name = "CategoryId", nullable = false)
+	private ForumCategory category;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "ThreadTags",
-            joinColumns = {@JoinColumn(name = "ThreadId")},
-            inverseJoinColumns = {@JoinColumn(name = "TagId")}
-    )
-    private List<Tag> tags;
+	@ManyToMany(fetch = FetchType.EAGER)
+	@JoinTable(
+			name = "ThreadTags",
+			joinColumns = {@JoinColumn(name = "ThreadId")},
+			inverseJoinColumns = {@JoinColumn(name = "TagId")}
+	)
+	private List<Tag> tags;
 
-    @OneToMany(
-            mappedBy = "threadUserStatusId.thread",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<ThreadUserStatus> threadUserStatuses;
+	@OneToMany(
+			mappedBy = "threadUserStatusId.thread",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private Set<ThreadUserStatus> threadUserStatuses;
 
-    @OneToMany(
-            mappedBy = "thread",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<Post> posts;
+	@OneToMany(
+			mappedBy = "thread",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private Set<Post> posts;
 
-    @ManyToOne
-    @JoinColumn(name = "CreatorID", nullable = false)
-    private User creator;
+	@ManyToOne
+	@JoinColumn(name = "CreatorID", nullable = false)
+	private User creator;
 
-    public List<Tag> getTags() {
-        return tags.stream().sorted(new TagComparator()).collect(Collectors.toList());
-    }
+	public List<Tag> getTags() {
+		return tags.stream().sorted(new TagComparator()).collect(Collectors.toList());
+	}
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Thread thread = (Thread) o;
-        return threadId == thread.threadId && Objects.equals(title, thread.title) && status == thread.status && Objects.equals(category, thread.category) && Objects.equals(tags, thread.tags) && Objects.equals(threadUserStatuses, thread.threadUserStatuses) && Objects.equals(posts, thread.posts);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Thread thread = (Thread) o;
+		return threadId == thread.threadId && Objects.equals(title, thread.title) && status == thread.status && Objects.equals(category, thread.category) && Objects.equals(tags, thread.tags) && Objects.equals(threadUserStatuses, thread.threadUserStatuses) && Objects.equals(posts, thread.posts);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(threadId, title, status, tags, threadUserStatuses);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(threadId, title, status, tags, threadUserStatuses);
+	}
 }

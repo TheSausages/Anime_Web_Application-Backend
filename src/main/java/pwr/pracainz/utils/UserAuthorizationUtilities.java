@@ -11,29 +11,30 @@ import java.security.Principal;
  */
 public interface UserAuthorizationUtilities {
 
-    /**
-     * Return the KeycloakAuthenticationToken (Authorization Information) of the current user
-     * @return Authorization Information of Current User in form of KeycloakAuthenticationToken
-     */
-    static KeycloakAuthenticationToken getAuthorizationInfoOfCurrentUser() {
-        return (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-    }
+	/**
+	 * Return the KeycloakAuthenticationToken (Authorization Information) of the current user
+	 *
+	 * @return Authorization Information of Current User in form of KeycloakAuthenticationToken
+	 */
+	static KeycloakAuthenticationToken getAuthorizationInfoOfCurrentUser() {
+		return (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+	}
 
-    /**
-     * Return the Principal of the Current User - for keycloak it will be the ID (or UUID) of the User on the Keycloak Server
-     *
-     * @return ID (UUID) of the Logged User in the form of a Principal Object
-     */
-    static Principal getPrincipalOfCurrentUser() {
-        KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        return (Principal) principal.getPrincipal();
-    }
+	/**
+	 * Return the Principal of the Current User - for keycloak it will be the ID (or UUID) of the User on the Keycloak Server
+	 *
+	 * @return ID (UUID) of the Logged User in the form of a Principal Object
+	 */
+	static Principal getPrincipalOfCurrentUser() {
+		KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+		return (Principal) principal.getPrincipal();
+	}
 
-    static String getIdOfCurrentUser() {
-        return getPrincipalOfCurrentUser().toString();
-    }
+	static String getIdOfCurrentUser() {
+		return getPrincipalOfCurrentUser().toString();
+	}
 
-    static boolean checkIfLoggedUser() {
-        return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
-    }
+	static boolean checkIfLoggedUser() {
+		return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+	}
 }

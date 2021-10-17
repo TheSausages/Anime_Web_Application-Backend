@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RefreshTokenDTO {
-    @NotBlank(message = "Cant log out right now!")
-    String refreshToken;
+	@NotBlank(message = "Cant log out right now!")
+	String refreshToken;
 }

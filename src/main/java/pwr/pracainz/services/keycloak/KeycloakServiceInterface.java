@@ -7,11 +7,11 @@ import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 
 public interface KeycloakServiceInterface {
-    AuthenticationTokenDTO login(LoginCredentialsDTO credentials);
+	AuthenticationTokenDTO login(LoginCredentialsDTO credentials);
 
-    ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken);
+	ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken);
 
-    AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody);
+	AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody);
 
-    AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO);
+	AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO);
 }

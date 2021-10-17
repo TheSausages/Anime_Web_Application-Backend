@@ -19,33 +19,33 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnimeUserInfoDTO {
-    @Valid
-    private AnimeUserInfoIdDTO id;
+	@Valid
+	private AnimeUserInfoIdDTO id;
 
-    private AnimeUserStatus status;
+	private AnimeUserStatus status;
 
-    @PastOrPresent(message = "Watch start date cannot be in the future")
-    private LocalDate watchStartDate;
+	@PastOrPresent(message = "Watch start date cannot be in the future")
+	private LocalDate watchStartDate;
 
-    @PastOrPresent(message = "Watch end date cannot be in the future")
-    private LocalDate watchEndDate;
+	@PastOrPresent(message = "Watch end date cannot be in the future")
+	private LocalDate watchEndDate;
 
-    @Min(value = 0, message = "Number of episodes seen cannot be negative")
-    private int nrOfEpisodesSeen;
+	@Min(value = 0, message = "Number of episodes seen cannot be negative")
+	private int nrOfEpisodesSeen;
 
-    @JsonProperty(value = "isFavourite")
-    private boolean isFavourite;
+	@JsonProperty(value = "isFavourite")
+	private boolean isFavourite;
 
-    @PastOrPresent(message = "Modification date cannot be in the future")
-    private LocalDateTime modification;
+	@PastOrPresent(message = "Modification date cannot be in the future")
+	private LocalDateTime modification;
 
-    private boolean didReview;
+	private boolean didReview;
 
-    @Min(value = 1, message = "Not one of the possible grades")
-    private Integer grade;
+	@Min(value = 1, message = "Not one of the possible grades")
+	private Integer grade;
 
-    @Valid
-    private ReviewDTO review;
+	@Valid
+	private ReviewDTO review;
 }
 
 

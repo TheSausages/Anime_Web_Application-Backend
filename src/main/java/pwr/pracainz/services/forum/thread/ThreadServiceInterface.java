@@ -9,15 +9,15 @@ import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 
 public interface ThreadServiceInterface {
-    PageDTO<SimpleThreadDTO> getNewestThreads(int pageNumber);
+	PageDTO<SimpleThreadDTO> getNewestThreads(int pageNumber);
 
-    PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery);
+	PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery);
 
-    CompleteThreadDTO getThreadById(int id);
+	CompleteThreadDTO getThreadById(int id);
 
-    Thread getNonDTOThreadById(int id);
+	Thread getNonDTOThreadById(int id);
 
-    SimpleThreadDTO createThread(CreateThreadDTO thread);
+	SimpleThreadDTO createThread(CreateThreadDTO thread);
 
-    CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
+	CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
 }

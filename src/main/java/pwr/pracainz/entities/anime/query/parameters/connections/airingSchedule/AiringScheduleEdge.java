@@ -4,17 +4,17 @@ import lombok.Getter;
 
 @Getter
 public class AiringScheduleEdge {
-    private final String airingScheduleEdgeString;
+	private final String airingScheduleEdgeString;
 
-    public AiringScheduleEdge() {
-        this.airingScheduleEdgeString = "airingScheduleEdge {\nid\n}";
-    }
+	public AiringScheduleEdge() {
+		this.airingScheduleEdgeString = "airingScheduleEdge {\nid\n}";
+	}
 
-    public AiringScheduleEdge(AiringSchedule airingSchedule) {
-        this.airingScheduleEdgeString = "airingScheduleEdge {\nid\nnode " + airingSchedule.getAiringScheduleStringStringWithoutFieldName() + "\n}";
-    }
+	public AiringScheduleEdge(AiringSchedule airingSchedule) {
+		this.airingScheduleEdgeString = "airingScheduleEdge {\nid\nnode " + airingSchedule.getAiringScheduleStringStringWithoutFieldName() + "\n}";
+	}
 
-    public String getAiringScheduleEdgeWithoutFieldName() {
-        return this.airingScheduleEdgeString.substring(19);
-    }
+	public String getAiringScheduleEdgeWithoutFieldName() {
+		return this.airingScheduleEdgeString.substring(19);
+	}
 }

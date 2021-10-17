@@ -6,7 +6,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import java.util.List;
 
 public interface TagServiceInterface {
-    List<TagDTO> getAllTags();
+	List<TagDTO> getAllTags();
 
-    Tag findTagByIdAndName(int id, String name);
+	Tag findTagByIdAndName(int id, String name);
 }

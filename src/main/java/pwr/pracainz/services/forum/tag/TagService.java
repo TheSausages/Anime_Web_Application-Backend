@@ -15,29 +15,29 @@ import java.util.stream.Collectors;
 @Service
 @Log4j2
 public class TagService implements TagServiceInterface {
-    private final TagRepository tagRepository;
-    private final DTOConversionInterface<Tag> dtoConversion;
+	private final TagRepository tagRepository;
+	private final DTOConversionInterface<Tag> dtoConversion;
 
-    @Autowired
-    TagService(TagRepository tagRepository, DTOConversionInterface<Tag> dtoConversion) {
-        this.tagRepository = tagRepository;
-        this.dtoConversion = dtoConversion;
-    }
+	@Autowired
+	TagService(TagRepository tagRepository, DTOConversionInterface<Tag> dtoConversion) {
+		this.tagRepository = tagRepository;
+		this.dtoConversion = dtoConversion;
+	}
 
-    @Override
-    public List<TagDTO> getAllTags() {
-        log.info("Find all tags");
+	@Override
+	public List<TagDTO> getAllTags() {
+		log.info("Find all tags");
 
-        return tagRepository.findAll().stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
-    }
+		return tagRepository.findAll().stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
+	}
 
-    @Override
-    public Tag findTagByIdAndName(int id, String name) {
-        log.info("Find a tag with id {} and name {}", id, name);
+	@Override
+	public Tag findTagByIdAndName(int id, String name) {
+		log.info("Find a tag with id {} and name {}", id, name);
 
-        return tagRepository.findByTagIdAndTagName(id, name)
-                .orElseThrow(() -> new ObjectNotFoundException("No Tag with name '" + name + "' and id '" + id + "' found!"));
-    }
+		return tagRepository.findByTagIdAndTagName(id, name)
+				.orElseThrow(() -> new ObjectNotFoundException("No Tag with name '" + name + "' and id '" + id + "' found!"));
+	}
 
 
 }

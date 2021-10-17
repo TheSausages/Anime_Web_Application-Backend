@@ -10,16 +10,16 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping("/animeUser")
 public class AnimeUserController {
-    private final AnimeUserServiceInterface animeUserService;
+	private final AnimeUserServiceInterface animeUserService;
 
-    @Autowired
-    AnimeUserController(AnimeUserServiceInterface animeUserService) {
-        this.animeUserService = animeUserService;
-    }
+	@Autowired
+	AnimeUserController(AnimeUserServiceInterface animeUserService) {
+		this.animeUserService = animeUserService;
+	}
 
-    @PostMapping("/updateUserAnime")
-    @ResponseBody
-    public AnimeUserInfoDTO register(@RequestBody @Valid AnimeUserInfoDTO animeUserInfoDTO) {
-        return animeUserService.updateCurrentUserAnimeInfo(animeUserInfoDTO);
-    }
+	@PostMapping("/updateUserAnime")
+	@ResponseBody
+	public AnimeUserInfoDTO register(@RequestBody @Valid AnimeUserInfoDTO animeUserInfoDTO) {
+		return animeUserService.updateCurrentUserAnimeInfo(animeUserInfoDTO);
+	}
 }

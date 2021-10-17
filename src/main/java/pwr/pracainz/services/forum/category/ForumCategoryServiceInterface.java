@@ -6,7 +6,7 @@ import pwr.pracainz.entities.databaseerntities.forum.ForumCategory;
 import java.util.List;
 
 public interface ForumCategoryServiceInterface {
-    List<ForumCategoryDTO> getAllCategories();
+	List<ForumCategoryDTO> getAllCategories();
 
-    ForumCategory findCategoryByIdAndName(int id, String name);
+	ForumCategory findCategoryByIdAndName(int id, String name);
 }

@@ -10,13 +10,13 @@ import pwr.pracainz.configuration.customMappers.threadStatus.ThreadStatusSeriali
 @JsonSerialize(using = ThreadStatusSerializer.class)
 @JsonDeserialize(using = ThreadStatusDeserializer.class)
 public enum ThreadStatus {
-    OPEN("Open"),
-    CLOSED("Closed");
+	OPEN("Open"),
+	CLOSED("Closed");
 
-    private final String formattedStatus;
+	private final String formattedStatus;
 
-    ThreadStatus(String formattedStatus) {
-        this.formattedStatus = formattedStatus;
-    }
+	ThreadStatus(String formattedStatus) {
+		this.formattedStatus = formattedStatus;
+	}
 }
 

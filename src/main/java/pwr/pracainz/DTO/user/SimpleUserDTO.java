@@ -15,18 +15,18 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimpleUserDTO {
-    @Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}")
-    private String userId;
+	@Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}")
+	private String userId;
 
-    @Size(max = 45)
-    private String username;
+	@Size(max = 45)
+	private String username;
 
-    @Min(0)
-    private int nrOfPosts;
+	@Min(0)
+	private int nrOfPosts;
 
-    @Min(0)
-    private int watchTime;
+	@Min(0)
+	private int watchTime;
 
-    @Min(0)
-    private long achievementPoints;
+	@Min(0)
+	private long achievementPoints;
 }

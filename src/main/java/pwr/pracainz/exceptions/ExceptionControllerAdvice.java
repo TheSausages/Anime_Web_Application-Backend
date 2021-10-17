@@ -25,81 +25,81 @@ import java.time.format.DateTimeFormatter;
 @Log4j2
 @RestControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
-    private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+	private static final DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
 
-    @ExceptionHandler(AuthenticationException.class)
-    @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    ResponseBodyWithMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
-        log.error("An unauthorized access to secured elements occurred: " + ex.getMessage());
+	@ExceptionHandler(AuthenticationException.class)
+	@ResponseStatus(HttpStatus.UNAUTHORIZED)
+	ResponseBodyWithMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
+		log.error("An unauthorized access to secured elements occurred: " + ex.getMessage());
 
-        return new ResponseBodyWithMessageDTO(ex.getMessage());
-    }
+		return new ResponseBodyWithMessageDTO(ex.getMessage());
+	}
 
-    @ExceptionHandler(RegistrationException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    ResponseBodyWithMessageDTO registrationExceptionHandler(RegistrationException ex) {
-        log.error("An error during registration: " + ex.getMessage());
+	@ExceptionHandler(RegistrationException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	ResponseBodyWithMessageDTO registrationExceptionHandler(RegistrationException ex) {
+		log.error("An error during registration: " + ex.getMessage());
 
-        return new ResponseBodyWithMessageDTO(ex.getMessage());
-    }
+		return new ResponseBodyWithMessageDTO(ex.getMessage());
+	}
 
-    @ExceptionHandler(AnilistException.class)
-    @ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-    ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
-        log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
+	@ExceptionHandler(AnilistException.class)
+	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
+	ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
+		log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
 
-        return new ResponseBodyWithMessageDTO(ex.getMessage());
-    }
+		return new ResponseBodyWithMessageDTO(ex.getMessage());
+	}
 
-    @ExceptionHandler(ObjectNotFoundException.class)
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
-        log.error(ex.getMessage());
+	@ExceptionHandler(ObjectNotFoundException.class)
+	@ResponseStatus(HttpStatus.NOT_FOUND)
+	ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
+		log.error(ex.getMessage());
 
-        return new ResponseBodyWithMessageDTO(ex.getMessage());
-    }
+		return new ResponseBodyWithMessageDTO(ex.getMessage());
+	}
 
-    @ExceptionHandler(IllegalArgumentException.class)
-    @ResponseStatus(HttpStatus.CONFLICT)
-    ResponseBodyWithMessageDTO illegalArgumentExceptionHandler(IllegalArgumentException ex) {
-        log.error("Error during post user updating: {}", ex.getMessage());
+	@ExceptionHandler(IllegalArgumentException.class)
+	@ResponseStatus(HttpStatus.CONFLICT)
+	ResponseBodyWithMessageDTO illegalArgumentExceptionHandler(IllegalArgumentException ex) {
+		log.error("Error during post user updating: {}", ex.getMessage());
 
-        return new ResponseBodyWithMessageDTO(ex.getMessage());
-    }
+		return new ResponseBodyWithMessageDTO(ex.getMessage());
+	}
 
-    @Override
-    @NonNull
-    protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
-        if (ex.getCause() != null) {
-            String innerCauseMessage = ex.getCause().getMessage();
+	@Override
+	@NonNull
+	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
+		if (ex.getCause() != null) {
+			String innerCauseMessage = ex.getCause().getMessage();
 
-            log.error("Error during deserialization: {}", innerCauseMessage);
+			log.error("Error during deserialization: {}", innerCauseMessage);
 
-            return handleExceptionInternal(
-                    ex, new ResponseBodyWithMessageDTO(innerCauseMessage),
-                    headers, HttpStatus.BAD_REQUEST, request
-            );
-        }
+			return handleExceptionInternal(
+					ex, new ResponseBodyWithMessageDTO(innerCauseMessage),
+					headers, HttpStatus.BAD_REQUEST, request
+			);
+		}
 
-        return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO("Error during deserialization!")
-                , headers, status, request);
-    }
+		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO("Error during deserialization!")
+				, headers, status, request);
+	}
 
-    @Override
-    @NonNull
-    protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
-        String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
+	@Override
+	@NonNull
+	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
+		String errorMessage = ex.getBindingResult().getAllErrors().get(0).getDefaultMessage();
 
-        log.error(errorMessage);
+		log.error(errorMessage);
 
-        return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(errorMessage), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
-    }
+		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(errorMessage), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
+	}
 
-    @Override
-    @NonNull
-    protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(@NonNull HttpMediaTypeNotSupportedException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
-        log.error("This media type is not Supported");
+	@Override
+	@NonNull
+	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(@NonNull HttpMediaTypeNotSupportedException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
+		log.error("This media type is not Supported");
 
-        return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO("This media type is not Supported"), headers, status, request);
-    }
+		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO("This media type is not Supported"), headers, status, request);
+	}
 }

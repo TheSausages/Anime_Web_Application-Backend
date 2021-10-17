@@ -9,12 +9,12 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @ConstructorBinding
 @Getter
 public class AnilistProperties {
-    private final String apiUrl;
+	private final String apiUrl;
 
-    private final String errorMessage;
+	private final String errorMessage;
 
-    public AnilistProperties(String apiUrl, String errorMessage) {
-        this.apiUrl = apiUrl;
-        this.errorMessage = errorMessage;
-    }
+	public AnilistProperties(String apiUrl, String errorMessage) {
+		this.apiUrl = apiUrl;
+		this.errorMessage = errorMessage;
+	}
 }

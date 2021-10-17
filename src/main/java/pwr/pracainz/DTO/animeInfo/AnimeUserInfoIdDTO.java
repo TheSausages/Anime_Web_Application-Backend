@@ -17,10 +17,10 @@ import javax.validation.constraints.Positive;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class AnimeUserInfoIdDTO {
 
-    @NotNull(message = "User id Anime User Information cannot be null")
-    @Valid
-    private SimpleUserDTO user;
+	@NotNull(message = "User id Anime User Information cannot be null")
+	@Valid
+	private SimpleUserDTO user;
 
-    @Positive(message = "Anime Id must be positive!")
-    private int animeId;
+	@Positive(message = "Anime Id must be positive!")
+	private int animeId;
 }

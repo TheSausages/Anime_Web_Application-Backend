@@ -10,15 +10,15 @@ import pwr.pracainz.configuration.customMappers.animeUserStatus.AnimeUserStatusS
 @JsonDeserialize(using = AnimeUserStatusDeserializer.class)
 @JsonSerialize(using = AnimeUserStatusSerializer.class)
 public enum AnimeUserStatus {
-    NO_STATUS("No Status"),
-    WATCHING("Watching"),
-    COMPLETED("Completed"),
-    DROPPED("Dropped"),
-    PLAN_TO_WATCH("Plan to Watch")
-    ;
+	NO_STATUS("No Status"),
+	WATCHING("Watching"),
+	COMPLETED("Completed"),
+	DROPPED("Dropped"),
+	PLAN_TO_WATCH("Plan to Watch");
 
-    private final String formattedStatus;
-    AnimeUserStatus(String formattedStatus) {
-        this.formattedStatus = formattedStatus;
-    }
+	private final String formattedStatus;
+
+	AnimeUserStatus(String formattedStatus) {
+		this.formattedStatus = formattedStatus;
+	}
 }

@@ -13,6 +13,6 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ResponseBodyWithMessageDTO {
-    @NotBlank(message = "Message cannot be blank")
-    String message;
+	@NotBlank(message = "Message cannot be blank")
+	String message;
 }

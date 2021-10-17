@@ -25,17 +25,17 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompleteThreadDTO extends SimpleThreadDTO {
 
-    @NotBlank(message = "Thread text cannot be blank")
-    @Size(max = 600, message = "Thread text is to long")
-    private String text;
+	@NotBlank(message = "Thread text cannot be blank")
+	@Size(max = 600, message = "Thread text is to long")
+	private String text;
 
-    @NotNull(message = "Posts cannot be null value")
-    @Valid
-    private PageDTO<CompletePostDTO> posts;
+	@NotNull(message = "Posts cannot be null value")
+	@Valid
+	private PageDTO<CompletePostDTO> posts;
 
-    public CompleteThreadDTO(int id, String title, String text, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts) {
-        super(id, title, NrOfPosts, status, creation, modification, creator, category, tags);
-        this.text = text;
-        this.posts = posts;
-    }
+	public CompleteThreadDTO(int id, String title, String text, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts) {
+		super(id, title, NrOfPosts, status, creation, modification, creator, category, tags);
+		this.text = text;
+		this.posts = posts;
+	}
 }

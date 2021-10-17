@@ -19,41 +19,41 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.getIdOfCurrentUser;
 @RestController
 @RequestMapping("/auth")
 public class UserController {
-    private final KeycloakServiceInterface keycloakService;
-    private final UserRepository userRepository;
+	private final KeycloakServiceInterface keycloakService;
+	private final UserRepository userRepository;
 
-    @Autowired
-    UserController(KeycloakServiceInterface keycloakService, UserRepository userRepository) {
-        this.keycloakService = keycloakService;
-        this.userRepository = userRepository;
-    }
+	@Autowired
+	UserController(KeycloakServiceInterface keycloakService, UserRepository userRepository) {
+		this.keycloakService = keycloakService;
+		this.userRepository = userRepository;
+	}
 
-    @PostMapping("/login")
-    public AuthenticationTokenDTO login(@RequestBody @Valid LoginCredentialsDTO credentials) {
-        return keycloakService.login(credentials);
-    }
+	@PostMapping("/login")
+	public AuthenticationTokenDTO login(@RequestBody @Valid LoginCredentialsDTO credentials) {
+		return keycloakService.login(credentials);
+	}
 
-    @PostMapping("/logout")
-    public ResponseBodyWithMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken) {
-        return keycloakService.logout(refreshTokenDTO, accessToken);
-    }
+	@PostMapping("/logout")
+	public ResponseBodyWithMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken) {
+		return keycloakService.logout(refreshTokenDTO, accessToken);
+	}
 
-    @PostMapping("/register")
-    public AuthenticationTokenDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
-        return keycloakService.register(registrationBodyDTO);
-    }
+	@PostMapping("/register")
+	public AuthenticationTokenDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
+		return keycloakService.register(registrationBodyDTO);
+	}
 
-    @PostMapping("/refreshToken")
-    public AuthenticationTokenDTO refreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
-        return keycloakService.refreshTokens(refreshTokenDTO);
-    }
+	@PostMapping("/refreshToken")
+	public AuthenticationTokenDTO refreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
+		return keycloakService.refreshTokens(refreshTokenDTO);
+	}
 
-    @GetMapping("/ach")
-    public ResponseEntity aaa() {
-        User user = userRepository.findById(getIdOfCurrentUser()).get();
+	@GetMapping("/ach")
+	public ResponseEntity aaa() {
+		User user = userRepository.findById(getIdOfCurrentUser()).get();
 
-        System.out.println(user);
+		System.out.println(user);
 
-        return ResponseEntity.ok(user);
-    }
+		return ResponseEntity.ok(user);
+	}
 }

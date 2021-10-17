@@ -8,49 +8,51 @@ import java.util.Set;
 
 @Getter
 public class AiringScheduleArguments {
-    private final String airingScheduleArgumentsString;
+	private final String airingScheduleArgumentsString;
 
-    private AiringScheduleArguments(String airingScheduleArgumentsString) {
-        this.airingScheduleArgumentsString = airingScheduleArgumentsString;
-    }
+	private AiringScheduleArguments(String airingScheduleArgumentsString) {
+		this.airingScheduleArgumentsString = airingScheduleArgumentsString;
+	}
 
-    public static AiringScheduleArgumentsBuilder getAiringScheduleArgumentsBuilder() {
-        return new AiringScheduleArgumentsBuilder();
-    }
+	public static AiringScheduleArgumentsBuilder getAiringScheduleArgumentsBuilder() {
+		return new AiringScheduleArgumentsBuilder();
+	}
 
-    @Override
-    public String toString() {
-        return airingScheduleArgumentsString;
-    }
+	@Override
+	public String toString() {
+		return airingScheduleArgumentsString;
+	}
 
-    public static final class AiringScheduleArgumentsBuilder {
-        private final Set<ParameterString> airingScheduleArguments = new LinkedHashSet<>();
+	public static final class AiringScheduleArgumentsBuilder {
+		private final Set<ParameterString> airingScheduleArguments = new LinkedHashSet<>();
 
-        public AiringScheduleArgumentsBuilder notYetAired() {
-            airingScheduleArguments.add(new ParameterString("notYetAired: true, "));
-            return this;
-        }
+		public AiringScheduleArgumentsBuilder notYetAired() {
+			airingScheduleArguments.add(new ParameterString("notYetAired: true, "));
+			return this;
+		}
 
-        public AiringScheduleArgumentsBuilder page(int page) {
-            airingScheduleArguments.add(new ParameterString("page: " + page + ", "));
-            return this;
-        }
+		public AiringScheduleArgumentsBuilder page(int page) {
+			airingScheduleArguments.add(new ParameterString("page: " + page + ", "));
+			return this;
+		}
 
-        public AiringScheduleArgumentsBuilder perPage(int perPage) {
-            airingScheduleArguments.add(new ParameterString("perPage: " + perPage + ", "));
-            return this;
-        }
+		public AiringScheduleArgumentsBuilder perPage(int perPage) {
+			airingScheduleArguments.add(new ParameterString("perPage: " + perPage + ", "));
+			return this;
+		}
 
-        public AiringScheduleArguments buildCharacterMediaArguments() {
-            if (airingScheduleArguments.isEmpty()) { throw new IllegalStateException("Airing Schedule Arguments should posses at least 1 parameter!"); }
+		public AiringScheduleArguments buildCharacterMediaArguments() {
+			if (airingScheduleArguments.isEmpty()) {
+				throw new IllegalStateException("Airing Schedule Arguments should posses at least 1 parameter!");
+			}
 
-            StringBuilder airingScheduleArguments = new StringBuilder("(");
+			StringBuilder airingScheduleArguments = new StringBuilder("(");
 
-            this.airingScheduleArguments.forEach(airingScheduleArguments::append);
+			this.airingScheduleArguments.forEach(airingScheduleArguments::append);
 
-            airingScheduleArguments.delete(airingScheduleArguments.length() - 2, airingScheduleArguments.length()).append(")");
+			airingScheduleArguments.delete(airingScheduleArguments.length() - 2, airingScheduleArguments.length()).append(")");
 
-            return new AiringScheduleArguments(airingScheduleArguments.toString());
-        }
-    }
+			return new AiringScheduleArguments(airingScheduleArguments.toString());
+		}
+	}
 }

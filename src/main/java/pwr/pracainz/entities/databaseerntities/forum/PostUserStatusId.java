@@ -19,26 +19,26 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PostUserStatusId implements Serializable {
-    @NotEmpty
-    @ManyToOne
-    @JoinColumn(name = "UserId")
-    private User user;
+	@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "UserId")
+	private User user;
 
-    @NotEmpty
-    @ManyToOne
-    @JoinColumn(name = "PostId")
-    private Post post;
+	@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "PostId")
+	private Post post;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        PostUserStatusId that = (PostUserStatusId) o;
-        return Objects.equals(user, that.user) && Objects.equals(post, that.post);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		PostUserStatusId that = (PostUserStatusId) o;
+		return Objects.equals(user, that.user) && Objects.equals(post, that.post);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, post);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(user, post);
+	}
 }

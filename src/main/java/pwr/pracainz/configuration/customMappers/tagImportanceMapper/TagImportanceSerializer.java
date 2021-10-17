@@ -8,16 +8,16 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.TagImportance;
 import java.io.IOException;
 
 public class TagImportanceSerializer extends StdSerializer<TagImportance> {
-    public TagImportanceSerializer() {
-        this(null);
-    }
+	public TagImportanceSerializer() {
+		this(null);
+	}
 
-    public TagImportanceSerializer(Class<TagImportance> t) {
-        super(t);
-    }
+	public TagImportanceSerializer(Class<TagImportance> t) {
+		super(t);
+	}
 
-    @Override
-    public void serialize(TagImportance value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeString(value.getFormattedImportance());
-    }
+	@Override
+	public void serialize(TagImportance value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		gen.writeString(value.getFormattedImportance());
+	}
 }

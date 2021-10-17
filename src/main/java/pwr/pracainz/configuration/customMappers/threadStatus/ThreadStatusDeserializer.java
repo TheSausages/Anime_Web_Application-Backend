@@ -12,24 +12,24 @@ import java.io.IOException;
 import java.util.Locale;
 
 public class ThreadStatusDeserializer extends StdDeserializer<ThreadStatus> {
-    public ThreadStatusDeserializer() {
-        this(null);
-    }
+	public ThreadStatusDeserializer() {
+		this(null);
+	}
 
-    public ThreadStatusDeserializer(Class<?> vc) {
-        super(vc);
-    }
+	public ThreadStatusDeserializer(Class<?> vc) {
+		super(vc);
+	}
 
-    @Override
-    public ThreadStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
-        String status = "No value read";
-        try {
-            JsonNode statusNode = p.getCodec().readTree(p);
-            status = statusNode instanceof TextNode ? statusNode.asText() : statusNode.path("status").asText();
+	@Override
+	public ThreadStatus deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
+		String status = "No value read";
+		try {
+			JsonNode statusNode = p.getCodec().readTree(p);
+			status = statusNode instanceof TextNode ? statusNode.asText() : statusNode.path("status").asText();
 
-            return ThreadStatus.valueOf(status.toUpperCase(Locale.ROOT));
-        } catch (Exception e) {
-            throw new CustomDeserializationException(String.format("Could not read thread status: %s", status));
-        }
-    }
+			return ThreadStatus.valueOf(status.toUpperCase(Locale.ROOT));
+		} catch (Exception e) {
+			throw new CustomDeserializationException(String.format("Could not read thread status: %s", status));
+		}
+	}
 }

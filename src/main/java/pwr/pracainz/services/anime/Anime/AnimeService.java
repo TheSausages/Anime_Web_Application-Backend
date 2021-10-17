@@ -37,406 +37,406 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 @Log4j2
 @Service
 public class AnimeService implements AnimeServiceInterface {
-    private final AnilistProperties anilistProperties;
-    private final AnimeUserServiceInterface animeUserService;
-    private final WebClient client;
-    private final ObjectMapper mapper;
+	private final AnilistProperties anilistProperties;
+	private final AnimeUserServiceInterface animeUserService;
+	private final WebClient client;
+	private final ObjectMapper mapper;
 
-    AnimeService(AnilistProperties anilistProperties, AnimeUserServiceInterface animeUserService, ObjectMapper mapper) {
-        this.anilistProperties = anilistProperties;
-        this.animeUserService = animeUserService;
-        this.mapper = mapper;
+	AnimeService(AnilistProperties anilistProperties, AnimeUserServiceInterface animeUserService, ObjectMapper mapper) {
+		this.anilistProperties = anilistProperties;
+		this.animeUserService = animeUserService;
+		this.mapper = mapper;
 
-        client = WebClient.create(anilistProperties.getApiUrl());
+		client = WebClient.create(anilistProperties.getApiUrl());
 
-        //this.populateTagFile();
-    }
+		//this.populateTagFile();
+	}
 
-    @Override
-    public ObjectNode getCurrentSeasonAnime() {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .nativeLanguage()
-                        .romajiLanguage()
-                        .buildMediaTitle())
-                .coverImage()
-                .buildField();
-        PageInfo pageInfo = PageInfo.getPageInfoBuilder()
-                .total()
-                .currentPage()
-                .lastPage()
-                .hasNextPage()
-                .perPage()
-                .buildPageInfo();
-        Page page = Page.getPageBuilder(1, 40)
-                .pageInfo(pageInfo)
-                .media(Media.getMediaBuilder(field)
-                        .seasonYear(LocalDateTime.now().getYear())
-                        .season(MediaSeason.getCurrentSeason())
-                        .type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-                        .sort(new MediaSort[]{MediaSort.POPULARITY_DESC})
-                        .buildMedia())
-                .buildPage();
+	@Override
+	public ObjectNode getCurrentSeasonAnime() {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.nativeLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.coverImage()
+				.buildField();
+		PageInfo pageInfo = PageInfo.getPageInfoBuilder()
+				.total()
+				.currentPage()
+				.lastPage()
+				.hasNextPage()
+				.perPage()
+				.buildPageInfo();
+		Page page = Page.getPageBuilder(1, 40)
+				.pageInfo(pageInfo)
+				.media(Media.getMediaBuilder(field)
+						.seasonYear(LocalDateTime.now().getYear())
+						.season(MediaSeason.getCurrentSeason())
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.sort(new MediaSort[]{MediaSort.POPULARITY_DESC})
+						.buildMedia())
+				.buildPage();
 
-        return client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(page))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason", getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
-                .block();
-    }
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason", getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
+				.block();
+	}
 
-    @Override
-    public ObjectNode getSeasonAnime(MediaSeason season, int year) {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .romajiLanguage()
-                        .buildMediaTitle())
-                .coverImage()
-                .buildField();
-        PageInfo pageInfo = PageInfo.getPageInfoBuilder()
-                .total()
-                .currentPage()
-                .lastPage()
-                .hasNextPage()
-                .perPage()
-                .buildPageInfo();
-        Page page = Page.getPageBuilder(1, 40)
-                .pageInfo(pageInfo)
-                .media(Media.getMediaBuilder(field)
-                        .seasonYear(year)
-                        .season(season)
-                        .type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-                        .buildMedia())
-                .buildPage();
+	@Override
+	public ObjectNode getSeasonAnime(MediaSeason season, int year) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.coverImage()
+				.buildField();
+		PageInfo pageInfo = PageInfo.getPageInfoBuilder()
+				.total()
+				.currentPage()
+				.lastPage()
+				.hasNextPage()
+				.perPage()
+				.buildPageInfo();
+		Page page = Page.getPageBuilder(1, 40)
+				.pageInfo(pageInfo)
+				.media(Media.getMediaBuilder(field)
+						.seasonYear(year)
+						.season(season)
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.buildMedia())
+				.buildPage();
 
-        return client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(page))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime from " + season + " of " + year))
-                .block();
-    }
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime from " + season + " of " + year))
+				.block();
+	}
 
-    @Override
-    public ObjectNode getTopAnimeMovies(int pageNumber) {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .coverImage()
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .nativeLanguage()
-                        .romajiLanguage()
-                        .buildMediaTitle())
-                .buildField();
-        Page page = Page.getPageBuilder(pageNumber, 49)
-                .pageInfo(PageInfo.getPageInfoBuilder()
-                        .currentPage()
-                        .lastPage()
-                        .total()
-                        .hasNextPage()
-                        .buildPageInfo())
-                .media(Media.getMediaBuilder(field)
-                        .type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-                        .format(MediaFormat.MOVIE)
-                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
-                        .buildMedia())
-                .buildPage();
+	@Override
+	public ObjectNode getTopAnimeMovies(int pageNumber) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.coverImage()
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.nativeLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.buildField();
+		Page page = Page.getPageBuilder(pageNumber, 49)
+				.pageInfo(PageInfo.getPageInfoBuilder()
+						.currentPage()
+						.lastPage()
+						.total()
+						.hasNextPage()
+						.buildPageInfo())
+				.media(Media.getMediaBuilder(field)
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.format(MediaFormat.MOVIE)
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.buildMedia())
+				.buildPage();
 
-        return client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(page))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime Movies"))
-                .block();
-    }
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime Movies"))
+				.block();
+	}
 
-    @Override
-    public ObjectNode getTopAnimeAiring(int pageNumber) {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .coverImage()
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .nativeLanguage()
-                        .romajiLanguage()
-                        .buildMediaTitle())
-                .buildField();
-        Page page = Page.getPageBuilder(pageNumber, 49)
-                .pageInfo(PageInfo.getPageInfoBuilder()
-                        .currentPage()
-                        .lastPage()
-                        .total()
-                        .hasNextPage()
-                        .buildPageInfo())
-                .media(Media.getMediaBuilder(field)
-                        .type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-                        .status(MediaStatus.RELEASING)
-                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
-                        .buildMedia())
-                .buildPage();
+	@Override
+	public ObjectNode getTopAnimeAiring(int pageNumber) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.coverImage()
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.nativeLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.buildField();
+		Page page = Page.getPageBuilder(pageNumber, 49)
+				.pageInfo(PageInfo.getPageInfoBuilder()
+						.currentPage()
+						.lastPage()
+						.total()
+						.hasNextPage()
+						.buildPageInfo())
+				.media(Media.getMediaBuilder(field)
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.status(MediaStatus.RELEASING)
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.buildMedia())
+				.buildPage();
 
-        return client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(page))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Airing Anime"))
-                .block();
-    }
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Airing Anime"))
+				.block();
+	}
 
-    @Override
-    public ObjectNode getTopAnimeAllTime(int pageNumber) {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .coverImage()
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguage()
-                        .nativeLanguage()
-                        .romajiLanguage()
-                        .buildMediaTitle())
-                .buildField();
-        Page page = Page.getPageBuilder(pageNumber, 49)
-                .pageInfo(PageInfo.getPageInfoBuilder()
-                        .currentPage()
-                        .total()
-                        .lastPage()
-                        .hasNextPage()
-                        .buildPageInfo())
-                .media(Media.getMediaBuilder(field)
-                        .type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-                        .sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
-                        .buildMedia())
-                .buildPage();
+	@Override
+	public ObjectNode getTopAnimeAllTime(int pageNumber) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.coverImage()
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.nativeLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.buildField();
+		Page page = Page.getPageBuilder(pageNumber, 49)
+				.pageInfo(PageInfo.getPageInfoBuilder()
+						.currentPage()
+						.total()
+						.lastPage()
+						.hasNextPage()
+						.buildPageInfo())
+				.media(Media.getMediaBuilder(field)
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.buildMedia())
+				.buildPage();
 
-        return client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(page))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
-                .block();
-    }
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
+				.block();
+	}
 
-    @Override
-    public ObjectNode getAnimeById(int id) {
-        Field field = Field.getFieldBuilder()
-                .parameter(FieldParameters.id)
-                .parameter(FieldParameters.season)
-                .parameter(FieldParameters.seasonYear)
-                .parameter(FieldParameters.episodes)
-                .parameter(FieldParameters.duration)
-                .parameter(FieldParameters.genres)
-                .parameter(FieldParameters.averageScore)
-                .parameter(FieldParameters.format)
-                .parameter(FieldParameters.type)
-                .parameter(FieldParameters.favourites)
-                .parameter(FieldParameters.isAdult)
-                .title(MediaTitle.getMediaTitleBuilder()
-                        .englishLanguageStylized()
-                        .romajiLanguageStylized()
-                        .nativeLanguageStylized()
-                        .buildMediaTitle())
-                .status()
-                .coverImage()
-                .descriptionAsHtml()
-                .source(2)
-                .fuzzyDate(FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.startDate).allAndBuild())
-                .fuzzyDate(FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.endDate).allAndBuild())
-                .nextAiringEpisode()
-                .relations(MediaConnection.getMediaConnectionBuilder()
-                        .edge(MediaEdge.getMediaConnectionBuilder()
-                                .node(Media.getMediaBuilder(Field.getFieldBuilder()
-                                        .parameter(FieldParameters.id)
-                                        .parameter(FieldParameters.type)
-                                        .title(MediaTitle.getMediaTitleBuilder()
-                                                .englishLanguage()
-                                                .romajiLanguage()
-                                                .nativeLanguage()
-                                                .buildMediaTitle())
-                                        .coverImage()
-                                        .status()
-                                        .buildField()).buildMedia())
-                                .relationType(2)
-                                .buildMediaEdge())
-                        .buildMediaConnection())
-                .characters(CharacterArguments.getCharacterArgumentsBuilder()
-                                .mediaSort(new CharacterSort[]{CharacterSort.ROLE})
-                                .perPage(15)
-                                .buildCharacterMediaArguments()
-                        , CharacterConnection.getCharacterConnectionBuilder()
-                        .edges(CharacterEdge.getCharacterEdgeBuilder()
-                                .node(Character.getCharacterBuilder()
-                                        .id()
-                                        .name()
-                                        .image()
-                                        .buildCharacter())
-                                .id()
-                                .role()
-                                .name()
-                                .voiceActors(Staff.getStaffBuilder()
-                                        .name()
-                                        .image()
-                                        .languageV2()
-                                        .buildStaff())
-                                .buildCharacterEdge())
-                        .pageInfo(PageInfo.getPageInfoBuilder()
-                                .hasNextPage()
-                                .lastPage()
-                                .currentPage()
-                                .buildPageInfo())
-                        .buildCharacterConnection())
-                .staff(StaffArguments.getStaffArgumentsBuilder()
-                        .sort(new StaffSort[]{StaffSort.RELEVANCE})
-                        .perPage(4)
-                        .buildStaffArguments()
-                        , StaffConnection.getMediaConnectionBuilder()
-                                .nodes(Staff.getStaffBuilder()
-                                        .name()
-                                        .image()
-                                        .primaryOccupations()
-                                        .buildStaff())
-                                .pageInfo(PageInfo.getPageInfoBuilder()
-                                        .currentPage()
-                                        .lastPage()
-                                        .hasNextPage()
-                                        .buildPageInfo())
-                                .buildStaffConnection())
-                .buildField();
-        Media media = Media.getMediaBuilder(field)
-                .id(id)
-                .buildMedia();
+	@Override
+	public ObjectNode getAnimeById(int id) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.parameter(FieldParameters.season)
+				.parameter(FieldParameters.seasonYear)
+				.parameter(FieldParameters.episodes)
+				.parameter(FieldParameters.duration)
+				.parameter(FieldParameters.genres)
+				.parameter(FieldParameters.averageScore)
+				.parameter(FieldParameters.format)
+				.parameter(FieldParameters.type)
+				.parameter(FieldParameters.favourites)
+				.parameter(FieldParameters.isAdult)
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguageStylized()
+						.romajiLanguageStylized()
+						.nativeLanguageStylized()
+						.buildMediaTitle())
+				.status()
+				.coverImage()
+				.descriptionAsHtml()
+				.source(2)
+				.fuzzyDate(FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.startDate).allAndBuild())
+				.fuzzyDate(FuzzyDateField.getFuzzyDateFieldBuilder(FuzzyDateFieldParameter.endDate).allAndBuild())
+				.nextAiringEpisode()
+				.relations(MediaConnection.getMediaConnectionBuilder()
+						.edge(MediaEdge.getMediaConnectionBuilder()
+								.node(Media.getMediaBuilder(Field.getFieldBuilder()
+										.parameter(FieldParameters.id)
+										.parameter(FieldParameters.type)
+										.title(MediaTitle.getMediaTitleBuilder()
+												.englishLanguage()
+												.romajiLanguage()
+												.nativeLanguage()
+												.buildMediaTitle())
+										.coverImage()
+										.status()
+										.buildField()).buildMedia())
+								.relationType(2)
+								.buildMediaEdge())
+						.buildMediaConnection())
+				.characters(CharacterArguments.getCharacterArgumentsBuilder()
+								.mediaSort(new CharacterSort[]{CharacterSort.ROLE})
+								.perPage(15)
+								.buildCharacterMediaArguments()
+						, CharacterConnection.getCharacterConnectionBuilder()
+								.edges(CharacterEdge.getCharacterEdgeBuilder()
+										.node(Character.getCharacterBuilder()
+												.id()
+												.name()
+												.image()
+												.buildCharacter())
+										.id()
+										.role()
+										.name()
+										.voiceActors(Staff.getStaffBuilder()
+												.name()
+												.image()
+												.languageV2()
+												.buildStaff())
+										.buildCharacterEdge())
+								.pageInfo(PageInfo.getPageInfoBuilder()
+										.hasNextPage()
+										.lastPage()
+										.currentPage()
+										.buildPageInfo())
+								.buildCharacterConnection())
+				.staff(StaffArguments.getStaffArgumentsBuilder()
+								.sort(new StaffSort[]{StaffSort.RELEVANCE})
+								.perPage(4)
+								.buildStaffArguments()
+						, StaffConnection.getMediaConnectionBuilder()
+								.nodes(Staff.getStaffBuilder()
+										.name()
+										.image()
+										.primaryOccupations()
+										.buildStaff())
+								.pageInfo(PageInfo.getPageInfoBuilder()
+										.currentPage()
+										.lastPage()
+										.hasNextPage()
+										.buildPageInfo())
+								.buildStaffConnection())
+				.buildField();
+		Media media = Media.getMediaBuilder(field)
+				.id(id)
+				.buildMedia();
 
-        ObjectNode node = client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(Query.fromQueryElement(media))
-                .retrieve()
-                .bodyToMono(ObjectNode.class)
-                .flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
-                .block();
+		ObjectNode node = client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(media))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
+				.block();
 
-        if (checkIfLoggedUser() && node != null) {
-            node.set("animeUserInformation",
-                    mapper.valueToTree(
-                            animeUserService.getCurrentUserAnimeInfo(id)
-                    ));
-        }
+		if (checkIfLoggedUser() && node != null) {
+			node.set("animeUserInformation",
+					mapper.valueToTree(
+							animeUserService.getCurrentUserAnimeInfo(id)
+					));
+		}
 
-        return node;
-    }
+		return node;
+	}
 
-    private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
-        return Mono.just(response)
-                .map(res -> removeDataAndQueryElementFromJson(res, element))
-                .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> {
-                    throw new AnilistException(anilistProperties.getErrorMessage());
-                });
-    }
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
+		return Mono.just(response)
+				.map(res -> removeDataAndQueryElementFromJson(res, element))
+				.doOnSuccess(s -> log.info(positiveResponse))
+				.doOnError(e -> {
+					throw new AnilistException(anilistProperties.getErrorMessage());
+				});
+	}
 
-    private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
-        return Mono.just(response)
-                .map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
-                .doOnSuccess(s -> log.info(positiveResponse))
-                .doOnError(e -> {
-                    throw new AnilistException(anilistProperties.getErrorMessage());
-                });
-    }
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
+		return Mono.just(response)
+				.map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
+				.doOnSuccess(s -> log.info(positiveResponse))
+				.doOnError(e -> {
+					throw new AnilistException(anilistProperties.getErrorMessage());
+				});
+	}
 
-    private ObjectNode removeDataAndQueryElementFromJson(ObjectNode json, QueryElements element) {
-        return json.get("data").get(element.name()).deepCopy();
-    }
+	private ObjectNode removeDataAndQueryElementFromJson(ObjectNode json, QueryElements element) {
+		return json.get("data").get(element.name()).deepCopy();
+	}
 
-    private ObjectNode getCurrentSeasonInformation() {
-        ObjectNode seasonInformation = mapper.createObjectNode();
-        seasonInformation.put("year", LocalDateTime.now().getYear());
-        seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
+	private ObjectNode getCurrentSeasonInformation() {
+		ObjectNode seasonInformation = mapper.createObjectNode();
+		seasonInformation.put("year", LocalDateTime.now().getYear());
+		seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
 
-        return seasonInformation;
-    }
+		return seasonInformation;
+	}
 
-    /*private void populateTagFile() {
-        log.info("Populate the Tag file with Current Existing Tags from the Database");
+	/*private void populateTagFile() {
+		log.info("Populate the Tag file with Current Existing Tags from the Database");
 
-        Gson gson = new GsonBuilder()
-                .serializeNulls()
-                .create();
+		Gson gson = new GsonBuilder()
+				.serializeNulls()
+				.create();
 
-        String query =
-                "query {" +
-                        "  MediaTagCollection {" +
-                        "    id" +
-                        "    name" +
-                        "    description" +
-                        "    category" +
-                        "    isGeneralSpoiler" +
-                        "    isMediaSpoiler" +
-                        "    isAdult" +
-                        "  }" +
-                        "}";
+		String query =
+				"query {" +
+						"  MediaTagCollection {" +
+						"    id" +
+						"    name" +
+						"    description" +
+						"    category" +
+						"    isGeneralSpoiler" +
+						"    isMediaSpoiler" +
+						"    isAdult" +
+						"  }" +
+						"}";
 
-        JSONObject queryParameters = new JSONObject();
+		JSONObject queryParameters = new JSONObject();
 
-        JSONObject requestBody = new JSONObject();
-        requestBody.put("query", query);
-        requestBody.put("variables", queryParameters.toJSONString());
+		JSONObject requestBody = new JSONObject();
+		requestBody.put("query", query);
+		requestBody.put("variables", queryParameters.toJSONString());
 
-        Mono<JSONObject> response = client
-                .post()
-                .headers(httpHeaders -> {
-                    httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-                    httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-                })
-                .body(BodyInserters.fromValue(requestBody))
-                .exchangeToMono(this::evaluateClientResponse);
+		Mono<JSONObject> response = client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(BodyInserters.fromValue(requestBody))
+				.exchangeToMono(this::evaluateClientResponse);
 
-        Object data = gson.fromJson(response.block().toJSONString(), JSONObject.class).get("data");
-        Object tagsMedia = gson.fromJson(gson.toJson(data), JSONObject.class).get("MediaTagCollection");
+		Object data = gson.fromJson(response.block().toJSONString(), JSONObject.class).get("data");
+		Object tagsMedia = gson.fromJson(gson.toJson(data), JSONObject.class).get("MediaTagCollection");
 
-        TagList tagList = new TagList();
-        tagList.addTagSet(gson.fromJson(gson.toJson(tagsMedia), new TypeToken<Set<Tag>>() {}.getType()));
+		TagList tagList = new TagList();
+		tagList.addTagSet(gson.fromJson(gson.toJson(tagsMedia), new TypeToken<Set<Tag>>() {}.getType()));
 
-        try (BufferedWriter writer = new BufferedWriter(new FileWriter("./tags.txt"))) {
-            tagList.getTagSet().forEach(tag -> {
-                try {
-                    writer.write(tag.toString());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }*/
+		try (BufferedWriter writer = new BufferedWriter(new FileWriter(".    ags.txt"))) {
+			tagList.getTagSet().forEach(tag -> {
+				try {
+					writer.write(tag.toString());
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			});
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}*/
 }

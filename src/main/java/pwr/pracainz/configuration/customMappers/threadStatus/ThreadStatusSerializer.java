@@ -8,16 +8,16 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 import java.io.IOException;
 
 public class ThreadStatusSerializer extends StdSerializer<ThreadStatus> {
-    public ThreadStatusSerializer() {
-        this(null);
-    }
+	public ThreadStatusSerializer() {
+		this(null);
+	}
 
-    public ThreadStatusSerializer(Class<ThreadStatus> t) {
-        super(t);
-    }
+	public ThreadStatusSerializer(Class<ThreadStatus> t) {
+		super(t);
+	}
 
-    @Override
-    public void serialize(ThreadStatus value, JsonGenerator gen, SerializerProvider provider) throws IOException {
-        gen.writeString(value.getFormattedStatus());
-    }
+	@Override
+	public void serialize(ThreadStatus value, JsonGenerator gen, SerializerProvider provider) throws IOException {
+		gen.writeString(value.getFormattedStatus());
+	}
 }

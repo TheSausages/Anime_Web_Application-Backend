@@ -8,5 +8,5 @@ import java.util.Optional;
 
 @Repository
 public interface TagRepository extends JpaRepository<Tag, Integer> {
-    Optional<Tag> findByTagIdAndTagName(int id, String name);
+	Optional<Tag> findByTagIdAndTagName(int id, String name);
 }

@@ -16,11 +16,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ThreadUserStatusIdDTO {
-    @NotNull(message = "User in Thread User Status id cannot be null")
-    @Valid
-    private SimpleUserDTO user;
+	@NotNull(message = "User in Thread User Status id cannot be null")
+	@Valid
+	private SimpleUserDTO user;
 
-    @NotNull(message = "Thread in Thread User Status id cannot be null")
-    @Valid
-    private SimpleThreadDTO thread;
+	@NotNull(message = "Thread in Thread User Status id cannot be null")
+	@Valid
+	private SimpleThreadDTO thread;
 }

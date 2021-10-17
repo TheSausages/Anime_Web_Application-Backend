@@ -8,169 +8,169 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class RecommendationTest {
 
-    @Test
-    void RecommendationBuilder_NoParams_ThrowException() {
-        //given
+	@Test
+	void RecommendationBuilder_NoParams_ThrowException() {
+		//given
 
-        //when
-        Exception exception = assertThrows(IllegalStateException.class, () -> Recommendation.getRecommendationBuilder().buildRecommendation());
+		//when
+		Exception exception = assertThrows(IllegalStateException.class, () -> Recommendation.getRecommendationBuilder().buildRecommendation());
 
-        //then
-        assertEquals(exception.getMessage(), "Recommendation should posses at least 1 parameter!");
-    }
+		//then
+		assertEquals(exception.getMessage(), "Recommendation should posses at least 1 parameter!");
+	}
 
-    @Test
-    void RecommendationBuilder_Id_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_Id_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .id()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.id()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_ManyId_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_ManyId_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .id()
-                .id()
-                .id()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.id()
+				.id()
+				.id()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_IdWithoutFieldName_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_IdWithoutFieldName_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .id()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.id()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationStringWithoutFieldName(), "{\nid\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationStringWithoutFieldName(), "{\nid\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_ManyIdWithoutFieldName_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_ManyIdWithoutFieldName_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .id()
-                .id()
-                .id()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.id()
+				.id()
+				.id()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationStringWithoutFieldName(), "{\nid\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationStringWithoutFieldName(), "{\nid\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_Rating_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_Rating_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .rating()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.rating()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nrating\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nrating\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_ManyRating_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_ManyRating_NoException() {
+		//given
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .rating()
-                .rating()
-                .rating()
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.rating()
+				.rating()
+				.rating()
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nrating\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nrating\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_Media_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_Media_NoException() {
+		//given
 
-        //when
+		//when
 
-        //then
-    }
+		//then
+	}
 
-    @Test
-    void RecommendationBuilder_MediaRecommendation_NoException() {
-        //given
+	@Test
+	void RecommendationBuilder_MediaRecommendation_NoException() {
+		//given
 
-        //when
+		//when
 
-        //then
-    }
+		//then
+	}
 
-    @Test
-    void RecommendationBuilder_User_NoException() {
-        //given
-        User user = User.getUserBuilder()
-                .id()
-                .buildUser();
+	@Test
+	void RecommendationBuilder_User_NoException() {
+		//given
+		User user = User.getUserBuilder()
+				.id()
+				.buildUser();
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .user(user)
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.user(user)
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nuser {\nid\n}\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nuser {\nid\n}\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_ManyUser_NoException() {
-        //given
-        User user = User.getUserBuilder()
-                .avatar()
-                .buildUser();
-        User user1 = User.getUserBuilder()
-                .id()
-                .buildUser();
+	@Test
+	void RecommendationBuilder_ManyUser_NoException() {
+		//given
+		User user = User.getUserBuilder()
+				.avatar()
+				.buildUser();
+		User user1 = User.getUserBuilder()
+				.id()
+				.buildUser();
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .user(user)
-                .user(user1)
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.user(user)
+				.user(user1)
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nuser {\navatar {\nlarge\nmedium\n}\n}\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nuser {\navatar {\nlarge\nmedium\n}\n}\n}");
+	}
 
-    @Test
-    void RecommendationBuilder_IdAndUser_NoException() {
-        //given
-        User user = User.getUserBuilder()
-                .avatar()
-                .buildUser();
+	@Test
+	void RecommendationBuilder_IdAndUser_NoException() {
+		//given
+		User user = User.getUserBuilder()
+				.avatar()
+				.buildUser();
 
-        //when
-        Recommendation recommendation = Recommendation.getRecommendationBuilder()
-                .id()
-                .user(user)
-                .buildRecommendation();
+		//when
+		Recommendation recommendation = Recommendation.getRecommendationBuilder()
+				.id()
+				.user(user)
+				.buildRecommendation();
 
-        //then
-        assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\nuser {\navatar {\nlarge\nmedium\n}\n}\n}");
-    }
+		//then
+		assertEquals(recommendation.getRecommendationString(), "recommendation {\nid\nuser {\navatar {\nlarge\nmedium\n}\n}\n}");
+	}
 }

@@ -10,10 +10,10 @@ import java.text.SimpleDateFormat;
 @Configuration
 public class ObjectMapperConfiguration {
 
-    @Bean
-    ObjectMapper getObjectMapper() {
-        return new ObjectMapper()
-                .registerModule(new JavaTimeModule())
-                .setDateFormat(new SimpleDateFormat("dd.MM.yyyy"));
-    }
+	@Bean
+	ObjectMapper getObjectMapper() {
+		return new ObjectMapper()
+				.registerModule(new JavaTimeModule())
+				.setDateFormat(new SimpleDateFormat("dd.MM.yyyy"));
+	}
 }

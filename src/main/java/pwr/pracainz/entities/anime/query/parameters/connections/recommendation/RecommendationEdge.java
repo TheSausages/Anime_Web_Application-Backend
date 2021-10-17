@@ -4,13 +4,13 @@ import lombok.Getter;
 
 @Getter
 public class RecommendationEdge {
-    private final String recommendationEdgeString;
+	private final String recommendationEdgeString;
 
-    public RecommendationEdge(Recommendation recommendation) {
-        this.recommendationEdgeString = "recommendationEdge {\nnode " + recommendation.getRecommendationStringWithoutFieldName() + "\n}";
-    }
+	public RecommendationEdge(Recommendation recommendation) {
+		this.recommendationEdgeString = "recommendationEdge {\nnode " + recommendation.getRecommendationStringWithoutFieldName() + "\n}";
+	}
 
-    public String getRecommendationEdgeWithoutFieldName() {
-        return this.recommendationEdgeString.substring(19);
-    }
+	public String getRecommendationEdgeWithoutFieldName() {
+		return this.recommendationEdgeString.substring(19);
+	}
 }

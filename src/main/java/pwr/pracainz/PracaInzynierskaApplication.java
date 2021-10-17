@@ -8,10 +8,7 @@ import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 @ConfigurationPropertiesScan
 @SpringBootApplication(exclude = {JacksonAutoConfiguration.class})
 public class PracaInzynierskaApplication {
-
 	public static void main(String[] args) {
 		SpringApplication.run(PracaInzynierskaApplication.class, args);
 	}
-
 }
-

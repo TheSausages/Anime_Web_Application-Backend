@@ -17,24 +17,24 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class RegistrationBodyDTO {
-    @Length(min = 6, message = "Username is too short")
-    @NotBlank(message = "Username cannot be blank!")
-    String username;
+	@Length(min = 6, message = "Username is too short")
+	@NotBlank(message = "Username cannot be blank!")
+	String username;
 
-    @NotBlank(message = "Password cannot be blank")
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password is not of correct structure")
-    String password;
+	@NotBlank(message = "Password cannot be blank")
+	@Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password is not of correct structure")
+	String password;
 
-    @NotBlank(message = "Matching password cannot be blank")
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Matching password is not of correct structure")
-    String matchingPassword;
+	@NotBlank(message = "Matching password cannot be blank")
+	@Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Matching password is not of correct structure")
+	String matchingPassword;
 
-    @NotBlank(message = "Mail cannot be blank")
-    @Email(message = "Mail is not of correct structure")
-    String email;
+	@NotBlank(message = "Mail cannot be blank")
+	@Email(message = "Mail is not of correct structure")
+	String email;
 
-    @AssertTrue(message = "Passwords must match")
-    private boolean isPasswordsMatching() {
-        return password.equals(matchingPassword);
-    }
+	@AssertTrue(message = "Passwords must match")
+	private boolean isPasswordsMatching() {
+		return password.equals(matchingPassword);
+	}
 }

@@ -15,11 +15,11 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class LoginCredentialsDTO {
-    @NotBlank(message = "Username cannot be empty!")
-    @Size(min = 6, message = "Username must have at least 6 characters")
-    String username;
+	@NotBlank(message = "Username cannot be empty!")
+	@Size(min = 6, message = "Username must have at least 6 characters")
+	String username;
 
-    @NotBlank(message = "Password cannot be empty!")
-    @Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password doesn't have the correct structure")
-    String password;
+	@NotBlank(message = "Password cannot be empty!")
+	@Pattern(regexp = "^(?=.+[0-9])(?=.{4,}[a-z])(?=.*[A-Z]).{6,}$", message = "Password doesn't have the correct structure")
+	String password;
 }

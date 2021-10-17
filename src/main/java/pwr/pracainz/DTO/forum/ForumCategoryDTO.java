@@ -15,13 +15,13 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ForumCategoryDTO {
-    @Positive(message = "Category id cannot be negative")
-    private int categoryId;
+	@Positive(message = "Category id cannot be negative")
+	private int categoryId;
 
-    @NotBlank(message = "Category name cannot be blank")
-    @Size(max = 45, message = "Category name is too long")
-    private String categoryName;
+	@NotBlank(message = "Category name cannot be blank")
+	@Size(max = 45, message = "Category name is too long")
+	private String categoryName;
 
-    @Size(max = 150, message = "Description is too long")
-    private String categoryDescription;
+	@Size(max = 150, message = "Description is too long")
+	private String categoryDescription;
 }

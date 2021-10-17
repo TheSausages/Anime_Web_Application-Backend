@@ -8,8 +8,8 @@ import javax.persistence.PostPersist;
 @Component
 public class PostListener {
 
-    @PostPersist
-    public void addToNrOfPosts(Post post) {
-        post.getUser().incrementNrOfPosts();
-    }
+	@PostPersist
+	public void addToNrOfPosts(Post post) {
+		post.getUser().incrementNrOfPosts();
+	}
 }

@@ -17,26 +17,26 @@ import java.util.Set;
 @EqualsAndHashCode(callSuper = true)
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class CompleteUserDTO extends SimpleUserDTO {
-    @Valid
-    private Set<AchievementDTO> achievements;
+	@Valid
+	private Set<AchievementDTO> achievements;
 
-    @Valid
-    private Set<AnimeUserInfoDTO> animeUserInfos;
+	@Valid
+	private Set<AnimeUserInfoDTO> animeUserInfos;
 
-    @Valid
-    private Set<ThreadUserStatusDTO> threadUserStatuses;
+	@Valid
+	private Set<ThreadUserStatusDTO> threadUserStatuses;
 
-    @Valid
-    private Set<CompletePostDTO> posts;
+	@Valid
+	private Set<CompletePostDTO> posts;
 
-    public CompleteUserDTO(String userId, String username, int nrOfPosts, int watchTime, long achievementPoints, Set<AchievementDTO> achievements,
-                           Set<AnimeUserInfoDTO> animeUserInfos, Set<ThreadUserStatusDTO> threadUserStatuses, Set<CompletePostDTO> posts) {
-        super(userId, username, nrOfPosts, watchTime, achievementPoints);
+	public CompleteUserDTO(String userId, String username, int nrOfPosts, int watchTime, long achievementPoints, Set<AchievementDTO> achievements,
+	                       Set<AnimeUserInfoDTO> animeUserInfos, Set<ThreadUserStatusDTO> threadUserStatuses, Set<CompletePostDTO> posts) {
+		super(userId, username, nrOfPosts, watchTime, achievementPoints);
 
-        this.achievements = achievements;
-        this.animeUserInfos = animeUserInfos;
-        this.threadUserStatuses = threadUserStatuses;
-        this.posts = posts;
-    }
+		this.achievements = achievements;
+		this.animeUserInfos = animeUserInfos;
+		this.threadUserStatuses = threadUserStatuses;
+		this.posts = posts;
+	}
 
 }

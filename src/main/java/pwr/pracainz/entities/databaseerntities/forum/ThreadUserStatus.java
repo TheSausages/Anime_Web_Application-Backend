@@ -16,25 +16,25 @@ import java.util.Objects;
 @Table(name = "ThreadUserStatus")
 @Entity
 public class ThreadUserStatus {
-    @EmbeddedId
-    private ThreadUserStatusId threadUserStatusId;
+	@EmbeddedId
+	private ThreadUserStatusId threadUserStatusId;
 
-    @ColumnDefault("false")
-    private boolean isWatching;
+	@ColumnDefault("false")
+	private boolean isWatching;
 
-    @ColumnDefault("false")
-    private boolean isBlocked;
+	@ColumnDefault("false")
+	private boolean isBlocked;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ThreadUserStatus that = (ThreadUserStatus) o;
-        return isWatching == that.isWatching && isBlocked == that.isBlocked && Objects.equals(threadUserStatusId, that.threadUserStatusId);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ThreadUserStatus that = (ThreadUserStatus) o;
+		return isWatching == that.isWatching && isBlocked == that.isBlocked && Objects.equals(threadUserStatusId, that.threadUserStatusId);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(isWatching, isBlocked);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(isWatching, isBlocked);
+	}
 }

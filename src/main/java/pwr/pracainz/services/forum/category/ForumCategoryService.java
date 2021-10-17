@@ -16,26 +16,26 @@ import java.util.stream.Collectors;
 @Log4j2
 @Service
 public class ForumCategoryService implements ForumCategoryServiceInterface {
-    private final ForumCategoryRepository categoryRepository;
-    private final DTOConversionInterface<?> dtoConversion;
+	private final ForumCategoryRepository categoryRepository;
+	private final DTOConversionInterface<?> dtoConversion;
 
-    @Autowired
-    ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface<?> dtoConversion) {
-        categoryRepository = forumCategoryRepository;
-        this.dtoConversion = dtoConversion;
-    }
+	@Autowired
+	ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface<?> dtoConversion) {
+		categoryRepository = forumCategoryRepository;
+		this.dtoConversion = dtoConversion;
+	}
 
-    @Override
-    public List<ForumCategoryDTO> getAllCategories() {
-        log.info("Get all Forum Categories");
+	@Override
+	public List<ForumCategoryDTO> getAllCategories() {
+		log.info("Get all Forum Categories");
 
-        return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "categoryName"))
-                .stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
-    }
+		return categoryRepository.findAll(Sort.by(Sort.Direction.ASC, "categoryName"))
+				.stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
+	}
 
-    @Override
-    public ForumCategory findCategoryByIdAndName(int id, String name) {
-        return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(id, name)
-                .orElseThrow(() -> new ObjectNotFoundException("No category with name '" + name + "' and id '" + id + "' found!"));
-    }
+	@Override
+	public ForumCategory findCategoryByIdAndName(int id, String name) {
+		return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(id, name)
+				.orElseThrow(() -> new ObjectNotFoundException("No category with name '" + name + "' and id '" + id + "' found!"));
+	}
 }

@@ -9,25 +9,25 @@ import pwr.pracainz.entities.anime.query.queryElements.QueryElement;
 
 @Getter
 public class Query {
-    private Query() {
-        throw new UnsupportedOperationException();
-    }
+	private Query() {
+		throw new UnsupportedOperationException();
+	}
 
-    public static BodyInserter<JSONObject, ReactiveHttpOutputMessage> fromQueryElement(QueryElement queryElement) {
-        StringBuilder query = new StringBuilder("query(");
-        StringBuilder queryElements = new StringBuilder();
-        JSONObject variables = new JSONObject();
+	public static BodyInserter<JSONObject, ReactiveHttpOutputMessage> fromQueryElement(QueryElement queryElement) {
+		StringBuilder query = new StringBuilder("query(");
+		StringBuilder queryElements = new StringBuilder();
+		JSONObject variables = new JSONObject();
 
-        variables.putAll(queryElement.getVariables());
-        queryElement.getQueryParameters().forEach(query::append);
-        queryElements.append(queryElement.getElementString()).append("\n");
+		variables.putAll(queryElement.getVariables());
+		queryElement.getQueryParameters().forEach(query::append);
+		queryElements.append(queryElement.getElementString()).append("\n");
 
-        query.delete(query.length() - 2, query.length()).append(") {\n").append(queryElements).append("}");
+		query.delete(query.length() - 2, query.length()).append(") {\n").append(queryElements).append("}");
 
-        JSONObject queryJson = new JSONObject();
-        queryJson.put("query", query);
-        queryJson.put("variables", variables.toJSONString());
+		JSONObject queryJson = new JSONObject();
+		queryJson.put("query", query);
+		queryJson.put("variables", variables.toJSONString());
 
-        return BodyInserters.fromValue(queryJson);
-    }
+		return BodyInserters.fromValue(queryJson);
+	}
 }

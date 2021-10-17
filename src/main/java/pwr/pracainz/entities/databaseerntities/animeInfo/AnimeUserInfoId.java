@@ -18,23 +18,23 @@ import java.util.Objects;
 @AllArgsConstructor
 public class AnimeUserInfoId implements Serializable {
 
-    @ManyToOne
-    @JoinColumn(name = "userId")
-    private User user;
+	@ManyToOne
+	@JoinColumn(name = "userId")
+	private User user;
 
-    @Positive
-    private int animeId;
+	@Positive
+	private int animeId;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        AnimeUserInfoId that = (AnimeUserInfoId) o;
-        return animeId == that.animeId && Objects.equals(user, that.user);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		AnimeUserInfoId that = (AnimeUserInfoId) o;
+		return animeId == that.animeId && Objects.equals(user, that.user);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, animeId);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(user, animeId);
+	}
 }

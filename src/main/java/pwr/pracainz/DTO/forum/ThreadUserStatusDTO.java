@@ -15,13 +15,13 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ThreadUserStatusDTO {
-    @NotNull(message = "Thread User Status id cannot be null")
-    @Valid
-    private ThreadUserStatusIdDTO ids;
+	@NotNull(message = "Thread User Status id cannot be null")
+	@Valid
+	private ThreadUserStatusIdDTO ids;
 
-    @JsonProperty(value = "isWatching")
-    private boolean isWatching;
+	@JsonProperty(value = "isWatching")
+	private boolean isWatching;
 
-    @JsonProperty(value = "isBlocked")
-    private boolean isBlocked;
+	@JsonProperty(value = "isBlocked")
+	private boolean isBlocked;
 }

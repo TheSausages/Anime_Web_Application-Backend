@@ -27,66 +27,66 @@ import java.util.Set;
 @Entity
 @EntityListeners({NrOfPostsAchievementsListener.class, PostListener.class})
 public class Post {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int postId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int postId;
 
-    @Length(max = 45)
-    @NotEmpty
-    private String title;
+	@Length(max = 45)
+	@NotEmpty
+	private String title;
 
-    @Length(max = 600)
-    @NotEmpty
-    private String postText;
+	@Length(max = 600)
+	@NotEmpty
+	private String postText;
 
-    @ColumnDefault("false")
-    private boolean isBlocked;
+	@ColumnDefault("false")
+	private boolean isBlocked;
 
-    @ColumnDefault("0")
-    @Min(value = 0)
-    private int nrOfPlus;
+	@ColumnDefault("0")
+	@Min(value = 0)
+	private int nrOfPlus;
 
-    @ColumnDefault("0")
-    @Min(value = 0)
-    private int nrOfMinus;
+	@ColumnDefault("0")
+	@Min(value = 0)
+	private int nrOfMinus;
 
-    @ColumnDefault("0")
-    @Min(value = 0)
-    private int nrOfReports;
+	@ColumnDefault("0")
+	@Min(value = 0)
+	private int nrOfReports;
 
-    private LocalDateTime creation;
+	private LocalDateTime creation;
 
-    private LocalDateTime modification;
+	private LocalDateTime modification;
 
-    @OneToMany(
-            mappedBy = "postUserStatusId.post",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private Set<PostUserStatus> postUserStatuses;
+	@OneToMany(
+			mappedBy = "postUserStatusId.post",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true
+	)
+	private Set<PostUserStatus> postUserStatuses;
 
-    @ManyToOne
-    @JoinColumn(name = "userId", nullable = false)
-    private User user;
+	@ManyToOne
+	@JoinColumn(name = "userId", nullable = false)
+	private User user;
 
-    @ManyToOne
-    @JoinColumn(name = "threadId", nullable = false)
-    private Thread thread;
+	@ManyToOne
+	@JoinColumn(name = "threadId", nullable = false)
+	private Thread thread;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Post post = (Post) o;
-        return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(user, post.user) && Objects.equals(thread, post.thread);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Post post = (Post) o;
+		return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(user, post.user) && Objects.equals(thread, post.thread);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, thread);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, thread);
+	}
 
-    public Set<PostUserStatus> getPostUserStatuses() {
-        return Objects.isNull(postUserStatuses) ? Collections.emptySet() : postUserStatuses;
-    }
+	public Set<PostUserStatus> getPostUserStatuses() {
+		return Objects.isNull(postUserStatuses) ? Collections.emptySet() : postUserStatuses;
+	}
 }

@@ -16,11 +16,11 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostUserStatusIdDTO {
-    @NotNull(message = "User in Post User Status cannot be empty")
-    @Valid
-    private SimpleUserDTO user;
+	@NotNull(message = "User in Post User Status cannot be empty")
+	@Valid
+	private SimpleUserDTO user;
 
-    @NotNull(message = "Post in Post User Status cannot be empty")
-    @Valid
-    private SimplePostDTO post;
+	@NotNull(message = "Post in Post User Status cannot be empty")
+	@Valid
+	private SimplePostDTO post;
 }

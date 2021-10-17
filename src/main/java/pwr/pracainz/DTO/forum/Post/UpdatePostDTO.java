@@ -15,14 +15,14 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdatePostDTO {
-    @Positive(message = "Post Id must be positive!")
-    private int postId;
+	@Positive(message = "Post Id must be positive!")
+	private int postId;
 
-    @NotBlank(message = "Post title cannot be blank")
-    @Size(max = 80, message = "Post title is to long")
-    private String title;
+	@NotBlank(message = "Post title cannot be blank")
+	@Size(max = 80, message = "Post title is to long")
+	private String title;
 
-    @NotBlank(message = "Post text cannot be blank")
-    @Size(max = 600, message = "Post text is to long")
-    private String text;
+	@NotBlank(message = "Post text cannot be blank")
+	@Size(max = 600, message = "Post text is to long")
+	private String text;
 }

@@ -15,36 +15,36 @@ import java.util.Set;
 @Entity
 @Table(name = "ForumCategories")
 public class ForumCategory {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int categoryId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int categoryId;
 
-    @NotEmpty
-    private String categoryName;
+	@NotEmpty
+	private String categoryName;
 
-    private String categoryDescription;
+	private String categoryDescription;
 
-    @OneToMany(mappedBy = "category")
-    private Set<Thread> threads;
+	@OneToMany(mappedBy = "category")
+	private Set<Thread> threads;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ForumCategory that = (ForumCategory) o;
-        return categoryId == that.categoryId && Objects.equals(categoryName, that.categoryName) && Objects.equals(categoryDescription, that.categoryDescription) && Objects.equals(threads, that.threads);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ForumCategory that = (ForumCategory) o;
+		return categoryId == that.categoryId && Objects.equals(categoryName, that.categoryName) && Objects.equals(categoryDescription, that.categoryDescription) && Objects.equals(threads, that.threads);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(categoryId, categoryName, categoryDescription, threads);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(categoryId, categoryName, categoryDescription, threads);
+	}
 
-    @Override
-    public String toString() {
-        return "ForumCategory \n" +
-                "   categoryId=" + categoryId + "\n" +
-                "   categoryName='" + categoryName + "\n" +
-                "   categoryDescription='" + categoryDescription;
-    }
+	@Override
+	public String toString() {
+		return "ForumCategory \n" +
+				"   categoryId=" + categoryId + "\n" +
+				"   categoryName='" + categoryName + "\n" +
+				"   categoryDescription='" + categoryDescription;
+	}
 }

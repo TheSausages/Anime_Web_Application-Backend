@@ -27,76 +27,76 @@ import java.util.List;
 @RestController
 @RequestMapping("/forum")
 public class ForumController {
-    private final ForumCategoryServiceInterface categoryService;
-    private final ThreadServiceInterface threadService;
-    private final PostServiceInterface postService;
-    private final TagServiceInterface tagService;
+	private final ForumCategoryServiceInterface categoryService;
+	private final ThreadServiceInterface threadService;
+	private final PostServiceInterface postService;
+	private final TagServiceInterface tagService;
 
-    @Autowired
-    ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService, PostServiceInterface postService, TagServiceInterface tagService) {
-        this.categoryService = forumCategoryServiceInterface;
-        this.threadService = threadService;
-        this.postService = postService;
-        this.tagService = tagService;
-    }
+	@Autowired
+	ForumController(ForumCategoryServiceInterface forumCategoryServiceInterface, ThreadServiceInterface threadService, PostServiceInterface postService, TagServiceInterface tagService) {
+		this.categoryService = forumCategoryServiceInterface;
+		this.threadService = threadService;
+		this.postService = postService;
+		this.tagService = tagService;
+	}
 
-    @GetMapping("/tags")
-    public List<TagDTO> getTags() {
-        return tagService.getAllTags();
-    }
+	@GetMapping("    ags")
+	public List<TagDTO> getTags() {
+		return tagService.getAllTags();
+	}
 
-    @GetMapping("/categories")
-    public List<ForumCategoryDTO> getForumCategories() {
-        return categoryService.getAllCategories();
-    }
+	@GetMapping("/categories")
+	public List<ForumCategoryDTO> getForumCategories() {
+		return categoryService.getAllCategories();
+	}
 
-    @PostMapping("/search/{page}")
-    public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int page, @RequestBody @Valid ForumQuery query) {
-        return threadService.searchThreads(page, query);
-    }
+	@PostMapping("/search/{page}")
+	public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int page, @RequestBody @Valid ForumQuery query) {
+		return threadService.searchThreads(page, query);
+	}
 
-    @GetMapping("/thread/newest/{page}")
-    public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int page) {
-        return threadService.getNewestThreads(page);
-    }
+	@GetMapping("    hread/newest/{page}")
+	public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int page) {
+		return threadService.getNewestThreads(page);
+	}
 
-    @GetMapping("/thread/{id}")
-    public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
-        return threadService.getThreadById(id);
-    }
+	@GetMapping("    hread/{id}")
+	public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
+		return threadService.getThreadById(id);
+	}
 
-    @GetMapping("/thread/{threadId}/posts/{page}")
-    public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
-                                                         @PathVariable @Positive int page) {
-        return postService.findPostsByThread(page, threadId);
-    }
+	@GetMapping("    hread/{threadId}/posts/{page}")
+	public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
+	                                                     @PathVariable @Positive int page) {
+		return postService.findPostsByThread(page, threadId);
+	}
 
-    @PutMapping("/post/{id}")
-    public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int id,
-                                                  @RequestBody @Valid PostUserStatusDTO status) {
-        return postService.updatePostUserStatus(id, status);
-    }
+	@PutMapping("/post/{id}")
+	public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int id,
+	                                              @RequestBody @Valid PostUserStatusDTO status) {
+		return postService.updatePostUserStatus(id, status);
+	}
 
-    @PostMapping("/thread/{threadId}/post")
-    public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
-                                                        @RequestBody @Valid CreatePostDTO post) {
-        return postService.createPostForThread(threadId, post);
-    }
+	@PostMapping("    hread/{threadId}/post")
+	public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
+	                                                    @RequestBody @Valid CreatePostDTO post) {
+		return postService.createPostForThread(threadId, post);
+	}
 
-    @PutMapping("/thread/{threadId}/post")
-    public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
-                                               @RequestBody @Valid UpdatePostDTO post) {
-        return postService.updatePostForThread(threadId, post);
-    }
+	@PutMapping("    hread/{threadId}/post")
+	public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
+	                                           @RequestBody @Valid UpdatePostDTO post) {
+		return postService.updatePostForThread(threadId, post);
+	}
 
-    @PostMapping("/thread")
-    public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
-        return threadService.createThread(newThread);
-    }
+	@PostMapping("    hread")
+	public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
+		return threadService.createThread(newThread);
+	}
 
-    @PutMapping("/thread/{threadId}")
-    public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
-                                          @RequestBody @Valid UpdateThreadDTO thread) {
-        return threadService.updateThread(threadId, thread);
-    }
+	@PutMapping("    hread/{threadId}")
+	public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
+	                                      @RequestBody @Valid UpdateThreadDTO thread) {
+		return threadService.updateThread(threadId, thread);
+	}
 }

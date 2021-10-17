@@ -11,23 +11,23 @@ import java.util.Map;
 @Log4j2
 @Component
 public class CustomErrorAttributes extends DefaultErrorAttributes {
-    @Override
-    public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
-        Map<String, Object> errorInformation = super.getErrorAttributes(webRequest, options);
+	@Override
+	public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
+		Map<String, Object> errorInformation = super.getErrorAttributes(webRequest, options);
 
-        log.error(String.format("An error occurred with message: %s on path: %s (%s %s)",
-                errorInformation.get("message"),
-                errorInformation.get("path"),
-                errorInformation.get("status"),
-                errorInformation.get("error")
-        ));
+		log.error(String.format("An error occurred with message: %s on path: %s (%s %s)",
+				errorInformation.get("message"),
+				errorInformation.get("path"),
+				errorInformation.get("status"),
+				errorInformation.get("error")
+		));
 
-        errorInformation.remove("timestamp");
-        errorInformation.remove("error");
-        errorInformation.remove("path");
+		errorInformation.remove("timestamp");
+		errorInformation.remove("error");
+		errorInformation.remove("path");
 
-        errorInformation.putIfAbsent("message", "No error message available! Please contact the administration");
+		errorInformation.putIfAbsent("message", "No error message available! Please contact the administration");
 
-        return errorInformation;
-    }
+		return errorInformation;
+	}
 }

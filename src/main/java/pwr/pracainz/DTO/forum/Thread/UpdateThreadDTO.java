@@ -18,15 +18,15 @@ import java.util.List;
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class UpdateThreadDTO extends CreateThreadDTO {
-    @Positive(message = "Thread Id must be positive")
-    private int threadId;
+	@Positive(message = "Thread Id must be positive")
+	private int threadId;
 
-    @NotNull(message = "Status cannot be null")
-    private ThreadStatus status;
+	@NotNull(message = "Status cannot be null")
+	private ThreadStatus status;
 
-    public UpdateThreadDTO(int threadId, String title, String text, ForumCategoryDTO category, List<TagDTO> tags, ThreadStatus status) {
-        super(title, text, category, tags);
-        this.threadId = threadId;
-        this.status = status;
-    }
+	public UpdateThreadDTO(int threadId, String title, String text, ForumCategoryDTO category, List<TagDTO> tags, ThreadStatus status) {
+		super(title, text, category, tags);
+		this.threadId = threadId;
+		this.status = status;
+	}
 }

@@ -22,52 +22,52 @@ import static pwr.pracainz.utils.UserAuthorizationUtilities.checkIfLoggedUser;
 @Log4j2
 @Service
 public class AnimeUserService implements AnimeUserServiceInterface {
-    private final DTOConversionInterface<?> dtoConversion;
-    private final DTODeconversionInterface dtoDeconversion;
-    private final UserServiceInterface userService;
-    private final AnimeUserInfoRepository animeUserInfoRepository;
-    private final ReviewRepository reviewRepository;
+	private final DTOConversionInterface<?> dtoConversion;
+	private final DTODeconversionInterface dtoDeconversion;
+	private final UserServiceInterface userService;
+	private final AnimeUserInfoRepository animeUserInfoRepository;
+	private final ReviewRepository reviewRepository;
 
-    @Autowired
-    AnimeUserService(DTOConversionInterface<?> dtoConversion, DTODeconversionInterface dtoDeconversion, UserServiceInterface userService, AnimeUserInfoRepository animeUserInfoRepository, ReviewRepository reviewRepository) {
-        this.dtoConversion = dtoConversion;
-        this.dtoDeconversion = dtoDeconversion;
-        this.userService = userService;
-        this.animeUserInfoRepository = animeUserInfoRepository;
-        this.reviewRepository = reviewRepository;
-    }
+	@Autowired
+	AnimeUserService(DTOConversionInterface<?> dtoConversion, DTODeconversionInterface dtoDeconversion, UserServiceInterface userService, AnimeUserInfoRepository animeUserInfoRepository, ReviewRepository reviewRepository) {
+		this.dtoConversion = dtoConversion;
+		this.dtoDeconversion = dtoDeconversion;
+		this.userService = userService;
+		this.animeUserInfoRepository = animeUserInfoRepository;
+		this.reviewRepository = reviewRepository;
+	}
 
-    @Override
-    public AnimeUserInfoDTO getCurrentUserAnimeInfo(int animeId) {
-        AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUserOrInsert(), animeId);
+	@Override
+	public AnimeUserInfoDTO getCurrentUserAnimeInfo(int animeId) {
+		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUserOrInsert(), animeId);
 
-        return animeUserInfoRepository
-                .findById(animeUserInfoId)
-                .map(dtoConversion::convertToDTO)
-                .orElse(dtoConversion.convertToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
-    }
+		return animeUserInfoRepository
+				.findById(animeUserInfoId)
+				.map(dtoConversion::convertToDTO)
+				.orElse(dtoConversion.convertToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
+	}
 
-    @Override
-    public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
-        if (!checkIfLoggedUser()) {
-            throw new AuthenticationException("You are not logged in!");
-        }
+	@Override
+	public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
+		if (!checkIfLoggedUser()) {
+			throw new AuthenticationException("You are not logged in!");
+		}
 
-        User currUser = userService.getCurrentUserOrInsert();
-        AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
+		User currUser = userService.getCurrentUserOrInsert();
+		AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 
-        if (Objects.nonNull(requestUserId) && !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
-            throw new AuthenticationException("Updating your anime information was not successful - please try again");
-        }
+		if (Objects.nonNull(requestUserId) && !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
+			throw new AuthenticationException("Updating your anime information was not successful - please try again");
+		}
 
-        log.info("Update Anime data for User: {}", currUser.getUserId());
+		log.info("Update Anime data for User: {}", currUser.getUserId());
 
-        AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, animeUserInfoDTO.getId().getAnimeId());
+		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, animeUserInfoDTO.getId().getAnimeId());
 
-        AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
-                .map(animeUserInfo -> animeUserInfo.copyDataFromDTO(animeUserInfoDTO))
-                .orElse(dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId));
+		AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
+				.map(animeUserInfo -> animeUserInfo.copyDataFromDTO(animeUserInfoDTO))
+				.orElse(dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId));
 
-        return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
-    }
+		return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
+	}
 }

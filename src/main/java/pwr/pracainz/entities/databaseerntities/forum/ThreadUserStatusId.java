@@ -19,27 +19,27 @@ import java.util.Objects;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ThreadUserStatusId implements Serializable {
-    @NotEmpty
-    @ManyToOne
-    @JoinColumn(name = "UserID")
-    private User user;
+	@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "UserID")
+	private User user;
 
-    @NotEmpty
-    @ManyToOne
-    @JoinColumn(name = "threadId")
-    private Thread thread;
+	@NotEmpty
+	@ManyToOne
+	@JoinColumn(name = "threadId")
+	private Thread thread;
 
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        ThreadUserStatusId that = (ThreadUserStatusId) o;
-        return Objects.equals(user, that.user) && Objects.equals(thread, that.thread);
-    }
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		ThreadUserStatusId that = (ThreadUserStatusId) o;
+		return Objects.equals(user, that.user) && Objects.equals(thread, that.thread);
+	}
 
-    @Override
-    public int hashCode() {
-        return Objects.hash(user, thread);
-    }
+	@Override
+	public int hashCode() {
+		return Objects.hash(user, thread);
+	}
 }

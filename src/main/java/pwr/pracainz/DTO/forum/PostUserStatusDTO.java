@@ -15,16 +15,16 @@ import javax.validation.constraints.NotNull;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class PostUserStatusDTO {
-    @NotNull(message = "Post User Status id cannot be null")
-    @Valid
-    private PostUserStatusIdDTO ids;
+	@NotNull(message = "Post User Status id cannot be null")
+	@Valid
+	private PostUserStatusIdDTO ids;
 
-    @JsonProperty(value = "isLiked")
-    private boolean isLiked;
+	@JsonProperty(value = "isLiked")
+	private boolean isLiked;
 
-    @JsonProperty(value = "isDisliked")
-    private boolean isDisliked;
+	@JsonProperty(value = "isDisliked")
+	private boolean isDisliked;
 
-    @JsonProperty(value = "isReported")
-    private boolean isReported;
+	@JsonProperty(value = "isReported")
+	private boolean isReported;
 }

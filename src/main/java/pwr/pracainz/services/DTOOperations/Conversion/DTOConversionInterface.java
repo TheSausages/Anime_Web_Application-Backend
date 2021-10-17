@@ -24,41 +24,41 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
 public interface DTOConversionInterface<T> {
-    PageDTO<T> convertToDTO(Page<T> page);
+	PageDTO<T> convertToDTO(Page<T> page);
 
-    CompleteUserDTO convertToDTO(User user);
+	CompleteUserDTO convertToDTO(User user);
 
-    SimpleUserDTO convertToSimpleDTO(User user);
+	SimpleUserDTO convertToSimpleDTO(User user);
 
-    AchievementDTO convertToDTO(Achievement achievement);
+	AchievementDTO convertToDTO(Achievement achievement);
 
-    SimplePostDTO convertToSimpleDTO(Post post);
+	SimplePostDTO convertToSimpleDTO(Post post);
 
-    CompletePostDTO convertToDTO(Post post);
+	CompletePostDTO convertToDTO(Post post);
 
-    CompletePostDTO convertToDTO(Post post, PostUserStatus status);
+	CompletePostDTO convertToDTO(Post post, PostUserStatus status);
 
-    SimpleThreadDTO convertToSimpleDTO(Thread thread);
+	SimpleThreadDTO convertToSimpleDTO(Thread thread);
 
-    CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts);
+	CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts);
 
-    ForumCategoryDTO convertToDTO(ForumCategory forumCategory);
+	ForumCategoryDTO convertToDTO(ForumCategory forumCategory);
 
-    TagDTO convertToDTO(Tag tag);
+	TagDTO convertToDTO(Tag tag);
 
-    ReviewDTO convertToDTO(Review review);
+	ReviewDTO convertToDTO(Review review);
 
-    AnimeUserInfoDTO convertToDTO(AnimeUserInfo animeUserInfo);
+	AnimeUserInfoDTO convertToDTO(AnimeUserInfo animeUserInfo);
 
-    AnimeUserInfoIdDTO convertToDTO(AnimeUserInfoId animeUserInfoId);
+	AnimeUserInfoIdDTO convertToDTO(AnimeUserInfoId animeUserInfoId);
 
-    ThreadUserStatusIdDTO convertToDTO(ThreadUserStatusId threadUserStatusId);
+	ThreadUserStatusIdDTO convertToDTO(ThreadUserStatusId threadUserStatusId);
 
-    ThreadUserStatusDTO convertToDTO(ThreadUserStatus threadUserStatus);
+	ThreadUserStatusDTO convertToDTO(ThreadUserStatus threadUserStatus);
 
-    PostUserStatusIdDTO convertToDTO(PostUserStatusId postUserStatusId);
+	PostUserStatusIdDTO convertToDTO(PostUserStatusId postUserStatusId);
 
-    PostUserStatusDTO convertToDTO(PostUserStatus postUserStatus);
+	PostUserStatusDTO convertToDTO(PostUserStatus postUserStatus);
 
-    AuthenticationTokenDTO convertToDTO(AuthenticationToken authenticationToken);
+	AuthenticationTokenDTO convertToDTO(AuthenticationToken authenticationToken);
 }

@@ -9,5 +9,4 @@ class PracaInzynierskaApplicationTests {
 	@Test
 	void contextLoads() {
 	}
-
 }
