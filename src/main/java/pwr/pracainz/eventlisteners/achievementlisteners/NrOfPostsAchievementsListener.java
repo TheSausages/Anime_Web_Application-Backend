@@ -1,12 +1,13 @@
 package pwr.pracainz.eventlisteners.achievementlisteners;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
+import pwr.pracainz.entities.AchievementEarnedEvent;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.repositories.user.AchievementRepository;
-import pwr.pracainz.services.achievement.AchievementServiceInterface;
 
 import javax.persistence.PostPersist;
 import java.util.Objects;
@@ -14,12 +15,12 @@ import java.util.Objects;
 @Component
 public class NrOfPostsAchievementsListener {
 	private static AchievementRepository achievementRepository;
-	private static AchievementServiceInterface achievementService;
+	private static ApplicationEventPublisher publisher;
 
 	@Autowired
-	public void setAchievementRepository(AchievementRepository achievementRepository, AchievementServiceInterface achievementService) {
+	public void setAchievementRepository(AchievementRepository achievementRepository, ApplicationEventPublisher publisher) {
 		NrOfPostsAchievementsListener.achievementRepository = achievementRepository;
-		NrOfPostsAchievementsListener.achievementService = achievementService;
+		NrOfPostsAchievementsListener.publisher = publisher;
 	}
 
 	@PostPersist
@@ -36,7 +37,8 @@ public class NrOfPostsAchievementsListener {
 		if (Objects.nonNull(achievement)) {
 			user.addAchievementPoints(achievement.getAchievementPoints());
 			user.getAchievements().add(achievement);
-			achievementService.emitAchievement(achievement);
+
+			publisher.publishEvent(new AchievementEarnedEvent(achievement));
 		}
 	}
 }
