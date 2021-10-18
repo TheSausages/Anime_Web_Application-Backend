@@ -1,9 +1,8 @@
 - when clicking button, make it load
 - better min/max itp for yups
-- Add achievements (front)
 - Add user profile (front)
 - Add anime statistics for this app (ex. favourites and average Score) (back)
-- Add more variables as properties
+- Add more variables as properties (front + back)
 - set setValueOptions as global constant (front)
 - Write Tests for backend and frontend
 - make backend calls cancelable (front)
