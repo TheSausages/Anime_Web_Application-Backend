@@ -24,6 +24,7 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,14 +43,14 @@ public class DTOConversion implements DTOConversionInterface {
 	}
 
 	@Override
-	public CompleteUserDTO convertToDTO(User user) {
+	public CompleteUserDTO convertToDTO(User user, Set<AchievementDTO> achievements) {
 		return new CompleteUserDTO(
 				user.getUserId(),
 				user.getUsername(),
 				user.getNrOfPosts(),
 				user.getWatchTime(),
 				user.getAchievementPoints(),
-				user.getAchievements().stream().map(this::convertToDTO).collect(Collectors.toSet()),
+				achievements,
 				user.getAnimeUserInfo().stream().map(this::convertToDTO).collect(Collectors.toSet()),
 				user.getThreadUserStatuses().stream().map(this::convertToDTO).collect(Collectors.toSet()),
 				user.getPosts().stream().map(this::convertToDTO).collect(Collectors.toSet())
@@ -68,12 +69,12 @@ public class DTOConversion implements DTOConversionInterface {
 	}
 
 	@Override
-	public AchievementDTO convertToDTO(Achievement achievement) {
+	public AchievementDTO convertToDTO(Achievement achievement, byte[] icon) {
 		return new AchievementDTO(
 				achievement.getAchievementId(),
 				achievement.getName(),
 				achievement.getDescription(),
-				achievement.getIconPath(),
+				icon,
 				achievement.getAchievementPoints(),
 				achievement.getUsers().size()
 		);

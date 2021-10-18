@@ -12,6 +12,7 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.exceptions.exceptions.AchievementException;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
+import pwr.pracainz.services.icon.IconServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
@@ -22,12 +23,14 @@ import java.io.IOException;
 public class AchievementService implements AchievementServiceInterface {
 	private final DTOConversion dtoConversion;
 	private final UserServiceInterface userService;
+	private final IconServiceInterface iconService;
 	private final SseEmitter emitter;
 
 	@Autowired
-	AchievementService(DTOConversion dtoConversion, UserServiceInterface userService) {
+	AchievementService(DTOConversion dtoConversion, UserServiceInterface userService, IconServiceInterface iconService) {
 		this.dtoConversion = dtoConversion;
 		this.userService = userService;
+		this.iconService = iconService;
 
 		SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
 		emitter.onCompletion(() -> log.info("Achievement emitter ended"));
@@ -69,7 +72,7 @@ public class AchievementService implements AchievementServiceInterface {
 		try {
 			emitter.send(SseEmitter.event()
 					.name(earnedAchievement.getName())
-					.data(dtoConversion.convertToDTO(earnedAchievement), MediaType.APPLICATION_JSON));
+					.data(dtoConversion.convertToDTO(earnedAchievement, iconService.getAchievementIcon(earnedAchievement)), MediaType.APPLICATION_JSON));
 
 			log.info("Achievement '{}' successfully emitted to user {}", earnedAchievement.getName(), userService.getUsernameOfCurrentUser());
 		} catch (IOException ex) {

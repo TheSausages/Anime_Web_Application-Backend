@@ -24,7 +24,7 @@ CREATE TABLE `Achievements`
     `AchievementID`     int          NOT NULL auto_increment,
     `Name`              varchar(45)  NOT NULL,
     `Description`       varchar(600) NOT NULL DEFAULT 'No Description given',
-    `IconPath`          varchar(45)  NOT NULL,
+    `IconPath`          varchar(100) NOT NULL,
     `AchievementPoints` int          NOT NULL DEFAULT 10,
 
     PRIMARY KEY (`AchievementID`)

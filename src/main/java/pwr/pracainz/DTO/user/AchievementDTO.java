@@ -6,10 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 
-import javax.validation.constraints.Min;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
 @Data
 @NoArgsConstructor
@@ -27,9 +24,11 @@ public class AchievementDTO {
 	@Size(max = 600, message = "Achievement description is too long")
 	String description;
 
-	@NotBlank(message = "Icon path for achievement not found")
-	@Size(max = 45, message = "Icon path for achievement is too long")
-	String iconPath;
+	//@NotBlank(message = "Icon path for achievement not found")
+	//@Size(max = 45, message = "Icon path for achievement is too long")
+	//String iconPath;
+	@NotNull(message = "Achievement should have an icon")
+	byte[] achievementIcon;
 
 	@Positive(message = "Achievement points cannot be negative")
 	int achievementPoints;

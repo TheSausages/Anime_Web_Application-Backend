@@ -1,3 +1,4 @@
+- when clicking button, make it load
 - better min/max itp for yups
 - Add achievements (front)
 - Add user profile (front)

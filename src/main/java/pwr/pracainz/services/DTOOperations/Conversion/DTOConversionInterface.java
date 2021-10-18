@@ -23,14 +23,16 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
+import java.util.Set;
+
 public interface DTOConversionInterface {
 	<T> PageDTO<T> convertToDTO(Page<T> page);
 
-	CompleteUserDTO convertToDTO(User user);
+	CompleteUserDTO convertToDTO(User user, Set<AchievementDTO> achievements);
 
 	SimpleUserDTO convertToSimpleDTO(User user);
 
-	AchievementDTO convertToDTO(Achievement achievement);
+	AchievementDTO convertToDTO(Achievement achievement, byte[] icon);
 
 	SimplePostDTO convertToSimpleDTO(Post post);
 
