@@ -5,7 +5,9 @@ import pwr.pracainz.entities.AchievementEarnedEvent;
 
 
 public interface AchievementServiceInterface {
-	SseEmitter achievementEmitter();
+	SseEmitter subscribe();
+
+	void cancel();
 
 	void emitAchievement(AchievementEarnedEvent event);
 }
