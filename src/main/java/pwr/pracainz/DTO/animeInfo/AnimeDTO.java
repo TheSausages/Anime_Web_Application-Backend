@@ -18,7 +18,7 @@ public class AnimeDTO {
 	private int animeId;
 
 	@Min(value = 0, message = "Average score cannot be negative")
-	private int averageScore;
+	private double averageScore;
 
 	@Min(value = 0, message = "Nr. of favourites cannot be negative")
 	private int nrOfFavourites;

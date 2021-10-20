@@ -67,6 +67,10 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
 		log.info("Update Anime data for User: {}", currUser.getUserId());
 
+		if (Objects.nonNull(animeUserInfoDTO.getGrade())) {
+			anime.updateAverageScore(animeUserInfoDTO.getGrade());
+		}
+
 		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, anime);
 
 		AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
