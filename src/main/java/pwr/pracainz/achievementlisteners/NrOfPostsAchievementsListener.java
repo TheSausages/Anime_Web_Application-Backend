@@ -1,4 +1,4 @@
-package pwr.pracainz.eventlisteners.achievementlisteners;
+package pwr.pracainz.achievementlisteners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

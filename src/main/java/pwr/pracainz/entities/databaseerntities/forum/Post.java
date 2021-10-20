@@ -5,9 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.validator.constraints.Length;
+import pwr.pracainz.achievementlisteners.NrOfPostsAchievementsListener;
 import pwr.pracainz.entities.databaseerntities.user.User;
-import pwr.pracainz.eventlisteners.PostListener;
-import pwr.pracainz.eventlisteners.achievementlisteners.NrOfPostsAchievementsListener;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
@@ -25,7 +24,7 @@ import java.util.Set;
 @Setter
 @Table(name = "Posts")
 @Entity
-@EntityListeners({NrOfPostsAchievementsListener.class, PostListener.class})
+@EntityListeners({NrOfPostsAchievementsListener.class})
 public class Post {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

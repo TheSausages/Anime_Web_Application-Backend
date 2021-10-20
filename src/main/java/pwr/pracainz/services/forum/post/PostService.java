@@ -129,8 +129,11 @@ public class PostService implements PostServiceInterface {
 		log.info("Create post for thread with id {}(id: {}) created by user {}", thread.getTitle(), threadId, currUser.getUsername());
 
 		Post post = dtoDeconversion.convertFromDTO(createPost);
+
 		post.setUser(currUser);
 		post.setThread(thread);
+
+		post.getUser().incrementNrOfPosts();
 
 		postRepository.save(post);
 
