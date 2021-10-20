@@ -1,6 +1,7 @@
 package pwr.pracainz.services.anime.Anime;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import pwr.pracainz.DTO.animeInfo.AnimeQuery;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaSeason;
 
 public interface AnimeServiceInterface {
@@ -15,4 +16,6 @@ public interface AnimeServiceInterface {
 	ObjectNode getTopAnimeAllTime(int pageNumber);
 
 	ObjectNode getAnimeById(int id);
+
+	ObjectNode searchByQuery(AnimeQuery query);
 }

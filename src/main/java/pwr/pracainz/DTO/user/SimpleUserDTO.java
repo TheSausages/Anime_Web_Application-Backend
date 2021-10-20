@@ -15,18 +15,18 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class SimpleUserDTO {
-	@Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}")
+	@Pattern(regexp = "\\w{8}-\\w{4}-\\w{4}-\\w{4}-\\w{12}", message = "User id doesnt have the correct structure")
 	private String userId;
 
-	@Size(max = 45)
+	@Size(max = 45, message = "Username is too long")
 	private String username;
 
-	@Min(0)
+	@Min(value = 0, message = "Nr of posts cannot be negative")
 	private int nrOfPosts;
 
-	@Min(0)
+	@Min(value = 0, message = "Watch time cannot be negative")
 	private int watchTime;
 
-	@Min(0)
+	@Min(value = 0, message = "Achievement points cannot be negative")
 	private long achievementPoints;
 }

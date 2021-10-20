@@ -44,13 +44,13 @@ public class ForumQuery {
 	@Min(value = 0, message = "Maximal number of posts cannot be negative")
 	private int minNrOfPosts = 0;
 
-	private ForumCategory category;
+	private ForumCategory category = null;
 
 	private String title = "";
 
 	private String creatorUsername = "";
 
-	private ThreadStatus status;
+	private ThreadStatus status = null;
 
 	@Valid
 	private List<TagDTO> tags = Collections.emptyList();

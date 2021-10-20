@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
+import pwr.pracainz.DTO.animeInfo.AnimeQuery;
 import pwr.pracainz.configuration.properties.AnilistProperties;
 import pwr.pracainz.entities.anime.query.Query;
 import pwr.pracainz.entities.anime.query.parameters.FieldParameters;
@@ -25,7 +26,10 @@ import pwr.pracainz.entities.anime.query.queryElements.Media.Field;
 import pwr.pracainz.entities.anime.query.queryElements.Media.Media;
 import pwr.pracainz.entities.anime.query.queryElements.Page.Page;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
+import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
+import pwr.pracainz.repositories.animeInfo.AnimeRepository;
+import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 import reactor.core.publisher.Mono;
@@ -37,13 +41,21 @@ import java.util.Collections;
 @Service
 public class AnimeService implements AnimeServiceInterface {
 	private final AnilistProperties anilistProperties;
+	private final AnimeRepository animeRepository;
 	private final AnimeUserServiceInterface animeUserService;
+	private final DTOConversionInterface dtoConversion;
 	private final WebClient client;
 	private final ObjectMapper mapper;
 
-	AnimeService(AnilistProperties anilistProperties, AnimeUserServiceInterface animeUserService, ObjectMapper mapper) {
+	AnimeService(AnilistProperties anilistProperties,
+	             AnimeRepository animeRepository,
+	             AnimeUserServiceInterface animeUserService,
+	             DTOConversionInterface dtoConversion,
+	             ObjectMapper mapper) {
 		this.anilistProperties = anilistProperties;
+		this.animeRepository = animeRepository;
 		this.animeUserService = animeUserService;
+		this.dtoConversion = dtoConversion;
 		this.mapper = mapper;
 
 		client = WebClient.create(anilistProperties.getApiUrl());
@@ -346,13 +358,23 @@ public class AnimeService implements AnimeServiceInterface {
 				.block();
 
 		if (UserAuthorizationUtilities.checkIfLoggedUser() && node != null) {
+			Anime anime = animeRepository.findById(id)
+					.orElseGet(() -> animeRepository.save(new Anime(id)));
+
+			node.set("localAnimeInformation", mapper.valueToTree(dtoConversion.convertToDTO(anime)));
+
 			node.set("animeUserInformation",
 					mapper.valueToTree(
-							animeUserService.getCurrentUserAnimeInfo(id)
+							animeUserService.getCurrentUserAnimeInfo(anime)
 					));
 		}
 
 		return node;
+	}
+
+	@Override
+	public ObjectNode searchByQuery(AnimeQuery query) {
+		return null;
 	}
 
 	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {

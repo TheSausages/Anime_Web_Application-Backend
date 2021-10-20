@@ -41,11 +41,11 @@ public class Achievement {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Achievement that = (Achievement) o;
-		return achievementId == that.achievementId && achievementPoints == that.achievementPoints && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(iconPath, that.iconPath) && Objects.equals(users, that.users);
+		return achievementId == that.achievementId && achievementPoints == that.achievementPoints && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(iconPath, that.iconPath);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(achievementId, name, description, iconPath, achievementPoints, users);
+		return Objects.hash(achievementId, name, description, iconPath, achievementPoints);
 	}
 }

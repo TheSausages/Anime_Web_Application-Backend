@@ -24,9 +24,6 @@ public class AchievementDTO {
 	@Size(max = 600, message = "Achievement description is too long")
 	String description;
 
-	//@NotBlank(message = "Icon path for achievement not found")
-	//@Size(max = 45, message = "Icon path for achievement is too long")
-	//String iconPath;
 	@NotNull(message = "Achievement should have an icon")
 	byte[] achievementIcon;
 

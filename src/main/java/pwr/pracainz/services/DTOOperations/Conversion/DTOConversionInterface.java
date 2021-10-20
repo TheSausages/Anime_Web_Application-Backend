@@ -2,6 +2,7 @@ package pwr.pracainz.services.DTOOperations.Conversion;
 
 import org.springframework.data.domain.Page;
 import pwr.pracainz.DTO.PageDTO;
+import pwr.pracainz.DTO.animeInfo.AnimeDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
@@ -14,6 +15,7 @@ import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
+import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
@@ -31,6 +33,8 @@ public interface DTOConversionInterface {
 	CompleteUserDTO convertToDTO(User user, Set<AchievementDTO> achievements);
 
 	SimpleUserDTO convertToSimpleDTO(User user);
+
+	AnimeDTO convertToDTO(Anime anime);
 
 	AchievementDTO convertToDTO(Achievement achievement, byte[] icon);
 

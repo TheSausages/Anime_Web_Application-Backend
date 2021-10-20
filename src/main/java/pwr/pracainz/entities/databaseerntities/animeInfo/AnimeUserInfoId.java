@@ -6,7 +6,6 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.validation.constraints.Positive;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,19 +21,20 @@ public class AnimeUserInfoId implements Serializable {
 	@JoinColumn(name = "userId")
 	private User user;
 
-	@Positive
-	private int animeId;
+	@ManyToOne
+	@JoinColumn(name = "animeId")
+	private Anime anime;
 
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		AnimeUserInfoId that = (AnimeUserInfoId) o;
-		return animeId == that.animeId && Objects.equals(user, that.user);
+		return Objects.equals(anime, that.anime) && Objects.equals(user, that.user);
 	}
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(user, animeId);
+		return Objects.hash(user, anime);
 	}
 }

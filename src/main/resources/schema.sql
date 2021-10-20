@@ -154,7 +154,18 @@ CREATE TABLE `Reviews`
     `NrOfMinus`   int          NOT NULL DEFAULT 0,
 
     PRIMARY KEY (`ReviewID`)
-) COMMENT='Table containing information about the review of a User';
+) COMMENT ='Table containing information about the review of a User';
+
+CREATE TABLE `Anime`
+(
+    `AnimeID`        int NOT NULL,
+    `AverageScore`   int NOT NULL DEFAULT 0,
+    `NrOfScores`     int NOT NULL DEFAULT 0,
+    `NrOfFavourites` int NOT NULL DEFAULT 0,
+    `NrOfReviews`    int NOT NULL DEFAULT 0,
+
+    PRIMARY KEY (`AnimeID`)
+) COMMENT ='Table containing information about anime not found from Anilist API';
 
 CREATE TABLE `AnimeUserInfos`
 (

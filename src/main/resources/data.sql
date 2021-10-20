@@ -16,6 +16,8 @@ values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');
 Insert into Reviews
 values (1, 'Ayy thats a title', 'Ayyyy thats something', 1, 2, 0);
 
+Insert Into Anime value ('127720', 0, 0, 0, 0);
+
 Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '127720', 'WATCHING', '2021-10-10 00:00:00',
                                   '2021-10-11', 0, false, '2021-07-5', true, 9, 1);
 

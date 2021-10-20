@@ -1,3 +1,6 @@
+- check if all services update all necessary information
+- check if all hashcodes and equesls make sense (backend)
+- add more event listeners (ex. update modification date) (backend)
 - when clicking button, make it load
 - better min/max itp for yups
 - Add user profile (front)

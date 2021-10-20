@@ -3,6 +3,7 @@ package pwr.pracainz.services.DTOOperations.Conversion;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.PageDTO;
+import pwr.pracainz.DTO.animeInfo.AnimeDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.DTO.animeInfo.ReviewDTO;
@@ -15,6 +16,7 @@ import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
+import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Review;
@@ -54,6 +56,16 @@ public class DTOConversion implements DTOConversionInterface {
 				user.getAnimeUserInfo().stream().map(this::convertToDTO).collect(Collectors.toSet()),
 				user.getThreadUserStatuses().stream().map(this::convertToDTO).collect(Collectors.toSet()),
 				user.getPosts().stream().map(this::convertToDTO).collect(Collectors.toSet())
+		);
+	}
+
+	@Override
+	public AnimeDTO convertToDTO(Anime anime) {
+		return new AnimeDTO(
+				anime.getAnimeId(),
+				anime.getAverageScore(),
+				anime.getNrOfFavourites(),
+				anime.getNrOfReviews()
 		);
 	}
 
@@ -206,7 +218,7 @@ public class DTOConversion implements DTOConversionInterface {
 	public AnimeUserInfoIdDTO convertToDTO(AnimeUserInfoId animeUserInfoId) {
 		return new AnimeUserInfoIdDTO(
 				convertToSimpleDTO(animeUserInfoId.getUser()),
-				animeUserInfoId.getAnimeId()
+				convertToDTO(animeUserInfoId.getAnime())
 		);
 	}
 
