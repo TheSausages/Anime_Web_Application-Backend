@@ -17,5 +17,5 @@ public interface AnimeServiceInterface {
 
 	ObjectNode getAnimeById(int id);
 
-	ObjectNode searchByQuery(AnimeQuery query);
+	ObjectNode searchByQuery(AnimeQuery query, int pageNumber);
 }

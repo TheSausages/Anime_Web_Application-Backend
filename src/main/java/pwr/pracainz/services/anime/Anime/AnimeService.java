@@ -21,6 +21,7 @@ import pwr.pracainz.entities.anime.query.parameters.connections.staff.StaffConne
 import pwr.pracainz.entities.anime.query.parameters.connections.staff.StaffSort;
 import pwr.pracainz.entities.anime.query.parameters.fuzzyDate.FuzzyDateField;
 import pwr.pracainz.entities.anime.query.parameters.fuzzyDate.FuzzyDateFieldParameter;
+import pwr.pracainz.entities.anime.query.parameters.fuzzyDate.FuzzyDateValue;
 import pwr.pracainz.entities.anime.query.parameters.media.*;
 import pwr.pracainz.entities.anime.query.queryElements.Media.Field;
 import pwr.pracainz.entities.anime.query.queryElements.Media.Media;
@@ -258,6 +259,111 @@ public class AnimeService implements AnimeServiceInterface {
 	}
 
 	@Override
+	public ObjectNode searchByQuery(AnimeQuery query, int pageNumber) {
+		Field field = Field.getFieldBuilder()
+				.parameter(FieldParameters.id)
+				.coverImage()
+				.title(MediaTitle.getMediaTitleBuilder()
+						.englishLanguage()
+						.nativeLanguage()
+						.romajiLanguage()
+						.buildMediaTitle())
+				.buildField();
+
+		Media.MediaBuilder mediaBuilder = Media.getMediaBuilder(field);
+
+		if (Objects.nonNull(query.getName())) {
+			mediaBuilder.search(query.getName());
+		}
+
+		if (Objects.nonNull(query.getMaxStartDate())) {
+			FuzzyDateValue date = FuzzyDateValue.getFuzzyDateValueBuilder()
+					.fromDate(query.getMaxStartDate())
+					.buildFuzzyDateValue();
+
+			mediaBuilder.startDateLesser(date);
+		}
+
+		if (Objects.nonNull(query.getMinStartDate())) {
+			FuzzyDateValue date = FuzzyDateValue.getFuzzyDateValueBuilder()
+					.fromDate(query.getMinStartDate())
+					.buildFuzzyDateValue();
+
+			mediaBuilder.startDateGreater(date);
+		}
+
+		if (Objects.nonNull(query.getMaxEndDate())) {
+			FuzzyDateValue date = FuzzyDateValue.getFuzzyDateValueBuilder()
+					.fromDate(query.getMaxEndDate())
+					.buildFuzzyDateValue();
+
+			mediaBuilder.endDateLesser(date);
+		}
+
+		if (Objects.nonNull(query.getMinEndDate())) {
+			FuzzyDateValue date = FuzzyDateValue.getFuzzyDateValueBuilder()
+					.fromDate(query.getMinEndDate())
+					.buildFuzzyDateValue();
+
+			mediaBuilder.endDateGreater(date);
+		}
+
+		if (Objects.nonNull(query.getMaxNrOfEpisodes())) {
+			mediaBuilder.episodesLesser(query.getMaxNrOfEpisodes());
+		}
+
+		if (Objects.nonNull(query.getMinNrOfEpisodes())) {
+			mediaBuilder.episodesGreater(query.getMinNrOfEpisodes());
+		}
+
+		if (Objects.nonNull(query.getMaxAverageScore())) {
+			mediaBuilder.averageScoreLesser(query.getMaxAverageScore());
+		}
+
+		if (Objects.nonNull(query.getMinAverageScore())) {
+			mediaBuilder.averageScoreGreater(query.getMinAverageScore());
+		}
+
+		if (Objects.nonNull(query.getSeason())) {
+			mediaBuilder.season(query.getSeason().getSeason());
+			mediaBuilder.seasonYear(query.getSeason().getYear());
+		}
+
+		if (Objects.nonNull(query.getStatus())) {
+			mediaBuilder.status(query.getStatus());
+		}
+
+		if (Objects.nonNull(query.getFormat())) {
+			mediaBuilder.format(query.getFormat());
+		}
+
+		Page page = Page.getPageBuilder(pageNumber, 49)
+				.pageInfo(PageInfo.getPageInfoBuilder()
+						.currentPage()
+						.total()
+						.lastPage()
+						.hasNextPage()
+						.buildPageInfo())
+				.media(Media.getMediaBuilder(field)
+						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.buildMedia())
+				.buildPage();
+
+		return client
+				.post()
+				.headers(httpHeaders -> {
+					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
+					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+				})
+				.body(Query.fromQueryElement(page))
+				.retrieve()
+				.bodyToMono(ObjectNode.class)
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Search query with conditions:"))
+				.block();
+	}
+
+	@Override
 	public ObjectNode getAnimeById(int id) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
@@ -373,11 +479,6 @@ public class AnimeService implements AnimeServiceInterface {
 		}
 
 		return node;
-	}
-
-	@Override
-	public ObjectNode searchByQuery(AnimeQuery query) {
-		return null;
 	}
 
 	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {

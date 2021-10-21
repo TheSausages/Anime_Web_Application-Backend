@@ -1,5 +1,6 @@
 package pwr.pracainz.entities.anime.query.parameters.fuzzyDate;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 import java.time.Year;
@@ -61,6 +62,20 @@ public class FuzzyDateValue {
 
 		public FuzzyDateValueBuilder currentDay() {
 			this.day = LocalDateTime.now().getDayOfMonth();
+			return this;
+		}
+
+		public FuzzyDateValueBuilder fromDate(LocalDateTime date) {
+			this.day = date.getDayOfMonth();
+			this.month = date.getMonthValue();
+			this.year = date.getYear();
+			return this;
+		}
+
+		public FuzzyDateValueBuilder fromDate(LocalDate date) {
+			this.day = date.getDayOfMonth();
+			this.month = date.getMonthValue();
+			this.year = date.getYear();
 			return this;
 		}
 

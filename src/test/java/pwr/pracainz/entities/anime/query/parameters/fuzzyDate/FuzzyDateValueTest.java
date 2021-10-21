@@ -2,6 +2,7 @@ package pwr.pracainz.entities.anime.query.parameters.fuzzyDate;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.Month;
 
@@ -197,5 +198,33 @@ class FuzzyDateValueTest {
 
 		//then
 		assertEquals(fuzzyDateValue.getFuzzyDateNumber(), 20000229);
+	}
+
+	@Test
+	void FuzzyDateValueBuilder_FromLocalDateTime_NoException() {
+		//given
+		LocalDateTime date = LocalDateTime.of(2020, 5, 1, 12, 0);
+
+		//when
+		FuzzyDateValue fuzzyDateValue = FuzzyDateValue.getFuzzyDateValueBuilder()
+				.fromDate(date)
+				.buildFuzzyDateValue();
+
+		//then
+		assertEquals(fuzzyDateValue.getFuzzyDateNumber(), 20200501);
+	}
+
+	@Test
+	void FuzzyDateValueBuilder_FromLocalDate_NoException() {
+		//given
+		LocalDate date = LocalDate.of(2020, 5, 1);
+
+		//when
+		FuzzyDateValue fuzzyDateValue = FuzzyDateValue.getFuzzyDateValueBuilder()
+				.fromDate(date)
+				.buildFuzzyDateValue();
+
+		//then
+		assertEquals(fuzzyDateValue.getFuzzyDateNumber(), 20200501);
 	}
 }

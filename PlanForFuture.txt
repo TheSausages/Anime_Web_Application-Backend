@@ -1,16 +1,15 @@
 - make sure mock data is concise (all data makes sense)
 - check if all services update all necessary information
 - check if all hashcodes and equesls make sense (backend)
+- Add more variables as properties (front + back)
+- add documentation
 - when clicking button, make it load
 - better min/max itp for yups
 - Add user profile (front)
-- Add anime statistics for this app (ex. favourites and average Score) (back)
-- Add more variables as properties (front + back)
-- set setValueOptions as global constant (front)
 - Write Tests for backend and frontend
 - make backend calls cancelable (front)
 - Add user picture (back + front)
-- Add better favoci (front)
+- add sort by for both queries
 - Add Language (a18n) (back + front)
 - Posts as subscription (back + front)
 - Adjust dto to whats needed (back + front)
