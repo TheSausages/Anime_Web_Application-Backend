@@ -203,13 +203,13 @@ public class DTOConversion implements DTOConversionInterface {
 		return new AnimeUserInfoDTO(
 				convertToDTO(animeUserInfo.getAnimeUserInfoId()),
 				animeUserInfo.getStatus(),
-				animeUserInfo.getWatchStartDate() != null ? animeUserInfo.getWatchStartDate() : null,
-				animeUserInfo.getWatchEndDate() != null ? animeUserInfo.getWatchEndDate() : null,
+				animeUserInfo.getWatchStartDate(),
+				animeUserInfo.getWatchEndDate(),
 				animeUserInfo.getNrOfEpisodesSeen(),
 				animeUserInfo.isFavourite(),
 				animeUserInfo.getModification(),
 				animeUserInfo.isDidReview(),
-				animeUserInfo.getGrade() != null ? animeUserInfo.getGrade() : null,
+				animeUserInfo.getGrade(),
 				animeUserInfo.getReview() != null ? convertToDTO(animeUserInfo.getReview()) : null
 		);
 	}

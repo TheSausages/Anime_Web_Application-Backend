@@ -36,6 +36,7 @@ import reactor.core.publisher.Mono;
 
 import java.time.LocalDateTime;
 import java.util.Collections;
+import java.util.Objects;
 
 @Log4j2
 @Service
@@ -357,16 +358,18 @@ public class AnimeService implements AnimeServiceInterface {
 				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
 				.block();
 
-		if (UserAuthorizationUtilities.checkIfLoggedUser() && node != null) {
+		if (Objects.nonNull(node)) {
 			Anime anime = animeRepository.findById(id)
 					.orElseGet(() -> animeRepository.save(new Anime(id)));
 
 			node.set("localAnimeInformation", mapper.valueToTree(dtoConversion.convertToDTO(anime)));
 
-			node.set("animeUserInformation",
-					mapper.valueToTree(
-							animeUserService.getCurrentUserAnimeInfo(anime)
-					));
+			if (UserAuthorizationUtilities.checkIfLoggedUser()) {
+				node.set("animeUserInformation",
+						mapper.valueToTree(
+								animeUserService.getCurrentUserAnimeInfo(anime)
+						));
+			}
 		}
 
 		return node;

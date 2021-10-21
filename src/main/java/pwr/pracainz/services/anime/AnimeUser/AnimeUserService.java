@@ -41,10 +41,11 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	public AnimeUserInfoDTO getCurrentUserAnimeInfo(Anime anime) {
 		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUserOrInsert(), anime);
 
-		return animeUserInfoRepository
-				.findById(animeUserInfoId)
-				.map(dtoConversion::convertToDTO)
-				.orElse(dtoConversion.convertToDTO(AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId)));
+		return dtoConversion.convertToDTO(
+				animeUserInfoRepository
+						.findById(animeUserInfoId)
+						.orElseGet(() -> AnimeUserInfo.getEmptyAnimeUserInfo(animeUserInfoId))
+		);
 	}
 
 	@Override
