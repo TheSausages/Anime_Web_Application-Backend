@@ -44,7 +44,7 @@ public class AnimeController {
 	}
 
 	@PostMapping(value = "/search/{pageNumber}")
-	public ObjectNode searchByQuery(@Valid AnimeQuery query, @PathVariable int pageNumber) {
+	public ObjectNode searchByQuery(@RequestBody @Valid AnimeQuery query, @PathVariable int pageNumber) {
 		return animeService.searchByQuery(query, pageNumber);
 	}
 }

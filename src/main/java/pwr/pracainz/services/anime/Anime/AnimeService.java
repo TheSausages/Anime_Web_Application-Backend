@@ -272,8 +272,8 @@ public class AnimeService implements AnimeServiceInterface {
 
 		Media.MediaBuilder mediaBuilder = Media.getMediaBuilder(field);
 
-		if (Objects.nonNull(query.getName())) {
-			mediaBuilder.search(query.getName());
+		if (Objects.nonNull(query.getTitle()) && !query.getTitle().isEmpty()) {
+			mediaBuilder.search(query.getTitle());
 		}
 
 		if (Objects.nonNull(query.getMaxStartDate())) {
@@ -344,7 +344,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.lastPage()
 						.hasNextPage()
 						.buildPageInfo())
-				.media(Media.getMediaBuilder(field)
+				.media(mediaBuilder
 						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
 						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
 						.buildMedia())
@@ -359,7 +359,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Search query with conditions:"))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Search query with conditions:" + query))
 				.block();
 	}
 

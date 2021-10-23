@@ -13,4 +13,9 @@ import pwr.pracainz.entities.anime.query.parameters.media.MediaSeason;
 public class MediaSeasonYear {
 	private MediaSeason season;
 	private int year;
+
+	@Override
+	public String toString() {
+		return season + " " + year;
+	}
 }
