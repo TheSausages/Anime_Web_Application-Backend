@@ -146,7 +146,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 	public AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO) {
 		return client
 				.post()
-				.uri("    oken")
+				.uri("/token")
 				.headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
 				.body(BodyInserters
 						.fromFormData("client_id", "ClientServer")

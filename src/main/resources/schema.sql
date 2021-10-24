@@ -33,7 +33,7 @@ CREATE TABLE `Achievements`
 CREATE TABLE `UserAchievements`
 (
     `AchievementID` int         NOT NULL,
-    `UserID`        varchar(45) NOT NULL,
+    `UserID`        varchar(36) NOT NULL,
 
     PRIMARY KEY (`UserID`, `AchievementID`),
     KEY `FK_UserAchievements_Achievements` (`AchievementID`),
@@ -70,8 +70,8 @@ CREATE TABLE `Threads`
     `ThreadText`   varchar(600)           NOT NULL DEFAULT 'No Text',
     `Status`       enum ('OPEN','CLOSED') NOT NULL DEFAULT 'OPEN',
     `NrOfPosts`    int                    NOT NULL DEFAULT 0,
-    `creation`     datetime                        DEFAULT CURRENT_TIMESTAMP,
-    `modification` datetime ON UPDATE CURRENT_TIMESTAMP,
+    `creation`     datetime               NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modification` datetime               NOT NULL ON UPDATE CURRENT_TIMESTAMP,
     `CreatorID`    varchar(45)            NOT NULL,
     `CategoryID`   int                    NOT NULL,
 
@@ -94,7 +94,7 @@ CREATE TABLE `ThreadTags`
 
 CREATE TABLE `ThreadUserStatus`
 (
-    `UserID`     varchar(45) NOT NULL,
+    `UserID`     varchar(36) NOT NULL,
     `ThreadID`   int         NOT NULL,
     `IsWatching` boolean     NOT NULL DEFAULT false,
     `IsBlocked`  boolean     NOT NULL DEFAULT false,
@@ -115,9 +115,9 @@ CREATE TABLE `Posts`
     `NrOfPlus`     int          NOT NULL DEFAULT 0,
     `NrOfMinus`    int          NOT NULL DEFAULT 0,
     `NrOfReports`  int          NOT NULL DEFAULT 0,
-    `creation`     datetime              DEFAULT CURRENT_TIMESTAMP,
-    `modification` datetime ON UPDATE CURRENT_TIMESTAMP,
-    `UserID`       varchar(45)  NOT NULL,
+    `creation`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    `modification` datetime     NOT NULL ON UPDATE CURRENT_TIMESTAMP,
+    `UserID`       varchar(36)  NOT NULL,
     `ThreadID`     int          NOT NULL,
 
     PRIMARY KEY (`PostID`),
@@ -129,7 +129,7 @@ CREATE TABLE `Posts`
 
 CREATE TABLE `PostUserStatus`
 (
-    `UserID`     varchar(45) NOT NULL,
+    `UserID`     varchar(36) NOT NULL,
     `PostID`     int         NOT NULL,
     `IsLiked`    boolean     NOT NULL DEFAULT false,
     `IsDisliked` boolean     NOT NULL DEFAULT false,
@@ -169,14 +169,14 @@ CREATE TABLE `Anime`
 
 CREATE TABLE `AnimeUserInfos`
 (
-    `UserID`           varchar(45)                                                          NOT NULL,
+    `UserID`           varchar(36)                                                          NOT NULL,
     `AnimeID`          int                                                                  NOT NULL,
     `Status`           enum ('NO_STATUS','WATCHING', 'COMPLETED','DROPPED','PLAN_TO_WATCH') NOT NULL DEFAULT 'NO_STATUS',
     `WatchStartDate`   date                                                                 NULL,
     `WatchEndDate`     date                                                                 NULL,
     `NrOfEpisodesSeen` smallint                                                             NOT NULL DEFAULT 0,
     `IsFavourite`      boolean                                                              NOT NULL DEFAULT false,
-    `modification`     datetime on update CURRENT_TIMESTAMP,
+    `modification`     datetime                                                             NOT NULL ON UPDATE CURRENT_TIMESTAMP,
     `DidReview`        boolean                                                              NOT NULL DEFAULT false,
     `Grade`            int                                                                  NULL     DEFAULT 5,
     `ReviewID`         int                                                                  NULL,
