@@ -108,7 +108,8 @@ public class ThreadService implements ThreadServiceInterface {
 		log.info("Get thread with id: {}", id);
 
 		return threadRepository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread") + id));
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread", id),
+						"Could not find thread with id: " + id));
 	}
 
 	@Override

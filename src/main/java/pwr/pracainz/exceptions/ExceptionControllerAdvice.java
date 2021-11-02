@@ -54,7 +54,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
-		log.error(ex.getMessage());
+		log.error(ex.getLogMessage());
 
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
