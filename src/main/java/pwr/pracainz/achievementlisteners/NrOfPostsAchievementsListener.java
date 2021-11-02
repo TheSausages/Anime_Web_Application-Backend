@@ -28,7 +28,7 @@ public class NrOfPostsAchievementsListener {
 		User user = post.getUser();
 
 		Achievement achievement = switch (post.getUser().getNrOfPosts()) {
-			case 0 -> achievementRepository.getById(2);
+			case 1 -> achievementRepository.getById(2);
 			case 10 -> achievementRepository.getById(3);
 			case 50 -> achievementRepository.getById(4);
 			default -> null;

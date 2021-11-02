@@ -6,19 +6,26 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import pwr.pracainz.configuration.properties.KeycloakMasterProperties;
 
 @Configuration
 public class KeycloakConfiguration {
+	private final KeycloakMasterProperties keycloakProperties;
+
+	KeycloakConfiguration(KeycloakMasterProperties keycloakProperties) {
+		this.keycloakProperties = keycloakProperties;
+	}
+
 	@Bean
 	Keycloak getKeycloak() {
 		return KeycloakBuilder.builder()
-				.serverUrl("http://localhost:8180/auth")
-				.realm("master")
+				.serverUrl(keycloakProperties.getUrl())
+				.realm(keycloakProperties.getRealm())
 				.grantType(OAuth2Constants.PASSWORD)
-				.username("admin")
-				.password("Password1")
-				.clientId("admin-cli")
-				.clientSecret("0f98645c-da38-44e9-8fce-681f3b69cfc4")
+				.username(keycloakProperties.getUsername())
+				.password(keycloakProperties.getPassword())
+				.clientId(keycloakProperties.getClientId())
+				.clientSecret(keycloakProperties.getClientSecret())
 				.resteasyClient(
 						new ResteasyClientBuilder()
 								.connectionPoolSize(10)

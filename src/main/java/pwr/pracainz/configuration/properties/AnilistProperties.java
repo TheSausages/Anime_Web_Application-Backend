@@ -10,7 +10,6 @@ import org.springframework.boot.context.properties.ConstructorBinding;
 @Getter
 public class AnilistProperties {
 	private final String apiUrl;
-
 	private final String errorMessage;
 
 	public AnilistProperties(String apiUrl, String errorMessage) {

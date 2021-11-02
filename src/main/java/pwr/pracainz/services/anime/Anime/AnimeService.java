@@ -3,6 +3,7 @@ package pwr.pracainz.services.anime.Anime;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -53,16 +54,14 @@ public class AnimeService implements AnimeServiceInterface {
 	             AnimeRepository animeRepository,
 	             AnimeUserServiceInterface animeUserService,
 	             DTOConversionInterface dtoConversion,
-	             ObjectMapper mapper) {
+	             ObjectMapper mapper,
+	             @Qualifier("anilistWebClient") WebClient anilistWenClient) {
 		this.anilistProperties = anilistProperties;
 		this.animeRepository = animeRepository;
 		this.animeUserService = animeUserService;
 		this.dtoConversion = dtoConversion;
 		this.mapper = mapper;
-
-		client = WebClient.create(anilistProperties.getApiUrl());
-
-		//this.populateTagFile();
+		this.client = anilistWenClient;
 	}
 
 	@Override
@@ -510,58 +509,4 @@ public class AnimeService implements AnimeServiceInterface {
 
 		return seasonInformation;
 	}
-
-	/*private void populateTagFile() {
-		log.info("Populate the Tag file with Current Existing Tags from the Database");
-
-		Gson gson = new GsonBuilder()
-				.serializeNulls()
-				.create();
-
-		String query =
-				"query {" +
-						"  MediaTagCollection {" +
-						"    id" +
-						"    name" +
-						"    description" +
-						"    category" +
-						"    isGeneralSpoiler" +
-						"    isMediaSpoiler" +
-						"    isAdult" +
-						"  }" +
-						"}";
-
-		JSONObject queryParameters = new JSONObject();
-
-		JSONObject requestBody = new JSONObject();
-		requestBody.put("query", query);
-		requestBody.put("variables", queryParameters.toJSONString());
-
-		Mono<JSONObject> response = client
-				.post()
-				.headers(httpHeaders -> {
-					httpHeaders.setContentType(MediaType.APPLICATION_JSON);
-					httpHeaders.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-				})
-				.body(BodyInserters.fromValue(requestBody))
-				.exchangeToMono(this::evaluateClientResponse);
-
-		Object data = gson.fromJson(response.block().toJSONString(), JSONObject.class).get("data");
-		Object tagsMedia = gson.fromJson(gson.toJson(data), JSONObject.class).get("MediaTagCollection");
-
-		TagList tagList = new TagList();
-		tagList.addTagSet(gson.fromJson(gson.toJson(tagsMedia), new TypeToken<Set<Tag>>() {}.getType()));
-
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(".    ags.txt"))) {
-			tagList.getTagSet().forEach(tag -> {
-				try {
-					writer.write(tag.toString());
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-			});
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}*/
 }
