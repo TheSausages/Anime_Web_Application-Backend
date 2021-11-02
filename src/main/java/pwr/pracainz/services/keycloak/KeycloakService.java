@@ -6,6 +6,7 @@ import org.keycloak.admin.client.Keycloak;
 import org.keycloak.representations.idm.CredentialRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -15,6 +16,7 @@ import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
+import pwr.pracainz.configuration.properties.KeycloakClientServerProperties;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
@@ -33,13 +35,19 @@ public class KeycloakService implements KeycloakServiceInterface {
 	private final Keycloak keycloak;
 	private final UserRepository userRepository;
 	private final DTOConversionInterface dtoConversion;
+	private final KeycloakClientServerProperties keycloakProperties;
 
 	@Autowired
-	KeycloakService(Keycloak keycloak, UserRepository userRepository, DTOConversionInterface dtoConversion) {
-		client = WebClient.create("http://localhost:8180/auth/realms/PracaInz/protocol/openid-connect");
+	KeycloakService(KeycloakClientServerProperties keycloakProperties,
+	                @Qualifier("keycloakWebClient") WebClient client,
+	                Keycloak keycloak,
+	                UserRepository userRepository,
+	                DTOConversionInterface dtoConversion) {
+		this.client = client;
 		this.keycloak = keycloak;
 		this.userRepository = userRepository;
 		this.dtoConversion = dtoConversion;
+		this.keycloakProperties = keycloakProperties;
 	}
 
 	@Override
@@ -58,8 +66,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 					httpHeaders.set("Authorization", accessToken);
 				})
 				.body(BodyInserters
-						.fromFormData("client_id", "ClientServer")
-						.with("client_secret", "cbf2b2ff-6fc9-442b-a80a-61df84886f00")
+						.fromFormData("client_id", keycloakProperties.getRealm())
+						.with("client_secret", keycloakProperties.getClientSecret())
 						.with("refresh_token", logoutRequestBody.getRefreshToken()))
 				.retrieve()
 				.toBodilessEntity()
@@ -77,12 +85,12 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.uri("/token")
 				.headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
 				.body(BodyInserters
-						.fromFormData("client_id", "ClientServer")
-						.with("client_secret", "cbf2b2ff-6fc9-442b-a80a-61df84886f00")
-						.with("scope", "openid")
+						.fromFormData("client_id", keycloakProperties.getRealm())
+						.with("client_secret", keycloakProperties.getClientSecret())
+						.with("scope", keycloakProperties.getScope())
 						.with("username", credentials.getUsername())
 						.with("password", credentials.getPassword())
-						.with("grant_type", "password"))
+						.with("grant_type", keycloakProperties.getGrantType().getLogin()))
 				.retrieve()
 				.bodyToMono(AuthenticationToken.class)
 				.map(dtoConversion::convertToDTO)
@@ -111,13 +119,15 @@ public class KeycloakService implements KeycloakServiceInterface {
 		user.setEmail(registrationBody.getEmail());
 		user.setCredentials(Collections.singletonList(password));
 
-		Response response = keycloak.realm("PracaInz").users().create(user);
+		Response response = keycloak.realm(keycloakProperties.getMainRealm())
+				.users().create(user);
 
 		if (response.getStatus() > 100 && response.getStatus() < 300) {
 			log.info("Registration was successful. Attempt login for user: {}", registrationBody.getUsername());
 
-			Optional<UserRepresentation> newUser = keycloak.realm("PracaInz").users().search(registrationBody.getUsername())
-					.stream().filter(userRep -> userRep.getEmail().equals(registrationBody.getEmail())).findAny();
+			Optional<UserRepresentation> newUser = keycloak.realm(keycloakProperties.getMainRealm())
+					.users().search(registrationBody.getUsername())
+					.stream().filter(userRep -> userRep.getEmail().equalsIgnoreCase(registrationBody.getEmail())).findAny();
 
 			if (newUser.isEmpty()) {
 				throw new RegistrationException("An error occurred while registration was underway - please contact the administration!");
@@ -149,11 +159,11 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.uri("/token")
 				.headers(httpHeaders -> httpHeaders.setContentType(MediaType.valueOf(MediaType.APPLICATION_FORM_URLENCODED_VALUE)))
 				.body(BodyInserters
-						.fromFormData("client_id", "ClientServer")
-						.with("client_secret", "cbf2b2ff-6fc9-442b-a80a-61df84886f00")
-						.with("scope", "openid")
+						.fromFormData("client_id", keycloakProperties.getRealm())
+						.with("client_secret", keycloakProperties.getRealm())
+						.with("scope", keycloakProperties.getScope())
 						.with("refresh_token", refreshTokenDTO.getRefreshToken())
-						.with("grant_type", "refresh_token"))
+						.with("grant_type", keycloakProperties.getGrantType().getRefresh()))
 				.retrieve()
 				.bodyToMono(AuthenticationToken.class)
 				.map(dtoConversion::convertToDTO)
