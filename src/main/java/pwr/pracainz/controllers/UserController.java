@@ -9,6 +9,7 @@ import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
 import pwr.pracainz.DTO.userauthetification.RegistrationBodyDTO;
 import pwr.pracainz.services.keycloak.KeycloakServiceInterface;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
 @RestController
@@ -22,22 +23,22 @@ public class UserController {
 	}
 
 	@PostMapping("/login")
-	public AuthenticationTokenDTO login(@RequestBody @Valid LoginCredentialsDTO credentials) {
-		return keycloakService.login(credentials);
+	public AuthenticationTokenDTO login(@RequestBody @Valid LoginCredentialsDTO credentials, HttpServletRequest request) {
+		return keycloakService.login(credentials, request);
 	}
 
 	@PostMapping("/logout")
-	public ResponseBodyWithMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken) {
-		return keycloakService.logout(refreshTokenDTO, accessToken);
+	public ResponseBodyWithMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken, HttpServletRequest request) {
+		return keycloakService.logout(refreshTokenDTO, accessToken, request);
 	}
 
 	@PostMapping("/register")
-	public AuthenticationTokenDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO) {
-		return keycloakService.register(registrationBodyDTO);
+	public AuthenticationTokenDTO register(@RequestBody @Valid RegistrationBodyDTO registrationBodyDTO, HttpServletRequest request) {
+		return keycloakService.register(registrationBodyDTO, request);
 	}
 
 	@PostMapping("/refreshToken")
-	public AuthenticationTokenDTO refreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
-		return keycloakService.refreshTokens(refreshTokenDTO);
+	public AuthenticationTokenDTO refreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, HttpServletRequest request) {
+		return keycloakService.refreshTokens(refreshTokenDTO, request);
 	}
 }

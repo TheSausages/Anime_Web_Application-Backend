@@ -23,7 +23,9 @@ import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
 import pwr.pracainz.repositories.user.UserRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.Optional;
@@ -36,22 +38,25 @@ public class KeycloakService implements KeycloakServiceInterface {
 	private final UserRepository userRepository;
 	private final DTOConversionInterface dtoConversion;
 	private final KeycloakClientServerProperties keycloakProperties;
+	private final I18nServiceInterface i18nService;
 
 	@Autowired
 	KeycloakService(KeycloakClientServerProperties keycloakProperties,
 	                @Qualifier("keycloakWebClient") WebClient client,
 	                Keycloak keycloak,
 	                UserRepository userRepository,
-	                DTOConversionInterface dtoConversion) {
+	                DTOConversionInterface dtoConversion,
+	                I18nServiceInterface i18nService) {
 		this.client = client;
 		this.keycloak = keycloak;
 		this.userRepository = userRepository;
 		this.dtoConversion = dtoConversion;
 		this.keycloakProperties = keycloakProperties;
+		this.i18nService = i18nService;
 	}
 
 	@Override
-	public ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken) {
+	public ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request) {
 		if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
 			log.warn("Could not log out - missing information!");
 
@@ -79,7 +84,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 	}
 
 	@Override
-	public AuthenticationTokenDTO login(LoginCredentialsDTO credentials) {
+	public AuthenticationTokenDTO login(LoginCredentialsDTO credentials, HttpServletRequest request) {
 		return client
 				.post()
 				.uri("/token")
@@ -96,12 +101,12 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.map(dtoConversion::convertToDTO)
 				.doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
 				.doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
-				.onErrorMap(throwable -> new AuthenticationException("The Credentials are not correct!"))
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("credentials.error", request)))
 				.block();
 	}
 
 	@Override
-	public AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody) {
+	public AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody, HttpServletRequest request) {
 		log.info("Attempt registration for user: {}, with email: {}", registrationBody.getUsername(), registrationBody.getEmail());
 
 		if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
@@ -142,7 +147,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 					registrationBody.getPassword()
 			);
 
-			return login(login);
+			return login(login, request);
 		}
 
 		if (response.getStatus() == 409) {
@@ -153,7 +158,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 	}
 
 	@Override
-	public AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO) {
+	public AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO, HttpServletRequest request) {
 		return client
 				.post()
 				.uri("/token")

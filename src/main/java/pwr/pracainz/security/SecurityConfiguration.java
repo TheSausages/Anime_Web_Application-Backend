@@ -69,7 +69,7 @@ public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter 
 		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8180", "http://192.168.0.245:3000"));
 		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT"));
 		configuration.setAllowCredentials(true);
-		configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION));
+		configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION, HttpHeaders.ACCEPT_LANGUAGE));
 		configuration.addExposedHeader(HttpHeaders.AUTHORIZATION);
 
 		UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

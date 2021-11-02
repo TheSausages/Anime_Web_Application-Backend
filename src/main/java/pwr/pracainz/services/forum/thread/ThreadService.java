@@ -22,6 +22,7 @@ import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
 import pwr.pracainz.services.forum.post.PostServiceInterface;
 import pwr.pracainz.services.forum.tag.TagServiceInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
@@ -38,6 +39,7 @@ public class ThreadService implements ThreadServiceInterface {
 	private final UserServiceInterface userService;
 	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
+	private final I18nServiceInterface i18nService;
 
 	@Autowired
 	ThreadService(ThreadRepository threadRepository,
@@ -45,6 +47,7 @@ public class ThreadService implements ThreadServiceInterface {
 	              ForumCategoryServiceInterface forumCategoryService,
 	              PostServiceInterface postService,
 	              UserServiceInterface userService,
+	              I18nServiceInterface i18nService,
 	              DTOConversionInterface dtoConversion,
 	              DTODeconversionInterface dtoDeconversion) {
 		this.threadRepository = threadRepository;
@@ -52,6 +55,7 @@ public class ThreadService implements ThreadServiceInterface {
 		this.forumCategoryService = forumCategoryService;
 		this.postService = postService;
 		this.userService = userService;
+		this.i18nService = i18nService;
 		this.dtoConversion = dtoConversion;
 		this.dtoDeconversion = dtoDeconversion;
 	}
@@ -104,7 +108,7 @@ public class ThreadService implements ThreadServiceInterface {
 		log.info("Get thread with id: {}", id);
 
 		return threadRepository.findById(id)
-				.orElseThrow(() -> new ObjectNotFoundException("Could not find thread with id: " + id));
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread") + id));
 	}
 
 	@Override
