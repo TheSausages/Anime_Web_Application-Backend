@@ -29,7 +29,7 @@ public class ThreadStatusDeserializer extends StdDeserializer<ThreadStatus> {
 
 			return ThreadStatus.valueOf(status.toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
-			throw new CustomDeserializationException(String.format("Could not read thread status: %s", status));
+			throw new CustomDeserializationException("general.an-error-occurred", String.format("Could not read thread status: %s", status));
 		}
 	}
 }

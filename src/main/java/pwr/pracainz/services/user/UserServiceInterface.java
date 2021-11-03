@@ -7,5 +7,7 @@ public interface UserServiceInterface {
 
 	User getCurrentUserOrInsert();
 
+	User saveUser(User user);
+
 	String getUsernameOfCurrentUser();
 }

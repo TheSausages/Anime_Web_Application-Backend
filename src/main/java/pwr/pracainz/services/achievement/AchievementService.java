@@ -12,6 +12,7 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.exceptions.exceptions.AchievementException;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 import pwr.pracainz.services.icon.IconServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
@@ -25,14 +26,19 @@ import java.util.concurrent.ConcurrentHashMap;
 public class AchievementService implements AchievementServiceInterface {
 	private final DTOConversion dtoConversion;
 	private final UserServiceInterface userService;
+	private final I18nServiceInterface i18nService;
 	private final IconServiceInterface iconService;
 	private final Map<String, SseEmitter> emitterMap;
 
 	@Autowired
-	AchievementService(DTOConversion dtoConversion, UserServiceInterface userService, IconServiceInterface iconService) {
+	AchievementService(DTOConversion dtoConversion,
+	                   UserServiceInterface userService,
+	                   IconServiceInterface iconService,
+	                   I18nServiceInterface i18nService) {
 		this.dtoConversion = dtoConversion;
 		this.userService = userService;
 		this.iconService = iconService;
+		this.i18nService = i18nService;
 
 		emitterMap = new ConcurrentHashMap<>();
 	}
@@ -40,7 +46,8 @@ public class AchievementService implements AchievementServiceInterface {
 	@Override
 	public SseEmitter subscribe() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("Only a logged in User can earn achievements");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.only-logged-in-can-earn-achievements"),
+					"A not logged in user tried to subscribe to achievements");
 		}
 
 		String userId = UserAuthorizationUtilities.getIdOfCurrentUser();
@@ -62,7 +69,8 @@ public class AchievementService implements AchievementServiceInterface {
 	@Override
 	public void cancel() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("An error occurred during an authenticated operation!");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.error-during-authentication"),
+					"A not logged in user tried to cancel subscription to achievements");
 		}
 
 		String userId = UserAuthorizationUtilities.getIdOfCurrentUser();
@@ -83,7 +91,8 @@ public class AchievementService implements AchievementServiceInterface {
 	@EventListener
 	public void emitAchievement(AchievementEarnedEvent event) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("Only a logged in User can earn achievements");
+			//Dont emit an achievement if the user is not logged in
+			return;
 		}
 
 		Achievement earnedAchievement = (Achievement) event.getSource();

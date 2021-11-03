@@ -29,7 +29,7 @@ public class AnimeUserStatusDeserializer extends StdDeserializer<AnimeUserStatus
 
 			return AnimeUserStatus.valueOf(status.replace(' ', '_').toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
-			throw new CustomDeserializationException(String.format("Could not read anime user status: %s", status));
+			throw new CustomDeserializationException("general.an-error-occurred", String.format("Could not read anime user status: %s", status));
 		}
 	}
 }

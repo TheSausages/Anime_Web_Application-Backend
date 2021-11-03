@@ -8,7 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import pwr.pracainz.DTO.animeInfo.AnimeQuery;
-import pwr.pracainz.configuration.properties.AnilistProperties;
 import pwr.pracainz.entities.anime.query.Query;
 import pwr.pracainz.entities.anime.query.parameters.FieldParameters;
 import pwr.pracainz.entities.anime.query.parameters.connections.PageInfo;
@@ -33,9 +32,11 @@ import pwr.pracainz.exceptions.exceptions.AnilistException;
 import pwr.pracainz.repositories.animeInfo.AnimeRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 import reactor.core.publisher.Mono;
 
+import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
@@ -43,29 +44,29 @@ import java.util.Objects;
 @Log4j2
 @Service
 public class AnimeService implements AnimeServiceInterface {
-	private final AnilistProperties anilistProperties;
 	private final AnimeRepository animeRepository;
 	private final AnimeUserServiceInterface animeUserService;
+	private final I18nServiceInterface i18nService;
 	private final DTOConversionInterface dtoConversion;
 	private final WebClient client;
 	private final ObjectMapper mapper;
 
-	AnimeService(AnilistProperties anilistProperties,
+	AnimeService(I18nServiceInterface i18nService,
 	             AnimeRepository animeRepository,
 	             AnimeUserServiceInterface animeUserService,
 	             DTOConversionInterface dtoConversion,
 	             ObjectMapper mapper,
 	             @Qualifier("anilistWebClient") WebClient anilistWenClient) {
-		this.anilistProperties = anilistProperties;
 		this.animeRepository = animeRepository;
 		this.animeUserService = animeUserService;
+		this.i18nService = i18nService;
 		this.dtoConversion = dtoConversion;
 		this.mapper = mapper;
 		this.client = anilistWenClient;
 	}
 
 	@Override
-	public ObjectNode getCurrentSeasonAnime() {
+	public ObjectNode getCurrentSeasonAnime(HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.title(MediaTitle.getMediaTitleBuilder()
@@ -101,12 +102,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason", getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason",
+						getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
 				.block();
 	}
 
 	@Override
-	public ObjectNode getSeasonAnime(MediaSeason season, int year) {
+	public ObjectNode getSeasonAnime(MediaSeason season, int year, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.title(MediaTitle.getMediaTitleBuilder()
@@ -140,12 +142,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime from " + season + " of " + year))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res,
+						String.format("Successfully got Anime from %s of %s", season, year)))
 				.block();
 	}
 
 	@Override
-	public ObjectNode getTopAnimeMovies(int pageNumber) {
+	public ObjectNode getTopAnimeMovies(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.coverImage()
@@ -178,12 +181,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime Movies"))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+						String.format("Successfully got %s Page of Top Anime Movies", pageNumber)))
 				.block();
 	}
 
 	@Override
-	public ObjectNode getTopAnimeAiring(int pageNumber) {
+	public ObjectNode getTopAnimeAiring(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.coverImage()
@@ -216,12 +220,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Airing Anime"))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+						String.format("Successfully got %s Page of Top Airing Anime", pageNumber)))
 				.block();
 	}
 
 	@Override
-	public ObjectNode getTopAnimeAllTime(int pageNumber) {
+	public ObjectNode getTopAnimeAllTime(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.coverImage()
@@ -253,12 +258,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Top Anime of All Time"))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+						String.format("Successfully got %s Page of Top Anime of All Time", pageNumber)))
 				.block();
 	}
 
 	@Override
-	public ObjectNode searchByQuery(AnimeQuery query, int pageNumber) {
+	public ObjectNode searchByQuery(AnimeQuery query, int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.coverImage()
@@ -358,12 +364,13 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "Successfully got " + pageNumber + " Page of Search query with conditions:" + query))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+						String.format("Successfully got %s Page of Search query with conditions: %s", pageNumber, query)))
 				.block();
 	}
 
 	@Override
-	public ObjectNode getAnimeById(int id) {
+	public ObjectNode getAnimeById(int id, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
 				.parameter(FieldParameters.id)
 				.parameter(FieldParameters.season)
@@ -460,7 +467,8 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(media))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, "Successfully got Anime with id:" + id))
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res,
+						String.format("Successfully got Anime with id: %s", id)))
 				.block();
 
 		if (Objects.nonNull(node)) {
@@ -480,21 +488,21 @@ public class AnimeService implements AnimeServiceInterface {
 		return node;
 	}
 
-	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveResponse) {
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveLogResponse) {
 		return Mono.just(response)
 				.map(res -> removeDataAndQueryElementFromJson(res, element))
-				.doOnSuccess(s -> log.info(positiveResponse))
+				.doOnSuccess(s -> log.info(positiveLogResponse))
 				.doOnError(e -> {
-					throw new AnilistException(anilistProperties.getErrorMessage());
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response"));
 				});
 	}
 
-	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveResponse) {
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveLogResponse) {
 		return Mono.just(response)
 				.map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
-				.doOnSuccess(s -> log.info(positiveResponse))
+				.doOnSuccess(s -> log.info(positiveLogResponse))
 				.doOnError(e -> {
-					throw new AnilistException(anilistProperties.getErrorMessage());
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response"));
 				});
 	}
 

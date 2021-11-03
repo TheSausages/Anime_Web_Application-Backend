@@ -9,6 +9,7 @@ import pwr.pracainz.entities.databaseerntities.forum.ForumCategory;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.ForumCategoryRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,11 +18,13 @@ import java.util.stream.Collectors;
 @Service
 public class ForumCategoryService implements ForumCategoryServiceInterface {
 	private final ForumCategoryRepository categoryRepository;
+	private final I18nServiceInterface i18nService;
 	private final DTOConversionInterface dtoConversion;
 
 	@Autowired
-	ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface dtoConversion) {
+	ForumCategoryService(ForumCategoryRepository forumCategoryRepository, DTOConversionInterface dtoConversion, I18nServiceInterface i18nService) {
 		categoryRepository = forumCategoryRepository;
+		this.i18nService = i18nService;
 		this.dtoConversion = dtoConversion;
 	}
 
@@ -36,6 +39,7 @@ public class ForumCategoryService implements ForumCategoryServiceInterface {
 	@Override
 	public ForumCategory findCategoryByIdAndName(int id, String name) {
 		return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(id, name)
-				.orElseThrow(() -> new ObjectNotFoundException("No category with name '" + name + "' and id '" + id + "' found!"));
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-category", name),
+						"No category with name '" + name + "' and id '" + id + "' found!"));
 	}
 }

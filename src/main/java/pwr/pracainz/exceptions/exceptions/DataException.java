@@ -6,14 +6,14 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 
 @ResponseStatus(HttpStatus.CONFLICT)
 @Getter
-public class RegistrationException extends RuntimeException {
-	private String logMessage = "Registration Exception, no message given";
+public class DataException extends RuntimeException {
+	private String logMessage = "Data Exception, no message given";
 
-	public RegistrationException(String userMessage) {
+	public DataException(String userMessage) {
 		super(userMessage);
 	}
 
-	public RegistrationException(String userMessage, String logMessage) {
+	public DataException(String userMessage, String logMessage) {
 		super(userMessage);
 		this.logMessage = logMessage;
 	}

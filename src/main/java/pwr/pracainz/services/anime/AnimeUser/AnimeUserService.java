@@ -14,6 +14,7 @@ import pwr.pracainz.repositories.animeInfo.AnimeRepository;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
@@ -25,14 +26,21 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
 	private final UserServiceInterface userService;
+	private final I18nServiceInterface i18nService;
 	private final AnimeUserInfoRepository animeUserInfoRepository;
 	private final AnimeRepository animeRepository;
 
 	@Autowired
-	AnimeUserService(DTOConversionInterface dtoConversion, DTODeconversionInterface dtoDeconversion, UserServiceInterface userService, AnimeUserInfoRepository animeUserInfoRepository, AnimeRepository animeRepository) {
+	AnimeUserService(DTOConversionInterface dtoConversion,
+	                 DTODeconversionInterface dtoDeconversion,
+	                 UserServiceInterface userService,
+	                 AnimeUserInfoRepository animeUserInfoRepository,
+	                 AnimeRepository animeRepository,
+	                 I18nServiceInterface i18nService) {
 		this.dtoConversion = dtoConversion;
 		this.dtoDeconversion = dtoDeconversion;
 		this.userService = userService;
+		this.i18nService = i18nService;
 		this.animeUserInfoRepository = animeUserInfoRepository;
 		this.animeRepository = animeRepository;
 	}
@@ -51,14 +59,16 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	@Override
 	public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("You are not logged in!");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"User tried to update User info without being logged in");
 		}
 
 		User currUser = userService.getCurrentUserOrInsert();
 		AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 
-		if (Objects.nonNull(requestUserId) && !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
-			throw new AuthenticationException("Updating your anime information was not successful - please try again");
+		if (Objects.isNull(requestUserId) || !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
+			throw new AuthenticationException(i18nService.getTranslation("anime.error-during-anime-info-update"),
+					String.format("Error during Anime User Information update for user %s", currUser.getUsername()));
 		}
 
 		Anime anime = animeRepository.findById(animeUserInfoDTO.getId().getAnime().getAnimeId())
@@ -66,7 +76,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 						animeUserInfoDTO.getId().getAnime().getAnimeId()
 				)));
 
-		log.info("Update Anime data for User: {}", currUser.getUserId());
+		log.info("Update Anime data for User: {}", currUser.getUsername());
 
 		if (Objects.nonNull(animeUserInfoDTO.getGrade())) {
 			anime.updateAverageScore(animeUserInfoDTO.getGrade());

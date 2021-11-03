@@ -29,7 +29,7 @@ public class TagImportanceDeserializer extends StdDeserializer<TagImportance> {
 
 			return TagImportance.valueOf(tagImportance.toUpperCase(Locale.ROOT));
 		} catch (Exception e) {
-			throw new CustomDeserializationException(String.format("Could not read anime user status: %s", tagImportance));
+			throw new CustomDeserializationException("general.an-error-occurred", String.format("Could not read anime user status: %s", tagImportance));
 		}
 	}
 }

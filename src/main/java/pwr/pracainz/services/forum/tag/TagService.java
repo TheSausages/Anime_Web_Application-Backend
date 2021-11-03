@@ -8,6 +8,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.TagRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
+import pwr.pracainz.services.i18n.I18nServiceInterface;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -16,11 +17,13 @@ import java.util.stream.Collectors;
 @Log4j2
 public class TagService implements TagServiceInterface {
 	private final TagRepository tagRepository;
+	private final I18nServiceInterface i18nService;
 	private final DTOConversionInterface dtoConversion;
 
 	@Autowired
-	TagService(TagRepository tagRepository, DTOConversionInterface dtoConversion) {
+	TagService(TagRepository tagRepository, I18nServiceInterface i18nService, DTOConversionInterface dtoConversion) {
 		this.tagRepository = tagRepository;
+		this.i18nService = i18nService;
 		this.dtoConversion = dtoConversion;
 	}
 
@@ -36,7 +39,8 @@ public class TagService implements TagServiceInterface {
 		log.info("Find a tag with id {} and name {}", id, name);
 
 		return tagRepository.findByTagIdAndTagName(id, name)
-				.orElseThrow(() -> new ObjectNotFoundException("No Tag with name '" + name + "' and id '" + id + "' found!"));
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-tag", name, id),
+						String.format("No Tag with name %s (id: %s}) found", name, id)));
 	}
 
 

@@ -109,13 +109,14 @@ public class ThreadService implements ThreadServiceInterface {
 
 		return threadRepository.findById(id)
 				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread", id),
-						"Could not find thread with id: " + id));
+						String.format("No thread with id %s found", id)));
 	}
 
 	@Override
 	public SimpleThreadDTO createThread(CreateThreadDTO newThread) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("You are not logged in!");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"User tried to create Thread without being logged in");
 		}
 
 		log.info("Create thread with title '{}' by user {}", newThread.getTitle(), userService.getUsernameOfCurrentUser());
@@ -131,15 +132,18 @@ public class ThreadService implements ThreadServiceInterface {
 	@Override
 	public CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException("You are not logged in!");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"User tried to update Thread without being logged in");
 		}
 
 		User currUser = userService.getCurrentUser();
 		Thread oldThread = threadRepository.findById(threadId)
-				.orElseThrow(() -> new ObjectNotFoundException("No thread with id " + threadId + " found!"));
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread", threadId),
+						String.format("No thread with id %s found", threadId)));
 
 		if (!currUser.equals(oldThread.getCreator())) {
-			throw new AuthenticationException("You can't update another persons thread!");
+			throw new AuthenticationException(i18nService.getTranslation("forum.no-updating-others-thread"),
+					String.format("User %s tried to update post of user %s (post id: %s)", currUser.getUsername(), oldThread.getCreator().getUsername(), oldThread.getCreator().getUserId()));
 		}
 
 		log.info("Update thread {}(id: {}), created by user {}", oldThread.getTitle(), oldThread.getThreadId(), currUser.getUsername());

@@ -4,18 +4,20 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import pwr.pracainz.DTO.animeInfo.AnimeQuery;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaSeason;
 
+import javax.servlet.http.HttpServletRequest;
+
 public interface AnimeServiceInterface {
-	ObjectNode getCurrentSeasonAnime();
+	ObjectNode getCurrentSeasonAnime(HttpServletRequest request);
 
-	ObjectNode getSeasonAnime(MediaSeason season, int year);
+	ObjectNode getSeasonAnime(MediaSeason season, int year, HttpServletRequest request);
 
-	ObjectNode getTopAnimeMovies(int pageNumber);
+	ObjectNode getTopAnimeMovies(int pageNumber, HttpServletRequest request);
 
-	ObjectNode getTopAnimeAiring(int pageNumber);
+	ObjectNode getTopAnimeAiring(int pageNumber, HttpServletRequest request);
 
-	ObjectNode getTopAnimeAllTime(int pageNumber);
+	ObjectNode getTopAnimeAllTime(int pageNumber, HttpServletRequest request);
 
-	ObjectNode getAnimeById(int id);
+	ObjectNode getAnimeById(int id, HttpServletRequest request);
 
-	ObjectNode searchByQuery(AnimeQuery query, int pageNumber);
+	ObjectNode searchByQuery(AnimeQuery query, int pageNumber, HttpServletRequest request);
 }

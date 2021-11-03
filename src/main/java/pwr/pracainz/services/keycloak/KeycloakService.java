@@ -21,9 +21,9 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.RegistrationException;
-import pwr.pracainz.repositories.user.UserRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.i18n.I18nServiceInterface;
+import pwr.pracainz.services.user.UserServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.core.Response;
@@ -35,7 +35,7 @@ import java.util.Optional;
 public class KeycloakService implements KeycloakServiceInterface {
 	private final WebClient client;
 	private final Keycloak keycloak;
-	private final UserRepository userRepository;
+	private final UserServiceInterface userService;
 	private final DTOConversionInterface dtoConversion;
 	private final KeycloakClientServerProperties keycloakProperties;
 	private final I18nServiceInterface i18nService;
@@ -44,12 +44,12 @@ public class KeycloakService implements KeycloakServiceInterface {
 	KeycloakService(KeycloakClientServerProperties keycloakProperties,
 	                @Qualifier("keycloakWebClient") WebClient client,
 	                Keycloak keycloak,
-	                UserRepository userRepository,
+	                UserServiceInterface userService,
 	                DTOConversionInterface dtoConversion,
 	                I18nServiceInterface i18nService) {
 		this.client = client;
 		this.keycloak = keycloak;
-		this.userRepository = userRepository;
+		this.userService = userService;
 		this.dtoConversion = dtoConversion;
 		this.keycloakProperties = keycloakProperties;
 		this.i18nService = i18nService;
@@ -60,7 +60,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 		if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
 			log.warn("Could not log out - missing information!");
 
-			throw new AuthenticationException("The credentials are not of correct structure");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.credentials-wrong-structure"),
+					"The credentials had wrong structure");
 		}
 
 		return client
@@ -78,8 +79,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.toBodilessEntity()
 				.map(res -> new ResponseBodyWithMessageDTO("Logout was successful!"))
 				.doOnSuccess(s -> log.info("Logged Out Successfully"))
-				.doOnError(s -> log.info("Logged Out was not successful"))
-				.onErrorMap(throwable -> new AuthenticationException("Logout was not successful"))
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.logout-not-successful"),
+						String.format("Logout was not successful for user %s", userService.getUsernameOfCurrentUser())))
 				.block();
 	}
 
@@ -100,8 +101,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.bodyToMono(AuthenticationToken.class)
 				.map(dtoConversion::convertToDTO)
 				.doOnSuccess(s -> log.info("Log In was Successful for Username:" + credentials.getUsername()))
-				.doOnError(e -> log.info("Log In was not successful for Username:" + credentials.getUsername()))
-				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("credentials.error", request)))
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.login-not-successful", request),
+						String.format("Log in was not successful for User %s", credentials.getUsername())))
 				.block();
 	}
 
@@ -110,7 +111,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 		log.info("Attempt registration for user: {}, with email: {}", registrationBody.getUsername(), registrationBody.getEmail());
 
 		if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
-			throw new AuthenticationException("The Passwords are not matching");
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-matching-passwords"),
+					String.format("The Passwords did not match for new user with username %s", registrationBody.getUsername()));
 		}
 
 		CredentialRepresentation password = new CredentialRepresentation();
@@ -135,10 +137,11 @@ public class KeycloakService implements KeycloakServiceInterface {
 					.stream().filter(userRep -> userRep.getEmail().equalsIgnoreCase(registrationBody.getEmail())).findAny();
 
 			if (newUser.isEmpty()) {
-				throw new RegistrationException("An error occurred while registration was underway - please contact the administration!");
+				throw new RegistrationException(i18nService.getTranslation("authentication.after-registration-error"),
+						String.format("User %s was register successfully, but couldn't be saved to the database", registrationBody.getUsername()));
 			}
 
-			userRepository.save(new User(
+			userService.saveUser(new User(
 					newUser.get().getId(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null, null
 			));
 
@@ -151,10 +154,15 @@ public class KeycloakService implements KeycloakServiceInterface {
 		}
 
 		if (response.getStatus() == 409) {
-			throw new RegistrationException("This username and/or email are already taken!");
+			throw new RegistrationException(i18nService.getTranslation("authentication.registration-data-taken"),
+					String.format("Data for user was already taken:\n username: %s,\n email: %s",
+							registrationBody.getUsername(),
+							registrationBody.getEmail())
+			);
 		}
 
-		throw new AuthenticationException("Registration was not successful!");
+		throw new AuthenticationException(i18nService.getTranslation("authentication.registration-error"),
+				String.format("Registration was not successful for user %s", registrationBody.getUsername()));
 	}
 
 	@Override
@@ -173,8 +181,8 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.bodyToMono(AuthenticationToken.class)
 				.map(dtoConversion::convertToDTO)
 				.doOnSuccess(s -> log.info("Tokens has been successful refreshed"))
-				.doOnError(e -> log.info("Tokens was not refreshed"))
-				.onErrorMap(throwable -> new AuthenticationException("Wrong refresh token!"))
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.tokens-not-refreshed"),
+						String.format("The refresh token of user %s did not work", userService.getUsernameOfCurrentUser())))
 				.block();
 	}
 }
