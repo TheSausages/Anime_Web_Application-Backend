@@ -4,7 +4,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.animeInfo.AnimeQuery;
+import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.services.anime.Anime.AnimeServiceInterface;
+import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
@@ -13,15 +15,17 @@ import javax.validation.Valid;
 @RequestMapping("/anime")
 public class AnimeController {
 	private final AnimeServiceInterface animeService;
+	private final AnimeUserServiceInterface animeUserService;
 
 	@Autowired
-	public AnimeController(AnimeServiceInterface animeService) {
+	public AnimeController(AnimeServiceInterface animeService, AnimeUserServiceInterface animeUserService) {
 		this.animeService = animeService;
+		this.animeUserService = animeUserService;
 	}
 
-	@GetMapping(value = "/{id}")
-	public ObjectNode getAnimeById(@PathVariable int id, HttpServletRequest request) {
-		return animeService.getAnimeById(id, request);
+	@GetMapping(value = "/{animeId}")
+	public ObjectNode getAnimeById(@PathVariable int animeId, HttpServletRequest request) {
+		return animeService.getAnimeById(animeId, request);
 	}
 
 	@GetMapping(value = "/season/current")
@@ -47,5 +51,10 @@ public class AnimeController {
 	@PostMapping(value = "/search/{pageNumber}")
 	public ObjectNode searchByQuery(@RequestBody @Valid AnimeQuery query, @PathVariable int pageNumber, HttpServletRequest request) {
 		return animeService.searchByQuery(query, pageNumber, request);
+	}
+
+	@PutMapping("/updateUserAnime")
+	public AnimeUserInfoDTO updateAnimeIfo(@RequestBody @Valid AnimeUserInfoDTO animeUserInfoDTO) {
+		return animeUserService.updateCurrentUserAnimeInfo(animeUserInfoDTO);
 	}
 }

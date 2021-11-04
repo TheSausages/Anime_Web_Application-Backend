@@ -64,6 +64,7 @@ public class AnimeUserInfo {
 		this.nrOfEpisodesSeen = animeUserInfoDTO.getNrOfEpisodesSeen();
 		this.isFavourite = animeUserInfoDTO.isFavourite();
 		this.grade = animeUserInfoDTO.getGrade();
+		this.modification = LocalDateTime.now();
 		this.didReview = animeUserInfoDTO.isDidReview();
 		this.review = this.didReview && Objects.nonNull(reviewDTO) ?
 				new Review(

@@ -29,7 +29,7 @@ public class DTODeconversion implements DTODeconversionInterface {
 				animeUserInfoDTO.getNrOfEpisodesSeen(),
 				animeUserInfoDTO.isFavourite(),
 				animeUserInfoDTO.getGrade(),
-				animeUserInfoDTO.getModification(),
+				LocalDateTime.now(),
 				animeUserInfoDTO.isDidReview(),
 				animeUserInfoDTO.isDidReview() ?
 						new Review(

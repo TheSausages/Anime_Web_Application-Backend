@@ -40,7 +40,7 @@ public class ForumController {
 		this.tagService = tagService;
 	}
 
-	@GetMapping("tags")
+	@GetMapping("/tags")
 	public List<TagDTO> getTags() {
 		return tagService.getAllTags();
 	}
@@ -50,53 +50,53 @@ public class ForumController {
 		return categoryService.getAllCategories();
 	}
 
-	@PostMapping("/search/{page}")
-	public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int page, @RequestBody @Valid ForumQuery query) {
-		return threadService.searchThreads(page, query);
+	@PostMapping("/thread/search/{pageNumber}")
+	public PageDTO<SimpleThreadDTO> searchThreads(@PathVariable @Min(value = 0) int pageNumber, @RequestBody @Valid ForumQuery query) {
+		return threadService.searchThreads(pageNumber, query);
 	}
 
-	@GetMapping("thread/newest/{page}")
-	public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int page) {
-		return threadService.getNewestThreads(page);
+	@GetMapping("/thread/newest/{pageNumber}")
+	public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int pageNumber) {
+		return threadService.getNewestThreads(pageNumber);
 	}
 
-	@GetMapping("thread/{id}")
-	public CompleteThreadDTO getThreadById(@PathVariable @Positive int id) {
-		return threadService.getThreadById(id);
+	@PostMapping("/thread")
+	public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
+		return threadService.createThread(newThread);
 	}
 
-	@GetMapping("thread/{threadId}/posts/{page}")
-	public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
-	                                                     @PathVariable @Positive int page) {
-		return postService.findPostsByThread(page, threadId);
+	@GetMapping("/thread/{threadId}")
+	public CompleteThreadDTO getThreadById(@PathVariable @Positive int threadId) {
+		return threadService.getThreadById(threadId);
 	}
 
-	@PutMapping("/post/{id}")
-	public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int id,
-	                                              @RequestBody @Valid PostUserStatusDTO status) {
-		return postService.updatePostUserStatus(id, status);
+	@PutMapping("/thread/{threadId}")
+	public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
+	                                      @RequestBody @Valid UpdateThreadDTO thread) {
+		return threadService.updateThread(threadId, thread);
 	}
 
-	@PostMapping("thread/{threadId}/post")
+	@PostMapping("/thread/{threadId}/post")
 	public PageDTO<CompletePostDTO> createPostForThread(@PathVariable @Positive int threadId,
 	                                                    @RequestBody @Valid CreatePostDTO post) {
 		return postService.createPostForThread(threadId, post);
 	}
 
-	@PutMapping("thread/{threadId}/post")
+	@PutMapping("/thread/{threadId}/post")
 	public CompletePostDTO updatePostForThread(@PathVariable @Positive int threadId,
 	                                           @RequestBody @Valid UpdatePostDTO post) {
 		return postService.updatePostForThread(threadId, post);
 	}
 
-	@PostMapping("thread")
-	public SimpleThreadDTO newThread(@RequestBody @Valid CreateThreadDTO newThread) {
-		return threadService.createThread(newThread);
+	@GetMapping("/thread/{threadId}/post/{pageNumber}")
+	public PageDTO<CompletePostDTO> getPostPageForThread(@PathVariable @Positive int threadId,
+	                                                     @PathVariable @Positive int pageNumber) {
+		return postService.findPostsByThread(pageNumber, threadId);
 	}
 
-	@PutMapping("thread/{threadId}")
-	public CompleteThreadDTO updateThread(@PathVariable @Positive int threadId,
-	                                      @RequestBody @Valid UpdateThreadDTO thread) {
-		return threadService.updateThread(threadId, thread);
+	@PutMapping("/post/{postId}")
+	public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int postId,
+	                                              @RequestBody @Valid PostUserStatusDTO status) {
+		return postService.updatePostUserStatus(postId, status);
 	}
 }
