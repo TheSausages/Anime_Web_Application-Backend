@@ -75,59 +75,6 @@ public class PostService implements PostServiceInterface {
 	}
 
 	@Override
-	@Transactional
-	public PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status) {
-		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
-					"User tried to update Post status without being logged in");
-		}
-
-		User currUser = userService.getCurrentUser();
-		PostUserStatusIdDTO requestUserId = status.getIds();
-
-		if (Objects.nonNull(requestUserId) && !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
-			throw new AuthenticationException(i18nService.getTranslation("forum.error-during-post-status-update"),
-					String.format("Error during Post status update for user %s", currUser.getUsername()));
-		}
-
-		if (status.getIds().getPost().getPostId() != postId) {
-			throw new DataException(i18nService.getTranslation("forum.error-during-post-status-update"),
-					String.format("Error occurred during post status update for user %s", userService.getUsernameOfCurrentUser()));
-		}
-
-		int postIndex = status.getIds().getPost().getPostId();
-		Post post = postRepository.findById(postIndex)
-				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-post", postIndex),
-						String.format("No post with id %s was found", postIndex)));
-
-		log.info("Update post user status for post with id: {}, and for user {}", postId, currUser.getUsername());
-
-		PostUserStatusId postUserId = new PostUserStatusId(currUser, post);
-
-		PostUserStatus userStatus = postUserStatusRepository.findById(postUserId)
-				.map(postUserStatus -> {
-					if (postUserStatus.isLiked() != status.isLiked()) {
-						updateNrOfPlus(postId, status);
-					}
-					if (postUserStatus.isDisliked() != status.isDisliked()) {
-						updateNrOfMinus(postId, status);
-					}
-					if (!postUserStatus.isReported() && status.isReported()) {
-						reportPost(postId, status);
-					}
-
-					return postUserStatus.copyDataFromDTO(status);
-				})
-				.orElseGet(() -> {
-					updateFields(postId, status);
-
-					return dtoDeconversion.convertFromDTO(status, postUserId);
-				});
-
-		return dtoConversion.convertToDTO(postUserStatusRepository.save(userStatus));
-	}
-
-	@Override
 	public PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO createPost) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
@@ -181,6 +128,59 @@ public class PostService implements PostServiceInterface {
 		oldPost.setPostText(post.getText());
 
 		return dtoConversion.convertToDTO(postRepository.save(oldPost));
+	}
+
+	@Override
+	@Transactional
+	public PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"User tried to update Post status without being logged in");
+		}
+
+		User currUser = userService.getCurrentUser();
+		PostUserStatusIdDTO requestUserId = status.getIds();
+
+		if (Objects.isNull(requestUserId) || !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
+			throw new AuthenticationException(i18nService.getTranslation("forum.error-during-post-status-update"),
+					String.format("Error during Post status update for user %s", currUser.getUsername()));
+		}
+
+		if (status.getIds().getPost().getPostId() != postId) {
+			throw new DataException(i18nService.getTranslation("forum.error-during-post-status-update"),
+					String.format("Error occurred during post status update for user %s", userService.getUsernameOfCurrentUser()));
+		}
+
+		int postIndex = status.getIds().getPost().getPostId();
+		Post post = postRepository.findById(postIndex)
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-post", postIndex),
+						String.format("No post with id %s was found", postIndex)));
+
+		log.info("Update post user status for post with id: {}, and for user {}", postId, currUser.getUsername());
+
+		PostUserStatusId postUserId = new PostUserStatusId(currUser, post);
+
+		PostUserStatus userStatus = postUserStatusRepository.findById(postUserId)
+				.map(postUserStatus -> {
+					if (postUserStatus.isLiked() != status.isLiked()) {
+						updateNrOfPlus(postId, status);
+					}
+					if (postUserStatus.isDisliked() != status.isDisliked()) {
+						updateNrOfMinus(postId, status);
+					}
+					if (!postUserStatus.isReported() && status.isReported()) {
+						reportPost(postId, status);
+					}
+
+					return postUserStatus.copyDataFromDTO(status);
+				})
+				.orElseGet(() -> {
+					updateFields(postId, status);
+
+					return dtoDeconversion.convertFromDTO(status, postUserId);
+				});
+
+		return dtoConversion.convertToDTO(postUserStatusRepository.save(userStatus));
 	}
 
 	private void updateFields(int postId, PostUserStatusDTO status) {

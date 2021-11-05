@@ -3,13 +3,10 @@ package pwr.pracainz.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import pwr.pracainz.DTO.PageDTO;
-import pwr.pracainz.DTO.forum.ForumCategoryDTO;
-import pwr.pracainz.DTO.forum.ForumQuery;
+import pwr.pracainz.DTO.forum.*;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
 import pwr.pracainz.DTO.forum.Post.UpdatePostDTO;
-import pwr.pracainz.DTO.forum.PostUserStatusDTO;
-import pwr.pracainz.DTO.forum.TagDTO;
 import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
@@ -98,5 +95,11 @@ public class ForumController {
 	public PostUserStatusDTO updateUserPostStatus(@PathVariable @Positive int postId,
 	                                              @RequestBody @Valid PostUserStatusDTO status) {
 		return postService.updatePostUserStatus(postId, status);
+	}
+
+	@PutMapping("/thread/{threadId}/status")
+	public ThreadUserStatusDTO updateThreadUserStatus(@PathVariable @Positive int threadId,
+	                                                  @RequestBody @Valid ThreadUserStatusDTO status) {
+		return threadService.updateThreadUserStatus(threadId, status);
 	}
 }

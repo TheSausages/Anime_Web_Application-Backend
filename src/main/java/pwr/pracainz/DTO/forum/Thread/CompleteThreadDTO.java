@@ -9,6 +9,7 @@ import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
@@ -33,8 +34,8 @@ public class CompleteThreadDTO extends SimpleThreadDTO {
 	@Valid
 	private PageDTO<CompletePostDTO> posts;
 
-	public CompleteThreadDTO(int id, String title, String text, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts) {
-		super(id, title, NrOfPosts, status, creation, modification, creator, category, tags);
+	public CompleteThreadDTO(int id, String title, String text, int NrOfPosts, ThreadStatus status, LocalDateTime creation, LocalDateTime modification, SimpleUserDTO creator, ForumCategoryDTO category, List<TagDTO> tags, PageDTO<CompletePostDTO> posts, ThreadUserStatusDTO userStatus) {
+		super(id, title, NrOfPosts, status, creation, modification, creator, category, tags, userStatus);
 		this.text = text;
 		this.posts = posts;
 	}

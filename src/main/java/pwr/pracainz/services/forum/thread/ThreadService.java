@@ -11,12 +11,17 @@ import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
+import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
+import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatusId;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
 import pwr.pracainz.repositories.forum.ThreadRepository;
+import pwr.pracainz.repositories.forum.ThreadUserStatusRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.DTOOperations.Deconversion.DTODeconversionInterface;
 import pwr.pracainz.services.forum.category.ForumCategoryServiceInterface;
@@ -27,12 +32,14 @@ import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Log4j2
 @Service
 public class ThreadService implements ThreadServiceInterface {
 	private final ThreadRepository threadRepository;
+	private final ThreadUserStatusRepository userStatusRepository;
 	private final TagServiceInterface tagService;
 	private final ForumCategoryServiceInterface forumCategoryService;
 	private final PostServiceInterface postService;
@@ -43,6 +50,7 @@ public class ThreadService implements ThreadServiceInterface {
 
 	@Autowired
 	ThreadService(ThreadRepository threadRepository,
+	              ThreadUserStatusRepository userStatusRepository,
 	              TagServiceInterface tagService,
 	              ForumCategoryServiceInterface forumCategoryService,
 	              PostServiceInterface postService,
@@ -51,6 +59,7 @@ public class ThreadService implements ThreadServiceInterface {
 	              DTOConversionInterface dtoConversion,
 	              DTODeconversionInterface dtoDeconversion) {
 		this.threadRepository = threadRepository;
+		this.userStatusRepository = userStatusRepository;
 		this.tagService = tagService;
 		this.forumCategoryService = forumCategoryService;
 		this.postService = postService;
@@ -65,7 +74,8 @@ public class ThreadService implements ThreadServiceInterface {
 		log.info("Get newest threads - page: {}", pageNumber);
 
 		return dtoConversion.convertToDTO(
-				threadRepository.findAll(PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
+				threadRepository.findAll(PageRequest.of(pageNumber, 30, Sort.by("creation").descending()))
+						.map(thread -> dtoConversion.convertToSimpleDTO(thread, findThreadStatusForUser(thread, userService.getCurrentUser())))
 		);
 	}
 
@@ -80,17 +90,18 @@ public class ThreadService implements ThreadServiceInterface {
 		return dtoConversion.convertToDTO(
 				threadRepository.findAllByForumQuery(
 						forumQuery.getMinCreation(),
-						forumQuery.getMaxCreation(),
-						forumQuery.getMinModification(),
-						forumQuery.getMaxModification(),
-						forumQuery.getMinNrOfPosts(),
-						forumQuery.getMaxNrOfPosts(),
-						forumQuery.getTitle(),
-						forumQuery.getCreatorUsername(),
-						forumQuery.getCategory(),
-						forumQuery.getStatus(),
-						tags,
-						PageRequest.of(pageNumber, 30, Sort.by("creation").descending())).map(dtoConversion::convertToSimpleDTO)
+								forumQuery.getMaxCreation(),
+								forumQuery.getMinModification(),
+								forumQuery.getMaxModification(),
+								forumQuery.getMinNrOfPosts(),
+								forumQuery.getMaxNrOfPosts(),
+								forumQuery.getTitle(),
+								forumQuery.getCreatorUsername(),
+								forumQuery.getCategory(),
+								forumQuery.getStatus(),
+								tags,
+								PageRequest.of(pageNumber, 30, Sort.by("creation").descending()))
+						.map(thread -> dtoConversion.convertToSimpleDTO(thread, findThreadStatusForUser(thread, userService.getCurrentUser())))
 		);
 	}
 
@@ -99,7 +110,9 @@ public class ThreadService implements ThreadServiceInterface {
 		Thread thread = getNonDTOThreadById(id);
 
 		return dtoConversion.convertToDTO(
-				thread, postService.findPostsByThread(0, thread.getThreadId())
+				thread,
+				postService.findPostsByThread(0, thread.getThreadId()),
+				findThreadStatusForUser(thread, userService.getCurrentUser())
 		);
 	}
 
@@ -126,7 +139,9 @@ public class ThreadService implements ThreadServiceInterface {
 		thread.setTags(newThread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
 		thread.setCreator(userService.getCurrentUserOrInsert());
 
-		return dtoConversion.convertToSimpleDTO(threadRepository.save(thread));
+		Thread savedThread = threadRepository.save(thread);
+
+		return dtoConversion.convertToSimpleDTO(savedThread, findThreadStatusForUser(savedThread, userService.getCurrentUser()));
 	}
 
 	@Override
@@ -154,7 +169,48 @@ public class ThreadService implements ThreadServiceInterface {
 		oldThread.setCategory(forumCategoryService.findCategoryByIdAndName(thread.getCategory().getCategoryId(), thread.getCategory().getCategoryName()));
 		oldThread.setTags(thread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
 
-		return dtoConversion.convertToDTO(threadRepository.save(oldThread),
-				postService.findPostsByThread(0, thread.getThreadId()));
+		Thread savedThread = threadRepository.save(oldThread);
+
+		return dtoConversion.convertToDTO(
+				savedThread,
+				postService.findPostsByThread(0, thread.getThreadId()),
+				findThreadStatusForUser(savedThread, userService.getCurrentUser())
+		);
+	}
+
+	@Override
+	public ThreadUserStatusDTO updateThreadUserStatus(int threadId, ThreadUserStatusDTO status) {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"User tried to update Post status without being logged in");
+		}
+
+		User currUser = userService.getCurrentUser();
+		ThreadUserStatusIdDTO ids = status.getIds();
+
+		if (Objects.isNull(ids) || !currUser.getUserId().equals(ids.getUser().getUserId())) {
+			throw new AuthenticationException(i18nService.getTranslation("forum.error-during-thread-status-update"),
+					String.format("Error during Thread status update for user %s", currUser.getUsername()));
+		}
+
+		int threadIndex = status.getIds().getThread().getThreadId();
+		Thread thread = threadRepository.findById(threadIndex)
+				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-thread", threadIndex),
+						String.format("No thread with id %s was found", threadIndex)));
+
+		log.info("Update thread user status for thread with id: {}, and for user {}", threadId, currUser.getUsername());
+
+		ThreadUserStatusId threadUserId = new ThreadUserStatusId(currUser, thread);
+
+		ThreadUserStatus userStatus = userStatusRepository.findById(threadUserId)
+				.map(threadUserStatus -> threadUserStatus.copyDataFromDTO(status))
+				.orElseGet(() -> dtoDeconversion.convertFromDTO(status, threadUserId));
+
+		return dtoConversion.convertToDTO(userStatusRepository.save(userStatus));
+	}
+
+	private ThreadUserStatus findThreadStatusForUser(Thread thread, User user) {
+		return thread.getThreadUserStatuses().stream().filter(threadUserStatus -> userService.getCurrentUser().equals(threadUserStatus.getThreadUserStatusId().getUser())).findFirst()
+				.orElseGet(() -> ThreadUserStatus.getEmptyThreadUserStatus(thread, user, false, false));
 	}
 }

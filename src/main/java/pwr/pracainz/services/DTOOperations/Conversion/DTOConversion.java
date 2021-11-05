@@ -26,6 +26,7 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.userauthentification.AuthenticationToken;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -136,7 +137,7 @@ public class DTOConversion implements DTOConversionInterface {
 	}
 
 	@Override
-	public SimpleThreadDTO convertToSimpleDTO(Thread thread) {
+	public SimpleThreadDTO convertToSimpleDTO(Thread thread, ThreadUserStatus status) {
 		return new SimpleThreadDTO(
 				thread.getThreadId(),
 				thread.getTitle(),
@@ -146,12 +147,13 @@ public class DTOConversion implements DTOConversionInterface {
 				thread.getModification(),
 				convertToSimpleDTO(thread.getCreator()),
 				convertToDTO(thread.getCategory()),
-				thread.getTags().stream().map(this::convertToDTO).collect(Collectors.toList())
+				thread.getTags().stream().map(this::convertToDTO).collect(Collectors.toList()),
+				Objects.isNull(status) ? null : this.convertToDTO(status)
 		);
 	}
 
 	@Override
-	public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts) {
+	public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts, ThreadUserStatus status) {
 		return new CompleteThreadDTO(
 				thread.getThreadId(),
 				thread.getTitle(),
@@ -163,7 +165,8 @@ public class DTOConversion implements DTOConversionInterface {
 				convertToSimpleDTO(thread.getCreator()),
 				convertToDTO(thread.getCategory()),
 				thread.getTags().stream().map(this::convertToDTO).collect(Collectors.toList()),
-				posts
+				posts,
+				this.convertToDTO(status)
 		);
 	}
 
@@ -226,7 +229,7 @@ public class DTOConversion implements DTOConversionInterface {
 	public ThreadUserStatusIdDTO convertToDTO(ThreadUserStatusId threadUserStatusId) {
 		return new ThreadUserStatusIdDTO(
 				convertToSimpleDTO(threadUserStatusId.getUser()),
-				convertToSimpleDTO(threadUserStatusId.getThread())
+				convertToSimpleDTO(threadUserStatusId.getThread(), null)
 		);
 	}
 

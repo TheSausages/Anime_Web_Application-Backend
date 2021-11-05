@@ -1,15 +1,19 @@
 package pwr.pracainz.entities.databaseerntities.forum;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
+import pwr.pracainz.entities.databaseerntities.user.User;
 
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Objects;
 
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -36,5 +40,20 @@ public class ThreadUserStatus {
 	@Override
 	public int hashCode() {
 		return Objects.hash(isWatching, isBlocked);
+	}
+
+	public static ThreadUserStatus getEmptyThreadUserStatus(Thread thread, User user, boolean isWatching, boolean isBlocked) {
+		ThreadUserStatusId id = new ThreadUserStatusId(user, thread);
+
+		return new ThreadUserStatus(
+				id, isWatching, isBlocked
+		);
+	}
+
+	public ThreadUserStatus copyDataFromDTO(ThreadUserStatusDTO userStatus) {
+		this.isBlocked = userStatus.isBlocked();
+		this.isWatching = userStatus.isWatching();
+
+		return this;
 	}
 }

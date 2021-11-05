@@ -6,6 +6,7 @@ import pwr.pracainz.DTO.forum.Thread.CompleteThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.CreateThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 
 public interface ThreadServiceInterface {
@@ -20,4 +21,6 @@ public interface ThreadServiceInterface {
 	SimpleThreadDTO createThread(CreateThreadDTO thread);
 
 	CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread);
+
+	ThreadUserStatusDTO updateThreadUserStatus(int threadId, ThreadUserStatusDTO status);
 }

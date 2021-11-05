@@ -44,9 +44,9 @@ public interface DTOConversionInterface {
 
 	CompletePostDTO convertToDTO(Post post, PostUserStatus status);
 
-	SimpleThreadDTO convertToSimpleDTO(Thread thread);
+	SimpleThreadDTO convertToSimpleDTO(Thread thread, ThreadUserStatus status);
 
-	CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts);
+	CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts, ThreadUserStatus status);
 
 	ForumCategoryDTO convertToDTO(ForumCategory forumCategory);
 

@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.forum.ForumCategoryDTO;
 import pwr.pracainz.DTO.forum.TagDTO;
+import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
@@ -52,4 +53,7 @@ public class SimpleThreadDTO {
 	@NotEmpty(message = "There must be at least 1 tag in a thread")
 	@Valid
 	private List<TagDTO> tags;
+
+	@Valid
+	private ThreadUserStatusDTO threadUserStatus;
 }
