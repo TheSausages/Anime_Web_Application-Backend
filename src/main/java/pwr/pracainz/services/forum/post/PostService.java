@@ -95,10 +95,10 @@ public class PostService implements PostServiceInterface {
 
 		Post post = dtoDeconversion.convertFromDTO(createPost);
 
-		post.setUser(currUser);
+		post.setCreator(currUser);
 		post.setThread(thread);
 
-		post.getUser().incrementNrOfPosts();
+		post.getCreator().incrementNrOfPosts();
 
 		postRepository.save(post);
 
@@ -117,7 +117,7 @@ public class PostService implements PostServiceInterface {
 				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-post", post.getPostId()),
 						String.format("No post with id %s was found", post.getPostId())));
 
-		if (!currUser.equals(oldPost.getUser())) {
+		if (!currUser.equals(oldPost.getCreator())) {
 			throw new AuthenticationException(i18nService.getTranslation("forum.no-updating-others-post"),
 					String.format("User %s tried to update others people post", userService.getUsernameOfCurrentUser()));
 		}

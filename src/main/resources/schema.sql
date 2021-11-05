@@ -117,14 +117,14 @@ CREATE TABLE `Posts`
     `NrOfReports`  int          NOT NULL DEFAULT 0,
     `creation`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
     `modification` datetime     NOT NULL ON UPDATE CURRENT_TIMESTAMP,
-    `UserID`       varchar(36)  NOT NULL,
+    `CreatorID`    varchar(36)  NOT NULL,
     `ThreadID`     int          NOT NULL,
 
     PRIMARY KEY (`PostID`),
     KEY `FK_Post_Thread` (`ThreadID`),
     CONSTRAINT `FK_8` FOREIGN KEY `FK_Post_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`),
-    KEY `FK_Post_User` (`UserID`),
-    CONSTRAINT `FK_9` FOREIGN KEY `FK_Post_User` (`UserID`) REFERENCES `Users` (`UserID`)
+    KEY `FK_Post_User` (`CreatorID`),
+    CONSTRAINT `FK_9` FOREIGN KEY `FK_Post_User` (`CreatorID`) REFERENCES `Users` (`UserID`)
 ) COMMENT ='Table containing Information about a single Post on the Forum';
 
 CREATE TABLE `PostUserStatus`

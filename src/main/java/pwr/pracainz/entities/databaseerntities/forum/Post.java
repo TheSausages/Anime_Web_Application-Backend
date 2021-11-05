@@ -65,8 +65,8 @@ public class Post {
 	private Set<PostUserStatus> postUserStatuses;
 
 	@ManyToOne
-	@JoinColumn(name = "userId", nullable = false)
-	private User user;
+	@JoinColumn(name = "creatorId", nullable = false)
+	private User creator;
 
 	@ManyToOne
 	@JoinColumn(name = "threadId", nullable = false)
@@ -77,7 +77,7 @@ public class Post {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Post post = (Post) o;
-		return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(user, post.user) && Objects.equals(thread, post.thread);
+		return postId == post.postId && isBlocked == post.isBlocked && nrOfPlus == post.nrOfPlus && nrOfMinus == post.nrOfMinus && Objects.equals(title, post.title) && Objects.equals(postText, post.postText) && Objects.equals(creator, post.creator) && Objects.equals(thread, post.thread);
 	}
 
 	@Override

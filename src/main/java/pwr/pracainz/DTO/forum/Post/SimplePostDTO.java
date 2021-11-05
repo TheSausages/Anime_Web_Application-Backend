@@ -35,5 +35,5 @@ public class SimplePostDTO {
 
 	@NotNull(message = "Creator cannot be null")
 	@Valid
-	private SimpleUserDTO user;
+	private SimpleUserDTO creator;
 }

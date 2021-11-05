@@ -77,7 +77,7 @@ public class User {
 	@OneToMany(mappedBy = "creator")
 	private Set<Thread> threads;
 
-	@OneToMany(mappedBy = "user")
+	@OneToMany(mappedBy = "creator")
 	private Set<Post> posts;
 
 	public User(String userId) {

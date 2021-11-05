@@ -101,7 +101,7 @@ public class DTOConversion implements DTOConversionInterface {
 				post.isBlocked(),
 				post.getCreation(),
 				post.getModification(),
-				convertToSimpleDTO(post.getUser())
+				convertToSimpleDTO(post.getCreator())
 		);
 	}
 
@@ -113,7 +113,7 @@ public class DTOConversion implements DTOConversionInterface {
 				post.isBlocked(),
 				post.getCreation(),
 				post.getModification(),
-				convertToSimpleDTO(post.getUser()),
+				convertToSimpleDTO(post.getCreator()),
 				post.getPostText(),
 				post.getNrOfPlus(),
 				post.getNrOfMinus()
@@ -128,7 +128,7 @@ public class DTOConversion implements DTOConversionInterface {
 				post.isBlocked(),
 				post.getCreation(),
 				post.getModification(),
-				convertToSimpleDTO(post.getUser()),
+				convertToSimpleDTO(post.getCreator()),
 				post.getPostText(),
 				post.getNrOfPlus(),
 				post.getNrOfMinus(),

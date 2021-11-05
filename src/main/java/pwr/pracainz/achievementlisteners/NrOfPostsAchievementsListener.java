@@ -25,9 +25,9 @@ public class NrOfPostsAchievementsListener {
 
 	@PostPersist
 	public void nrOfPostsAchievements(Post post) {
-		User user = post.getUser();
+		User user = post.getCreator();
 
-		Achievement achievement = switch (post.getUser().getNrOfPosts()) {
+		Achievement achievement = switch (post.getCreator().getNrOfPosts()) {
 			case 1 -> achievementRepository.getById(2);
 			case 10 -> achievementRepository.getById(3);
 			case 50 -> achievementRepository.getById(4);
