@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
+import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
 
 import javax.validation.Valid;
@@ -27,10 +28,13 @@ public class CompleteUserDTO extends SimpleUserDTO {
 	private Set<ThreadUserStatusDTO> threadUserStatuses;
 
 	@Valid
+	private Set<SimpleThreadDTO> threads;
+
+	@Valid
 	private Set<CompletePostDTO> posts;
 
 	public CompleteUserDTO(String userId, String username, int nrOfPosts, int watchTime, long achievementPoints, Set<AchievementDTO> achievements,
-	                       Set<AnimeUserInfoDTO> animeUserInfos, Set<ThreadUserStatusDTO> threadUserStatuses, Set<CompletePostDTO> posts) {
+	                       Set<AnimeUserInfoDTO> animeUserInfos, Set<ThreadUserStatusDTO> threadUserStatuses, Set<SimpleThreadDTO> threads, Set<CompletePostDTO> posts) {
 		super(userId, username, nrOfPosts, watchTime, achievementPoints);
 
 		this.achievements = achievements;

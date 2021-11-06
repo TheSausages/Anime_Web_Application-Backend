@@ -54,9 +54,10 @@ public class DTOConversion implements DTOConversionInterface {
 				user.getWatchTime(),
 				user.getAchievementPoints(),
 				achievements,
-				user.getAnimeUserInfo().stream().map(this::convertToDTO).collect(Collectors.toSet()),
-				user.getThreadUserStatuses().stream().map(this::convertToDTO).collect(Collectors.toSet()),
-				user.getPosts().stream().map(this::convertToDTO).collect(Collectors.toSet())
+				user.getAnimeUserInfo().stream().limit(6).map(this::convertToDTO).collect(Collectors.toSet()),
+				user.getThreadUserStatuses().stream().limit(6).map(this::convertToDTO).collect(Collectors.toSet()),
+				user.getThreads().stream().limit(6).map(thread -> this.convertToSimpleDTO(thread, null)).collect(Collectors.toSet()),
+				user.getPosts().stream().limit(6).map(this::convertToDTO).collect(Collectors.toSet())
 		);
 	}
 
@@ -213,7 +214,7 @@ public class DTOConversion implements DTOConversionInterface {
 				animeUserInfo.getModification(),
 				animeUserInfo.isDidReview(),
 				animeUserInfo.getGrade(),
-				animeUserInfo.getReview() != null ? convertToDTO(animeUserInfo.getReview()) : null
+				Objects.nonNull(animeUserInfo.getReview()) ? convertToDTO(animeUserInfo.getReview()) : null
 		);
 	}
 

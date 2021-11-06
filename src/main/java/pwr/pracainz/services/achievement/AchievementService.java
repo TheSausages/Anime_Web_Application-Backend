@@ -91,7 +91,7 @@ public class AchievementService implements AchievementServiceInterface {
 	@EventListener
 	public void emitAchievement(AchievementEarnedEvent event) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
-			//Dont emit an achievement if the user is not logged in
+			//Don't emit an achievement if the user is not logged in
 			return;
 		}
 
