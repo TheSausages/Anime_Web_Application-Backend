@@ -35,6 +35,11 @@ public class UserService implements UserServiceInterface {
 
 	@Override
 	public CompleteUserDTO getCurrentUserInformation() {
+		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+					"No User was logged in");
+		}
+
 		return getUserInformationById(getCurrentUser().getUserId(), true);
 	}
 
