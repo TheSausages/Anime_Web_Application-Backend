@@ -11,8 +11,7 @@ import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
-@RestController
-@RequestMapping("/anime")
+@RestControllerWithBasePath("${api.default-path}/anime")
 public class AnimeController {
 	private final AnimeServiceInterface animeService;
 	private final AnimeUserServiceInterface animeUserService;

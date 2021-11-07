@@ -1,4 +1,5 @@
 plugins {
+    id "com.github.node-gradle.node" version "3.1.1"
 	id "org.springframework.boot" version "2.5.3"
 	id "io.spring.dependency-management" version "1.0.11.RELEASE"
 	id "java"
@@ -58,4 +59,45 @@ dependencies {
 
 test {
 	useJUnitPlatform()
+}
+
+node {
+    download = true
+    version = "14.16.1"
+    npmVersion = "6.14.12"
+    distBaseUrl = "https://nodejs.org/dist"
+    npmInstallCommand = "install"
+    workDir = file("$projectDir/../ReactFrontEnd/nodejs")
+    npmWorkDir = file("$projectDir/../ReactFrontEnd/npm")
+    nodeModulesDir = file("$projectDir/../ReactFrontEnd")
+}
+
+task npmInstallDependencies(type: NpmTask) {
+    dependsOn 'npmSetup'
+    execOverrides {
+        it.ignoreExitValue = true
+        it.workingDir = "$projectDir/../ReactFrontEnd"
+    }
+    args = ['install']
+}
+
+task npmBuild(type: NpmTask) {
+    dependsOn 'npmInstallDependencies'
+    execOverrides {
+        it.workingDir = "$projectDir/../ReactFrontEnd"
+    }
+    args = ['run', 'build']
+}
+
+task copyFrontendToBuild(type: Copy) {
+    dependsOn 'npmBuild'
+    from "$projectDir/../ReactFrontEnd/build/"
+    into "$buildDir/resources/main/static"
+}
+
+processResources {
+    def serve = System.getenv('SERVE_STATIC_CONTENT')
+    if (serve != null && serve == 'serve') {
+        dependsOn 'copyFrontendToBuild'
+    }
 }

@@ -56,17 +56,20 @@ public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter 
 				.headers().frameOptions().sameOrigin()
 				.and()
 				.authorizeRequests()
-				.mvcMatchers("/auth**", "/auth/**", "/anime/**", "/anime**", "/user/**", "/user**").permitAll()
+				.mvcMatchers("/**", "/auth**", "/auth/**", "/anime/**", "/anime**", "/user/**", "/user**").permitAll()
 				.mvcMatchers("/forum/**", "/forum**", "/animeUser**", "/animeUser/**", "/achievements/**", "/achievements**", "/user/current").authenticated()
 				.anyRequest().authenticated()
 		;
 
 	}
 
+	/**
+	 * TODO Change into 2 beans for profiles local and docker (local has localhost:3000 and http://192.168.0.245:3000, docker has localhost:8080 and 192.168.0.245:8080), both have 8180
+	 */
 	@Bean
 	public CorsConfigurationSource corsConfigurationSource() {
 		CorsConfiguration configuration = new CorsConfiguration();
-		configuration.setAllowedOrigins(Arrays.asList("http://localhost:3000", "http://localhost:8180", "http://192.168.0.245:3000"));
+		configuration.setAllowedOrigins(Arrays.asList("http://localhost:8180", "http://localhost:3000", "http://192.168.0.245:3000", "http://localhost:8080", "http://192.168.0.245:8080"));
 		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "OPTIONS", "DELETE", "PUT"));
 		configuration.setAllowCredentials(true);
 		configuration.setAllowedHeaders(Arrays.asList(HttpHeaders.CONTENT_TYPE, HttpHeaders.AUTHORIZATION, HttpHeaders.ACCEPT_LANGUAGE));

@@ -21,8 +21,7 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
-@RestController
-@RequestMapping("/forum")
+@RestControllerWithBasePath("${api.default-path}/forum")
 public class ForumController {
 	private final ForumCategoryServiceInterface categoryService;
 	private final ThreadServiceInterface threadService;
