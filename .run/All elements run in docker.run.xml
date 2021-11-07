@@ -1,7 +1,6 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="All elements run in docker" type="CompoundRunConfigurationType">
-    <toRun name="Praca Inzynierska without Static Content" type="Application" />
-    <toRun name="Keycloak + Database" type="docker-deploy" />
+    <toRun name="Run Server + Static Content + Keycloak + Database" type="ShConfigurationType" />
     <method v="2" />
   </configuration>
 </component>

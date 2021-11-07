@@ -1,7 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Local server serves react app static files" type="CompoundRunConfigurationType">
-    <toRun name="Praca Inzynierska without Static Content" type="Application" />
     <toRun name="Keycloak + Database" type="docker-deploy" />
+    <toRun name="Praca Inzynierska with Static Content" type="Application" />
     <method v="2" />
   </configuration>
 </component>

@@ -93,6 +93,10 @@ task copyFrontendToBuild(type: Copy) {
     dependsOn 'npmBuild'
     from "$projectDir/../ReactFrontEnd/build/"
     into "$buildDir/resources/main/static"
+
+    doLast("Finish copy") {
+        println("The React app data was successfully copied to the static folder")
+    }
 }
 
 processResources {
