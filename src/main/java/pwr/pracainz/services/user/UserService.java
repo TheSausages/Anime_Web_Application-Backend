@@ -2,6 +2,7 @@ package pwr.pracainz.services.user;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
@@ -24,13 +25,15 @@ public class UserService implements UserServiceInterface {
 	private final I18nServiceInterface i18nService;
 	private final IconServiceInterface iconService;
 	private final DTOConversionInterface dtoConversion;
+	private final ApplicationEventPublisher publisher;
 
 	@Autowired
-	UserService(UserRepository userRepository, I18nServiceInterface i18nService, IconServiceInterface iconService, DTOConversionInterface dtoConversion) {
+	UserService(UserRepository userRepository, I18nServiceInterface i18nService, IconServiceInterface iconService, DTOConversionInterface dtoConversion, ApplicationEventPublisher publisher) {
 		this.userRepository = userRepository;
 		this.i18nService = i18nService;
 		this.iconService = iconService;
 		this.dtoConversion = dtoConversion;
+		this.publisher = publisher;
 	}
 
 	@Override

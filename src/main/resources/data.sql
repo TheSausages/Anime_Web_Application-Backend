@@ -5,10 +5,9 @@ values ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'User', 0, 0, 0),
 
 
 Insert into Achievements
-values (1, 'Welcome onboard!', 'Achievement unlocked after registering', 'achievements/Hello.png', 10),
-       (2, 'First Post!', 'Welcome aboard', 'achievements/NrOfPosts-1.png', 15),
-       (3, '10 Posts!', 'Getting the hang of it', 'achievements/NrOfPosts-10.png', 15),
-       (4, '50 posts!', 'Seasoned forum veteran', 'achievements/NrOfPosts-50.png', 25);
+values (1, 'First Post!', 'The first is never the last', 'achievements/NrOfPosts-1.png', 15),
+       (2, '10 Posts!', 'Getting the hang of it', 'achievements/NrOfPosts-10.png', 15),
+       (3, '50 posts!', 'Seasoned forum veteran', 'achievements/NrOfPosts-50.png', 25);
 
 Insert into UserAchievements
 values (1, 'eabc11d0-e6da-49f8-a6db-6bceb84a06bc');

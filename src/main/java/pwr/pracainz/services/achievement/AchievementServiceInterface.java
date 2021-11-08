@@ -1,7 +1,7 @@
 package pwr.pracainz.services.achievement;
 
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import pwr.pracainz.entities.AchievementEarnedEvent;
+import pwr.pracainz.entities.events.AchievementEarnedEvent;
 
 
 public interface AchievementServiceInterface {

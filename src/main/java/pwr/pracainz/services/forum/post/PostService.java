@@ -2,6 +2,7 @@ package pwr.pracainz.services.forum.post;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
@@ -17,6 +18,7 @@ import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.entities.events.PostEvent;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.DataException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
@@ -42,6 +44,7 @@ public class PostService implements PostServiceInterface {
 	private final UserServiceInterface userService;
 	private final DTOConversionInterface dtoConversion;
 	private final DTODeconversionInterface dtoDeconversion;
+	private final ApplicationEventPublisher publisher;
 
 	@Autowired
 	PostService(PostRepository postRepository,
@@ -50,7 +53,8 @@ public class PostService implements PostServiceInterface {
 	            UserServiceInterface userService,
 	            I18nServiceInterface i18nService,
 	            DTOConversionInterface dtoConversion,
-	            DTODeconversionInterface dtoDeconversion) {
+	            DTODeconversionInterface dtoDeconversion,
+	            ApplicationEventPublisher publisher) {
 		this.dtoConversion = dtoConversion;
 		this.postUserStatusRepository = postUserStatusRepository;
 		this.userService = userService;
@@ -58,6 +62,7 @@ public class PostService implements PostServiceInterface {
 		this.postRepository = postRepository;
 		this.threadRepository = threadRepository;
 		this.dtoDeconversion = dtoDeconversion;
+		this.publisher = publisher;
 	}
 
 
@@ -98,7 +103,9 @@ public class PostService implements PostServiceInterface {
 		post.setCreator(currUser);
 		post.setThread(thread);
 
-		post.getCreator().incrementNrOfPosts();
+		currUser.incrementNrOfPosts();
+
+		publisher.publishEvent(new PostEvent(post));
 
 		postRepository.save(post);
 

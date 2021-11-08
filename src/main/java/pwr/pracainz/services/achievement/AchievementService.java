@@ -7,8 +7,8 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import pwr.pracainz.entities.AchievementEarnedEvent;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
+import pwr.pracainz.entities.events.AchievementEarnedEvent;
 import pwr.pracainz.exceptions.exceptions.AchievementException;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversion;
@@ -82,7 +82,7 @@ public class AchievementService implements AchievementServiceInterface {
 	/*
 	This code can be used to try if async works
 		try {
-			sleep(10000);
+			sleep(5000);
 			System.out.println("ach:" + LocalDateTime.now());
 		} catch (Exception e) {
 		}

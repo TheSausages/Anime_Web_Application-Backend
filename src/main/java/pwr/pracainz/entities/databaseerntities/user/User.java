@@ -15,6 +15,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotEmpty;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -45,7 +46,7 @@ public class User {
 	@ColumnDefault("0")
 	private long achievementPoints;
 
-	@ManyToMany(fetch = FetchType.LAZY)
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "UserAchievements",
 			joinColumns = {@JoinColumn(name = "UserID")},
@@ -82,6 +83,18 @@ public class User {
 
 	public User(String userId) {
 		this.userId = userId;
+	}
+
+	/**
+	 * This is used when registering. We need to create the achievements right away because
+	 * 	we add one in the {@link UserAchievementsListener#registrationAchievements(User)}
+	 * @param userId Id of the user, retrieved from Keycloak
+	 * @param username Username of the user
+	 */
+	public User(String userId, String username) {
+		this.userId = userId;
+		this.username = username;
+		this.achievements = new HashSet<>();
 	}
 
 	public void incrementNrOfPosts() {
