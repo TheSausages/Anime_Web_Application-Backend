@@ -2,11 +2,7 @@ package pwr.pracainz.achievementlisteners;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.event.EventListener;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.AchievementIdEnum;
@@ -26,9 +22,7 @@ public class PostAchievementsListener {
 		this.publisher = publisher;
 	}
 
-	@Async
-	@Transactional(propagation = Propagation.REQUIRES_NEW)
-	@EventListener
+	@AchievementListener
 	public void NrOfAchievementListener(PostEvent event) {
 		User user = ((Post) event.getSource()).getCreator();
 
