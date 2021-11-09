@@ -76,6 +76,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.buildMediaTitle())
 				.coverImage()
 				.buildField();
+
 		PageInfo pageInfo = PageInfo.getPageInfoBuilder()
 				.total()
 				.currentPage()
@@ -83,6 +84,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.hasNextPage()
 				.perPage()
 				.buildPageInfo();
+
 		Page page = Page.getPageBuilder(1, 40)
 				.pageInfo(pageInfo)
 				.media(Media.getMediaBuilder(field)
@@ -117,6 +119,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.buildMediaTitle())
 				.coverImage()
 				.buildField();
+
 		PageInfo pageInfo = PageInfo.getPageInfoBuilder()
 				.total()
 				.currentPage()
@@ -124,6 +127,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.hasNextPage()
 				.perPage()
 				.buildPageInfo();
+
 		Page page = Page.getPageBuilder(1, 40)
 				.pageInfo(pageInfo)
 				.media(Media.getMediaBuilder(field)
@@ -158,6 +162,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.romajiLanguage()
 						.buildMediaTitle())
 				.buildField();
+
 		Page page = Page.getPageBuilder(pageNumber, 49)
 				.pageInfo(PageInfo.getPageInfoBuilder()
 						.currentPage()
@@ -197,6 +202,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.romajiLanguage()
 						.buildMediaTitle())
 				.buildField();
+
 		Page page = Page.getPageBuilder(pageNumber, 49)
 				.pageInfo(PageInfo.getPageInfoBuilder()
 						.currentPage()
@@ -236,6 +242,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.romajiLanguage()
 						.buildMediaTitle())
 				.buildField();
+
 		Page page = Page.getPageBuilder(pageNumber, 49)
 				.pageInfo(PageInfo.getPageInfoBuilder()
 						.currentPage()
@@ -454,6 +461,7 @@ public class AnimeService implements AnimeServiceInterface {
 										.buildPageInfo())
 								.buildStaffConnection())
 				.buildField();
+
 		Media media = Media.getMediaBuilder(field)
 				.id(id)
 				.buildMedia();

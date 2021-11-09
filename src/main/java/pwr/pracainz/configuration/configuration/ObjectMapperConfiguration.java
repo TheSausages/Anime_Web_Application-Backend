@@ -1,4 +1,4 @@
-package pwr.pracainz.configuration;
+package pwr.pracainz.configuration.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;

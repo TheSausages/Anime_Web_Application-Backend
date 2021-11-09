@@ -1,4 +1,4 @@
-package pwr.pracainz.configuration;
+package pwr.pracainz.configuration.configuration;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.boot.web.error.ErrorAttributeOptions;
@@ -10,7 +10,7 @@ import java.util.Map;
 
 @Log4j2
 @Component
-public class CustomErrorAttributes extends DefaultErrorAttributes {
+public class CustomErrorAttributesConfiguration extends DefaultErrorAttributes {
 	@Override
 	public Map<String, Object> getErrorAttributes(WebRequest webRequest, ErrorAttributeOptions options) {
 		Map<String, Object> errorInformation = super.getErrorAttributes(webRequest, options);

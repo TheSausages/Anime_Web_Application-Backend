@@ -1,4 +1,4 @@
-package pwr.pracainz.configuration;
+package pwr.pracainz.configuration.configuration;
 
 import org.springframework.aop.interceptor.AsyncUncaughtExceptionHandler;
 import org.springframework.context.annotation.Configuration;

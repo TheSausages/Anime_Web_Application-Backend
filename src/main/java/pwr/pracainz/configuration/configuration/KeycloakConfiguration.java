@@ -1,4 +1,4 @@
-package pwr.pracainz.configuration;
+package pwr.pracainz.configuration.configuration;
 
 import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
 import org.keycloak.OAuth2Constants;
