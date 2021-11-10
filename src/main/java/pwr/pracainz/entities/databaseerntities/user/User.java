@@ -86,8 +86,7 @@ public class User {
 	}
 
 	/**
-	 * This is used when registering. We need to create the achievements right away because
-	 * 	we add one in the {@link UserAchievementsListener#registrationAchievements(User)}
+	 * This is used when registering
 	 * @param userId Id of the user, retrieved from Keycloak
 	 * @param username Username of the user
 	 */

@@ -41,6 +41,9 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
 
+/**
+ * Default implementation for the {@link AnimeServiceInterface} implementation.
+ */
 @Log4j2
 @Service
 public class AnimeService implements AnimeServiceInterface {
@@ -65,6 +68,11 @@ public class AnimeService implements AnimeServiceInterface {
 		this.client = anilistWenClient;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation sorts the anime from the most popular to least (on Anilist)
+	 */
 	@Override
 	public ObjectNode getCurrentSeasonAnime(HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -104,11 +112,14 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, "currentSeason",
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,  request, "currentSeason",
 						getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ObjectNode getSeasonAnime(MediaSeason season, int year, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -146,11 +157,14 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, request,
 						String.format("Successfully got Anime from %s of %s", season, year)))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ObjectNode getTopAnimeMovies(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -186,11 +200,14 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Anime Movies", pageNumber)))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ObjectNode getTopAnimeAiring(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -226,11 +243,14 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Airing Anime", pageNumber)))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ObjectNode getTopAnimeAllTime(int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -265,11 +285,16 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Anime of All Time", pageNumber)))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation sorts the list from the best shows to the worst
+	 */
 	@Override
 	public ObjectNode searchByQuery(AnimeQuery query, int pageNumber, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -371,11 +396,14 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(page))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Search query with conditions: %s", pageNumber, query)))
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ObjectNode getAnimeById(int id, HttpServletRequest request) {
 		Field field = Field.getFieldBuilder()
@@ -475,7 +503,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.body(Query.fromQueryElement(media))
 				.retrieve()
 				.bodyToMono(ObjectNode.class)
-				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res,
+				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, request,
 						String.format("Successfully got Anime with id: %s", id)))
 				.block();
 
@@ -496,28 +524,60 @@ public class AnimeService implements AnimeServiceInterface {
 		return node;
 	}
 
-	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String positiveLogResponse) {
+	/**
+	 Evaluate the Anilist response:
+	 * <ul>
+	 *     <li>Remove unnecessary information from the response</li>
+	 *     <li>On success, log <i>positiveLogResponse</i></li>
+	 *     <li>On error, throw an {@link AnilistException} with a translated message using the language from the original request</li>
+	 * </ul>
+	 * @param element What type of {@link pwr.pracainz.entities.anime.query.queryElements.QueryElement} was used.
+	 *                   This information if used to get rid in unnecessery info using {@link #removeDataAndQueryElementFromJson(ObjectNode, QueryElements)}
+	 * @param response The answer from Anilist
+	 * @param request {@link AnimeServiceInterface}
+	 * @param positiveLogResponse Message that should be logged when no error occurred
+	 * @return The processed answer that is sent back as the answer to the original request
+	 */
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, HttpServletRequest request, String positiveLogResponse) {
 		return Mono.just(response)
 				.map(res -> removeDataAndQueryElementFromJson(res, element))
 				.doOnSuccess(s -> log.info(positiveLogResponse))
 				.doOnError(e -> {
-					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response"));
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
 				});
 	}
 
-	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, String additionalBodyName, ObjectNode additionalBody, String positiveLogResponse) {
+	/**
+	 * Variant of the {@link #evaluateClientResponse(QueryElements, ObjectNode, HttpServletRequest, String)} method.
+	 * This method adds additional information to the answer under a given name.
+	 * @param additionalBodyName Name under which the additional information should be inserted
+	 * @param additionalBody Data that should be inserted
+	 */
+	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, HttpServletRequest request, String additionalBodyName, ObjectNode additionalBody, String positiveLogResponse) {
 		return Mono.just(response)
 				.map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
 				.doOnSuccess(s -> log.info(positiveLogResponse))
 				.doOnError(e -> {
-					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response"));
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
 				});
 	}
 
+	/**
+	 * Remove unnecessary information from the data.
+	 * @param json Original data
+	 * @param element Element from the {@link ObjectNode} which should be returned
+	 * @return Data with the unnecessary information taken out
+	 */
 	private ObjectNode removeDataAndQueryElementFromJson(ObjectNode json, QueryElements element) {
 		return json.get("data").get(element.name()).deepCopy();
 	}
 
+	/**
+	 * Get year and season of the current Anime season
+	 * @return Current Season information
+	 *
+	 * @see MediaSeason#getCurrentSeason()
+	 */
 	private ObjectNode getCurrentSeasonInformation() {
 		ObjectNode seasonInformation = mapper.createObjectNode();
 		seasonInformation.put("year", LocalDateTime.now().getYear());

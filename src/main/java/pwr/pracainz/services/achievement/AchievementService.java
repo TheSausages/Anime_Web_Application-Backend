@@ -21,6 +21,9 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+/**
+ * Default implementation for the {@link AchievementServiceInterface} implementation.
+ */
 @Log4j2
 @Service
 public class AchievementService implements AchievementServiceInterface {
@@ -43,6 +46,12 @@ public class AchievementService implements AchievementServiceInterface {
 		emitterMap = new ConcurrentHashMap<>();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * Each user has its own {@link SseEmitter}.
+	 * @return An {@link SseEmitter} used for a given user.
+	 */
 	@Override
 	public SseEmitter subscribe() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -66,6 +75,9 @@ public class AchievementService implements AchievementServiceInterface {
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public void cancel() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -86,6 +98,11 @@ public class AchievementService implements AchievementServiceInterface {
 			System.out.println("ach:" + LocalDateTime.now());
 		} catch (Exception e) {
 		}
+	 */
+	/**
+	 * {@inheritDoc}
+	 *
+	 * When an error occurs, emit an {@link AchievementException} with a message.
 	 */
 	@Async
 	@EventListener
@@ -108,7 +125,7 @@ public class AchievementService implements AchievementServiceInterface {
 			log.error("Error occurred during achievement emitting for user {}, \n {}", userService.getUsernameOfCurrentUser(), ex);
 
 			emitter.completeWithError(new AchievementException(
-					"An achievement was added, but notification could not be send"
+					i18nService.getTranslation("general.error-during-achievement-emission")
 			));
 		}
 	}

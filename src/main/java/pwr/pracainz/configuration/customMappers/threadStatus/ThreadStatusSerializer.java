@@ -7,6 +7,10 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
 
 import java.io.IOException;
 
+/**
+ * Custom serializer for the {@link ThreadStatus} class.
+ * It serializes to the {@link ThreadStatus#formattedStatus}.
+ */
 public class ThreadStatusSerializer extends StdSerializer<ThreadStatus> {
 	public ThreadStatusSerializer() {
 		this(null);

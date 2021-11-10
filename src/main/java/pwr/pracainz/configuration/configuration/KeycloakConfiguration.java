@@ -8,6 +8,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import pwr.pracainz.configuration.properties.KeycloakMasterProperties;
 
+/**
+ * Configure a {@link Keycloak} instance as a bean using {@link KeycloakMasterProperties}.
+ */
 @Configuration
 public class KeycloakConfiguration {
 	private final KeycloakMasterProperties keycloakProperties;

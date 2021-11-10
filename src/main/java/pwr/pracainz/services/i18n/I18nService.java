@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
 
+/**
+ * Default implementation for the {@link I18nServiceInterface} implementation.
+ */
 @Log4j2
 @Service
 public class I18nService implements I18nServiceInterface {
@@ -19,25 +22,15 @@ public class I18nService implements I18nServiceInterface {
 	}
 
 	/**
-	 * Get a translation using a selected path. This method uses the locale set from the {@link org.springframework.http.HttpHeaders#ACCEPT_LANGUAGE} header.
-	 *
-	 * @param path       Path to the translation
-	 * @param parameters Parameters used in the translation, can be empty
-	 * @return Translation with parameters inserted in order
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getTranslation(String path, Object... parameters) {
 		return source.getMessage(path, parameters, LocaleContextHolder.getLocale());
 	}
-	
+
 	/**
-	 * Variant of {@link #getTranslation(String, Object...)}.When the error is from a request to another site (ex. anilist) the headers would be from there, so in order to get
-	 * the correct locale we need to insert our request here
-	 *
-	 * @param path       Path to the translation
-	 * @param request    Selected request, should posses the language header
-	 * @param parameters Parameters used in the translation, can be empty
-	 * @return Translation with parameters inserted in order
+	 * {@inheritDoc}
 	 */
 	@Override
 	public String getTranslation(String path, HttpServletRequest request, Object... parameters) {

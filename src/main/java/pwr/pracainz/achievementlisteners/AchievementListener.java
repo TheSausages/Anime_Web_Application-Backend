@@ -10,6 +10,11 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
+/**
+ * Annotation for all achievement listeners. Each of the listeners is asynchronous.
+ * <p>
+ * It creates a new transaction for each listener.
+ */
 @Async
 @EventListener
 @Transactional(propagation = Propagation.REQUIRES_NEW)

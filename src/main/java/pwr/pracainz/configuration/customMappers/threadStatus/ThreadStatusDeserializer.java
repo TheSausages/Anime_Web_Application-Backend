@@ -11,6 +11,10 @@ import pwr.pracainz.exceptions.exceptions.CustomDeserializationException;
 import java.io.IOException;
 import java.util.Locale;
 
+/**
+ * Custom deserializer for the {@link ThreadStatus} class.
+ * It uses the {@link ThreadStatus#formattedStatus} to deserialize.
+ */
 public class ThreadStatusDeserializer extends StdDeserializer<ThreadStatus> {
 	public ThreadStatusDeserializer() {
 		this(null);

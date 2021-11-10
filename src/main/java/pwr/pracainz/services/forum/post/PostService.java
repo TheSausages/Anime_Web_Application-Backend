@@ -18,7 +18,7 @@ import pwr.pracainz.entities.databaseerntities.forum.PostUserStatus;
 import pwr.pracainz.entities.databaseerntities.forum.PostUserStatusId;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.user.User;
-import pwr.pracainz.entities.events.PostEvent;
+import pwr.pracainz.entities.events.PostCreationEvent;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.DataException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
@@ -105,7 +105,7 @@ public class PostService implements PostServiceInterface {
 
 		currUser.incrementNrOfPosts();
 
-		publisher.publishEvent(new PostEvent(post));
+		publisher.publishEvent(new PostCreationEvent(post));
 
 		postRepository.save(post);
 

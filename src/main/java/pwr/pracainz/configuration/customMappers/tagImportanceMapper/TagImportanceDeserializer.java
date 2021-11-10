@@ -11,6 +11,10 @@ import pwr.pracainz.exceptions.exceptions.CustomDeserializationException;
 import java.io.IOException;
 import java.util.Locale;
 
+/**
+ * Custom deserializer for the {@link TagImportance} class.
+ * It uses the {@link TagImportance#formattedImportance} to deserialize.
+ */
 public class TagImportanceDeserializer extends StdDeserializer<TagImportance> {
 	public TagImportanceDeserializer() {
 		this(null);

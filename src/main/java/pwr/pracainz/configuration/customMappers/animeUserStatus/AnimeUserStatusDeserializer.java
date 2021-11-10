@@ -11,6 +11,10 @@ import pwr.pracainz.exceptions.exceptions.CustomDeserializationException;
 import java.io.IOException;
 import java.util.Locale;
 
+/**
+ * Custom deserializer for the {@link AnimeUserStatus} class.
+ * It uses the {@link AnimeUserStatus#formattedStatus} to deserialize.
+ */
 public class AnimeUserStatusDeserializer extends StdDeserializer<AnimeUserStatus> {
 	public AnimeUserStatusDeserializer() {
 		this(null);

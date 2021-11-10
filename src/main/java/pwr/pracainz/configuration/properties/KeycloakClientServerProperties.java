@@ -4,6 +4,9 @@ import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.ConstructorBinding;
 
+/**
+ * Properties used for connecting to the client realm in keycloak. It uses the <i>keycloakrealm.clientserver</i> prefix
+ */
 @ConfigurationProperties(prefix = "keycloakrealm.clientserver")
 @ConstructorBinding
 @Getter

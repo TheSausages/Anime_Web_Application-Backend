@@ -7,6 +7,13 @@ import org.springframework.context.annotation.Configuration;
 
 import java.text.SimpleDateFormat;
 
+/**
+ * Configure an app-wide {@link ObjectMapper} with:
+ * <ul>
+ *     <li>Use the {@link JavaTimeModule}</li>
+ *     <li>The date format is <i>dd.MM.yyyy</i></li>
+ * </ul>
+ */
 @Configuration
 public class ObjectMapperConfiguration {
 

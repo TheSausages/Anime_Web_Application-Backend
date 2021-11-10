@@ -9,6 +9,16 @@ import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecu
 
 import java.util.concurrent.Executor;
 
+/**
+ * Configure the App to enable asynchronous operations. It's configured to remember the security data from the request.
+ * Additional configurations:
+ * <ul>
+ *     <li>Max pool size: 10</li>
+ *     <li>There is no {@link AsyncUncaughtExceptionHandler} configured</li>
+ * </ul>
+ *
+ * @see pwr.pracainz.achievementlisteners.AchievementListener
+ */
 @EnableAsync
 @Configuration
 public class AsyncConfiguration implements AsyncConfigurer {

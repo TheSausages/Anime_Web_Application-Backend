@@ -7,6 +7,10 @@ import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 
 import java.io.IOException;
 
+/**
+ * Custom serializer for the {@link AnimeUserStatus} class.
+ * It serializes to the {@link AnimeUserStatus#formattedStatus}.
+ */
 public class AnimeUserStatusSerializer extends StdSerializer<AnimeUserStatus> {
 	public AnimeUserStatusSerializer() {
 		this(null);

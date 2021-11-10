@@ -8,9 +8,12 @@ import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.databaseerntities.user.AchievementIdEnum;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.events.AchievementEarnedEvent;
-import pwr.pracainz.entities.events.PostEvent;
+import pwr.pracainz.entities.events.PostCreationEvent;
 import pwr.pracainz.repositories.user.AchievementRepository;
 
+/**
+ * Class that contains all {@link AchievementListener} for the {@link Post} class.
+ */
 @Component
 public class PostAchievementsListener {
 	private final AchievementRepository achievementRepository;
@@ -22,8 +25,19 @@ public class PostAchievementsListener {
 		this.publisher = publisher;
 	}
 
+	/**
+	 * Listener that checks if a {@link Post} creator should get an Achievement connected to the {@link User#nrOfPosts}
+	 * <p>
+	 * Achievements earned for this listener:
+	 * <ul>
+	 *     <li>{@link AchievementIdEnum#NrOfPostsAchievement_1}</li>
+	 *     <li>{@link AchievementIdEnum#NrOfPostsAchievement_10}</li>
+	 *     <li>{@link AchievementIdEnum#NrOfPostsAchievement_50}</li>
+	 * </ul>
+	 * @param event Event containing newly created post.
+	 */
 	@AchievementListener
-	public void NrOfAchievementListener(PostEvent event) {
+	public void NrOfAchievementListener(PostCreationEvent event) {
 		User user = ((Post) event.getSource()).getCreator();
 
 		int achievementId = switch (user.getNrOfPosts()) {
