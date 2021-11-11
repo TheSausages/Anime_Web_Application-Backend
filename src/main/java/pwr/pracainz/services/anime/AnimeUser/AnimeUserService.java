@@ -94,8 +94,21 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(currUser, anime);
 
 		AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
-				.map(animeUserInfo -> animeUserInfo.copyDataFromDTO(animeUserInfoDTO))
-				.orElse(dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId));
+				.map(animeUserInfo -> {
+					int oldWatchTime = animeUserInfo.getNrOfEpisodesSeen() * anime.getAverageEpisodeLength();
+					int newWatchTime = animeUserInfoDTO.getNrOfEpisodesSeen() * anime.getAverageEpisodeLength();
+					currUser.addWatchTime(newWatchTime - oldWatchTime);
+
+					return animeUserInfo.copyDataFromDTO(animeUserInfoDTO);
+				})
+				.orElseGet(() -> {
+					int newWatchTime = animeUserInfoDTO.getNrOfEpisodesSeen() * anime.getAverageEpisodeLength();
+					currUser.addWatchTime(newWatchTime);
+
+					return dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId);
+				});
+
+
 
 		return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
 	}

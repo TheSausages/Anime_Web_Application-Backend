@@ -158,11 +158,12 @@ CREATE TABLE `Reviews`
 
 CREATE TABLE `Anime`
 (
-    `AnimeID`        int          NOT NULL,
-    `AverageScore`   double(2, 1) NOT NULL DEFAULT 0,
-    `NrOfScores`     int          NOT NULL DEFAULT 0,
-    `NrOfFavourites` int          NOT NULL DEFAULT 0,
-    `NrOfReviews`    int          NOT NULL DEFAULT 0,
+    `AnimeID`               int          NOT NULL,
+    `AverageScore`          double(2, 1) NOT NULL DEFAULT 0,
+    `NrOfScores`            int          NOT NULL DEFAULT 0,
+    `NrOfFavourites`        int          NOT NULL DEFAULT 0,
+    `NrOfReviews`           int          NOT NULL DEFAULT 0,
+    `AverageEpisodeLength`  int          DEFAULT 25,
 
     PRIMARY KEY (`AnimeID`)
 ) COMMENT ='Table containing information about anime not found from Anilist API';

@@ -1,5 +1,6 @@
 package pwr.pracainz.services.anime.Anime;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.log4j.Log4j2;
@@ -510,8 +511,11 @@ public class AnimeService implements AnimeServiceInterface {
 				.block();
 
 		if (Objects.nonNull(node)) {
+			JsonNode durationNode = node.get("duration");
+			int averageEpisodeLength = Objects.isNull(durationNode) ? 25 : durationNode.asInt();
+
 			Anime anime = animeRepository.findById(id)
-					.orElseGet(() -> animeRepository.save(new Anime(id)));
+					.orElseGet(() -> animeRepository.save(new Anime(id, averageEpisodeLength)));
 
 			node.set("localAnimeInformation", mapper.valueToTree(dtoConversion.convertToDTO(anime)));
 

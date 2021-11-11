@@ -104,6 +104,8 @@ public class User {
 		this.achievementPoints += points;
 	}
 
+	public void addWatchTime(int watchTime) { this.watchTime += watchTime; }
+
 	@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;

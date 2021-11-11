@@ -37,6 +37,10 @@ public class Anime {
 	@ColumnDefault("0")
 	private int nrOfReviews;
 
+	@Min(value = 0)
+	@ColumnDefault("25")
+	private int averageEpisodeLength;
+
 	@OneToMany(
 			mappedBy = "animeUserInfoId.anime",
 			cascade = CascadeType.ALL,
@@ -45,8 +49,11 @@ public class Anime {
 	)
 	private Set<AnimeUserInfo> animeUserInfos;
 
-	public Anime(int animeId) {
+	public Anime(int animeId) { this.animeId = animeId; }
+
+	public Anime(int animeId, int averageEpisodeLength) {
 		this.animeId = animeId;
+		this.averageEpisodeLength = averageEpisodeLength;
 	}
 
 	public void updateAverageScore(int grade) {
