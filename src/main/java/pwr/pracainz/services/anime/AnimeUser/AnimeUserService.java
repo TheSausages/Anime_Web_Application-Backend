@@ -20,6 +20,9 @@ import pwr.pracainz.utils.UserAuthorizationUtilities;
 
 import java.util.Objects;
 
+/**
+ * Default implementation for the {@link AnimeUserServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class AnimeUserService implements AnimeUserServiceInterface {
@@ -45,9 +48,12 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		this.animeRepository = animeRepository;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeUserInfoDTO getCurrentUserAnimeInfo(Anime anime) {
-		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUserOrInsert(), anime);
+		AnimeUserInfoId animeUserInfoId = new AnimeUserInfoId(userService.getCurrentUser(), anime);
 
 		return dtoConversion.convertToDTO(
 				animeUserInfoRepository
@@ -56,6 +62,9 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -63,7 +72,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 					"User tried to update User info without being logged in");
 		}
 
-		User currUser = userService.getCurrentUserOrInsert();
+		User currUser = userService.getCurrentUser();
 		AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 
 		if (Objects.isNull(requestUserId) || !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {

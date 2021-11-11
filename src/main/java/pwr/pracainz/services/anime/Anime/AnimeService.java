@@ -42,7 +42,7 @@ import java.util.Collections;
 import java.util.Objects;
 
 /**
- * Default implementation for the {@link AnimeServiceInterface} implementation.
+ * Default implementation for the {@link AnimeServiceInterface} interface.
  */
 @Log4j2
 @Service
@@ -403,6 +403,8 @@ public class AnimeService implements AnimeServiceInterface {
 
 	/**
 	 * {@inheritDoc}
+	 *
+	 * This implementation also adds local Anime statistics and Anime User Information of the currently authenticated user
 	 */
 	@Override
 	public ObjectNode getAnimeById(int id, HttpServletRequest request) {

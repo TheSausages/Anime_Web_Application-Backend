@@ -18,6 +18,9 @@ import pwr.pracainz.utils.UserAuthorizationUtilities;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation for the {@link UserServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class UserService implements UserServiceInterface {
@@ -36,6 +39,9 @@ public class UserService implements UserServiceInterface {
 		this.publisher = publisher;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompleteUserDTO getCurrentUserInformation() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -43,11 +49,16 @@ public class UserService implements UserServiceInterface {
 					"No User was logged in");
 		}
 
-		return getUserInformationById(getCurrentUser().getUserId(), true);
+		return getUserInformationById(getCurrentUser().getUserId());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
-	public CompleteUserDTO getUserInformationById(String userId, boolean isCurrentUser) {
+	public CompleteUserDTO getUserInformationById(String userId) {
+		boolean isCurrentUser = UserAuthorizationUtilities.checkIfLoggedUser();
+
 		log.info("Get complete user information for user with id: {}, current User: {}", userId, isCurrentUser);
 
 		User user = userRepository.findById(userId)
@@ -61,26 +72,24 @@ public class UserService implements UserServiceInterface {
 		return dtoConversion.convertToDTO(user, achievements);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User getCurrentUser() {
-		return userRepository.findById(UserAuthorizationUtilities.getIdOfCurrentUser())
-				.orElseThrow(() -> new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
-						String.format("No User was found for given id: %s", UserAuthorizationUtilities.getIdOfCurrentUser())));
-	}
-
-	@Override
-	public User getCurrentUserOrInsert() {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
 					"No User was logged in");
 		}
 
-		String currUserId = UserAuthorizationUtilities.getIdOfCurrentUser();
-
-		return userRepository.findById(currUserId)
-				.orElseGet(() -> userRepository.save(new User(currUserId)));
+		return userRepository.findById(UserAuthorizationUtilities.getIdOfCurrentUser())
+				.orElseThrow(() -> new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
+						String.format("No User was found for given id: %s", UserAuthorizationUtilities.getIdOfCurrentUser())));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public User saveUser(User user) {
 		log.info("Save user {} with id {}", user.getUsername(), user.getUserId());
@@ -88,6 +97,9 @@ public class UserService implements UserServiceInterface {
 		return userRepository.save(user);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public String getUsernameOfCurrentUser() {
 		return getCurrentUser().getUsername();

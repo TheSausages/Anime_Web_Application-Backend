@@ -22,7 +22,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Default implementation for the {@link AchievementServiceInterface} implementation.
+ * Default implementation for the {@link AchievementServiceInterface} interface.
  */
 @Log4j2
 @Service

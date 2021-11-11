@@ -14,6 +14,9 @@ import pwr.pracainz.services.i18n.I18nServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation for the {@link ForumCategoryServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class ForumCategoryService implements ForumCategoryServiceInterface {
@@ -28,6 +31,9 @@ public class ForumCategoryService implements ForumCategoryServiceInterface {
 		this.dtoConversion = dtoConversion;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<ForumCategoryDTO> getAllCategories() {
 		log.info("Get all Forum Categories");
@@ -36,6 +42,9 @@ public class ForumCategoryService implements ForumCategoryServiceInterface {
 				.stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ForumCategory findCategoryByIdAndName(int id, String name) {
 		return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(id, name)

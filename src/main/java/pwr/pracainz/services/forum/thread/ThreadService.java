@@ -35,6 +35,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation for the {@link ThreadServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class ThreadService implements ThreadServiceInterface {
@@ -69,6 +72,9 @@ public class ThreadService implements ThreadServiceInterface {
 		this.dtoDeconversion = dtoDeconversion;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PageDTO<SimpleThreadDTO> getNewestThreads(int pageNumber) {
 		log.info("Get newest threads - page: {}", pageNumber);
@@ -79,6 +85,9 @@ public class ThreadService implements ThreadServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PageDTO<SimpleThreadDTO> searchThreads(int pageNumber, ForumQuery forumQuery) {
 		log.info("Get all threads that meet criteria: {},\n page: {}", forumQuery, pageNumber);
@@ -105,6 +114,9 @@ public class ThreadService implements ThreadServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompleteThreadDTO getThreadById(int id) {
 		Thread thread = getNonDTOThreadById(id);
@@ -116,6 +128,9 @@ public class ThreadService implements ThreadServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Thread getNonDTOThreadById(int id) {
 		log.info("Get thread with id: {}", id);
@@ -125,6 +140,9 @@ public class ThreadService implements ThreadServiceInterface {
 						String.format("No thread with id %s found", id)));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SimpleThreadDTO createThread(CreateThreadDTO newThread) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -137,13 +155,16 @@ public class ThreadService implements ThreadServiceInterface {
 		Thread thread = dtoDeconversion.convertFromDTO(newThread);
 		thread.setCategory(forumCategoryService.findCategoryByIdAndName(newThread.getCategory().getCategoryId(), newThread.getCategory().getCategoryName()));
 		thread.setTags(newThread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
-		thread.setCreator(userService.getCurrentUserOrInsert());
+		thread.setCreator(userService.getCurrentUser());
 
 		Thread savedThread = threadRepository.save(thread);
 
 		return dtoConversion.convertToSimpleDTO(savedThread, findThreadStatusForUser(savedThread, userService.getCurrentUser()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompleteThreadDTO updateThread(int threadId, UpdateThreadDTO thread) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -178,6 +199,11 @@ public class ThreadService implements ThreadServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation updates the status for the currently authenticated user.
+	 */
 	@Override
 	public ThreadUserStatusDTO updateThreadUserStatus(int threadId, ThreadUserStatusDTO status) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {

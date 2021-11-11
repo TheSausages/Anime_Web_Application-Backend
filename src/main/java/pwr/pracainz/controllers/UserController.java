@@ -27,7 +27,7 @@ public class UserController {
 
 	@GetMapping("/user/{userId}")
 	public CompleteUserDTO getUserInformation(@PathVariable String userId) {
-		return userService.getUserInformationById(userId, false);
+		return userService.getUserInformationById(userId);
 	}
 
 	@GetMapping("/user/current")

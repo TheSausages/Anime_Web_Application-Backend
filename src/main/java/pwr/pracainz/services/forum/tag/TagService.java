@@ -13,6 +13,9 @@ import pwr.pracainz.services.i18n.I18nServiceInterface;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation for the {@link TagServiceInterface} interface.
+ */
 @Service
 @Log4j2
 public class TagService implements TagServiceInterface {
@@ -27,6 +30,9 @@ public class TagService implements TagServiceInterface {
 		this.dtoConversion = dtoConversion;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public List<TagDTO> getAllTags() {
 		log.info("Find all tags");
@@ -34,6 +40,9 @@ public class TagService implements TagServiceInterface {
 		return tagRepository.findAll().stream().map(dtoConversion::convertToDTO).collect(Collectors.toList());
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Tag findTagByIdAndName(int id, String name) {
 		log.info("Find a tag with id {} and name {}", id, name);

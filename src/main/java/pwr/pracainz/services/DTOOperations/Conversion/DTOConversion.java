@@ -30,8 +30,15 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Default implementation for the {@link DTOConversionInterface} interface.
+ */
 @Service
 public class DTOConversion implements DTOConversionInterface {
+
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public <T> PageDTO<T> convertToDTO(Page<T> page) {
 		return new PageDTO<>(
@@ -45,6 +52,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompleteUserDTO convertToDTO(User user, Set<AchievementDTO> achievements) {
 		return new CompleteUserDTO(
@@ -61,6 +71,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeDTO convertToDTO(Anime anime) {
 		return new AnimeDTO(
@@ -71,6 +84,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SimpleUserDTO convertToSimpleDTO(User user) {
 		return new SimpleUserDTO(
@@ -82,6 +98,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AchievementDTO convertToDTO(Achievement achievement, byte[] icon) {
 		return new AchievementDTO(
@@ -94,6 +113,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SimplePostDTO convertToSimpleDTO(Post post) {
 		return new SimplePostDTO(
@@ -106,6 +128,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompletePostDTO convertToDTO(Post post) {
 		return new CompletePostDTO(
@@ -121,6 +146,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompletePostDTO convertToDTO(Post post, PostUserStatus status) {
 		return new CompletePostDTO(
@@ -137,6 +165,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public SimpleThreadDTO convertToSimpleDTO(Thread thread, ThreadUserStatus status) {
 		return new SimpleThreadDTO(
@@ -153,6 +184,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompleteThreadDTO convertToDTO(Thread thread, PageDTO<CompletePostDTO> posts, ThreadUserStatus status) {
 		return new CompleteThreadDTO(
@@ -171,6 +205,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ForumCategoryDTO convertToDTO(ForumCategory forumCategory) {
 		return new ForumCategoryDTO(
@@ -180,6 +217,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public TagDTO convertToDTO(Tag tag) {
 		return new TagDTO(
@@ -190,6 +230,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ReviewDTO convertToDTO(Review review) {
 		return new ReviewDTO(
@@ -202,6 +245,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeUserInfoDTO convertToDTO(AnimeUserInfo animeUserInfo) {
 		return new AnimeUserInfoDTO(
@@ -218,6 +264,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeUserInfoIdDTO convertToDTO(AnimeUserInfoId animeUserInfoId) {
 		return new AnimeUserInfoIdDTO(
@@ -226,6 +275,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ThreadUserStatusIdDTO convertToDTO(ThreadUserStatusId threadUserStatusId) {
 		return new ThreadUserStatusIdDTO(
@@ -234,6 +286,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ThreadUserStatusDTO convertToDTO(ThreadUserStatus threadUserStatus) {
 		return new ThreadUserStatusDTO(
@@ -243,6 +298,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PostUserStatusIdDTO convertToDTO(PostUserStatusId postUserStatusId) {
 		return new PostUserStatusIdDTO(
@@ -251,6 +309,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PostUserStatusDTO convertToDTO(PostUserStatus postUserStatus) {
 		return new PostUserStatusDTO(
@@ -261,6 +322,9 @@ public class DTOConversion implements DTOConversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AuthenticationTokenDTO convertToDTO(AuthenticationToken authenticationToken) {
 		return new AuthenticationTokenDTO(

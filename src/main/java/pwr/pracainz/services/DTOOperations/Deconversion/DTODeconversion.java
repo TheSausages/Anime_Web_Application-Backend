@@ -15,9 +15,17 @@ import pwr.pracainz.entities.databaseerntities.forum.*;
 
 import java.time.LocalDateTime;
 
+/**
+ * Default implementation for the {@link DTODeconversionInterface} interface.
+ * <p>
+ * Any implementation should not have any dependencies or state fields.
+ */
 @Service
 public class DTODeconversion implements DTODeconversionInterface {
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AnimeUserInfo convertFromDTO(AnimeUserInfoDTO animeUserInfoDTO, AnimeUserInfoId animeUserInfoId) {
 		return new AnimeUserInfo(
@@ -42,6 +50,9 @@ public class DTODeconversion implements DTODeconversionInterface {
 						null);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PostUserStatus convertFromDTO(PostUserStatusDTO postUserStatusDTO, PostUserStatusId postUserStatusId) {
 		return new PostUserStatus(
@@ -52,6 +63,9 @@ public class DTODeconversion implements DTODeconversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ThreadUserStatus convertFromDTO(ThreadUserStatusDTO threadUserStatusDTO, ThreadUserStatusId threadUserStatusId) {
 		return new ThreadUserStatus(
@@ -61,6 +75,9 @@ public class DTODeconversion implements DTODeconversionInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Post convertFromDTO(CreatePostDTO postDTO) {
 		Post post = new Post();
@@ -72,6 +89,9 @@ public class DTODeconversion implements DTODeconversionInterface {
 		return post;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public Thread convertFromDTO(CreateThreadDTO threadDTO) {
 		Thread thread = new Thread();

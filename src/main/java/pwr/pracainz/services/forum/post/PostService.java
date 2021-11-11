@@ -34,6 +34,9 @@ import pwr.pracainz.utils.UserAuthorizationUtilities;
 import javax.transaction.Transactional;
 import java.util.Objects;
 
+/**
+ * Default implementation for the {@link PostServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class PostService implements PostServiceInterface {
@@ -66,6 +69,9 @@ public class PostService implements PostServiceInterface {
 	}
 
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PageDTO<CompletePostDTO> findPostsByThread(int pageNumber, int threadId) {
 		log.info("Get page {} of posts from thread {} and for user {}", pageNumber, threadId, userService.getUsernameOfCurrentUser());
@@ -79,6 +85,9 @@ public class PostService implements PostServiceInterface {
 		);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO createPost) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -112,6 +121,9 @@ public class PostService implements PostServiceInterface {
 		return findPostsByThread(0, threadId);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public CompletePostDTO updatePostForThread(int threadId, UpdatePostDTO post) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -137,6 +149,11 @@ public class PostService implements PostServiceInterface {
 		return dtoConversion.convertToDTO(postRepository.save(oldPost));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation updates the status for the currently authenticated user.
+	 */
 	@Override
 	@Transactional
 	public PostUserStatusDTO updatePostUserStatus(int postId, PostUserStatusDTO status) {

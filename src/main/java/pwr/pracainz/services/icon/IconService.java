@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Objects;
 
+/**
+ * Default implementation for the {@link IconServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class IconService implements IconServiceInterface {
@@ -24,12 +27,19 @@ public class IconService implements IconServiceInterface {
 		this.dtoConversion = dtoConversion;
 
 		try (InputStream stream = this.getClass().getClassLoader().getResourceAsStream(defaultAchievementIconPath)) {
+			if (Objects.isNull(stream)) {
+				throw new IOException("The default achievement icon stream is null");
+			}
+
 			defaultAchievementIcon = IOUtils.toByteArray(stream);
 		} catch (Exception e) {
-			throw new BeanInitializationException("Could not find the default achievement icon");
+			throw new BeanInitializationException("Could not find the default achievement icon", e);
 		}
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public byte[] getAchievementIcon(Achievement achievement) throws IOException {
 		log.info("Try to get Icon with path:" + achievement.getIconPath());
@@ -43,14 +53,19 @@ public class IconService implements IconServiceInterface {
 		return IOUtils.toByteArray(in);
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * For this implementation, if no icon was found use a default icon.
+	 */
 	@Override
 	public AchievementDTO getAchievementDtoWithIcon(Achievement achievement) {
-		log.info("Create Achievement DTo for {}", achievement.getName());
+		log.info("Create Achievement DTO for {}", achievement.getName());
 
 		try {
 			return dtoConversion.convertToDTO(achievement, this.getAchievementIcon(achievement));
 		} catch (IOException e) {
-			log.error("Error occurred during Achievement DTO creation: {}, \n Using default achievement icon with name {}", e.getMessage(), defaultAchievementIconPath);
+			log.warn("Error occurred during Achievement DTO creation: {}, \n Using default achievement icon with name {}", e.getMessage(), defaultAchievementIconPath);
 
 			return dtoConversion.convertToDTO(achievement, defaultAchievementIcon);
 		}

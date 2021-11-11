@@ -30,6 +30,9 @@ import javax.ws.rs.core.Response;
 import java.util.Collections;
 import java.util.Optional;
 
+/**
+ * Default implementation for the {@link KeycloakServiceInterface} interface.
+ */
 @Log4j2
 @Service
 public class KeycloakService implements KeycloakServiceInterface {
@@ -55,6 +58,9 @@ public class KeycloakService implements KeycloakServiceInterface {
 		this.i18nService = i18nService;
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request) {
 		if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
@@ -84,6 +90,9 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AuthenticationTokenDTO login(LoginCredentialsDTO credentials, HttpServletRequest request) {
 		return client
@@ -106,6 +115,11 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.block();
 	}
 
+	/**
+	 * {@inheritDoc}
+	 *
+	 * This implementation also adds user information to the database.
+	 */
 	@Override
 	public AuthenticationTokenDTO register(RegistrationBodyDTO registrationBody, HttpServletRequest request) {
 		log.info("Attempt registration for user: {}, with email: {}", registrationBody.getUsername(), registrationBody.getEmail());
@@ -165,6 +179,9 @@ public class KeycloakService implements KeycloakServiceInterface {
 				String.format("Registration was not successful for user %s", registrationBody.getUsername()));
 	}
 
+	/**
+	 * {@inheritDoc}
+	 */
 	@Override
 	public AuthenticationTokenDTO refreshTokens(RefreshTokenDTO refreshTokenDTO, HttpServletRequest request) {
 		return client

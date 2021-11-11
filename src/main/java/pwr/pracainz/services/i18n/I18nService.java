@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import javax.servlet.http.HttpServletRequest;
 
 /**
- * Default implementation for the {@link I18nServiceInterface} implementation.
+ * Default implementation for the {@link I18nServiceInterface} interface.
  */
 @Log4j2
 @Service

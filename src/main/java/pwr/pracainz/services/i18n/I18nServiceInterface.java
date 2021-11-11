@@ -15,10 +15,12 @@ public interface I18nServiceInterface {
 	String getTranslation(String path, Object... parameters);
 
 	/**
-	 * Variant of {@link #getTranslation(String, Object...)}.When the error is from a request to another site (ex. anilist) the headers would be from there, so in order to get
-	 * the correct locale we need to insert our request here
+	 * Variant of {@link #getTranslation(String, Object...)}. When the error is from a request to another site (ex. anilist) the headers would be from there, so in order to get
+	 * the correct locale we need to insert our request here.
+	 * The <i>request</i> parameter for each method is used to retrieve the {@link org.springframework.http.HttpHeaders#ACCEPT_LANGUAGE}
+	 * header from the request for a {@link pwr.pracainz.services.i18n.I18nServiceInterface} implementation to use.
 	 * @param path       Path to the translation
-	 * @param request    Selected request, should posses the language header
+	 * @param request    Selected request, should possess the language header
 	 * @param parameters Parameters used in the translation, can be empty
 	 * @return Translation with parameters inserted in order
 	 */
