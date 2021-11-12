@@ -1,3 +1,4 @@
+- add openapi 3 for controllers (https://github.com/springdoc/springdoc-openapi#integration-of-the-library-in-a-spring-boot-2xx-project-without-the-swagger-ui)
 - make sure mock data is concise (all data makes sense)
 - check if all services update all necessary information
 - check if all hashcodes and equesls make sense (backend)

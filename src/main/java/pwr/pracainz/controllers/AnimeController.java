@@ -11,6 +11,9 @@ import pwr.pracainz.services.anime.AnimeUser.AnimeUserServiceInterface;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+/**
+ * Controller for request connected to Anime and Anime User Statuses.
+ */
 @RestControllerWithBasePath("${api.default-path}/anime")
 public class AnimeController {
 	private final AnimeServiceInterface animeService;

@@ -5,7 +5,7 @@ import org.springframework.stereotype.Repository;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
 
 /**
- * Repository for the {@link Anime} class (AnimeTable)
+ * Repository for the {@link Anime} class (Anime table).
  */
 @Repository
 public interface AnimeRepository extends JpaRepository<Anime, Integer> {

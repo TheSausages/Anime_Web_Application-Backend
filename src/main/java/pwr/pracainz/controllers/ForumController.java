@@ -21,6 +21,9 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * Controller for request connected to Forum: Tags, Categories, Thead, Posts and Thread/Post User Statuses.
+ */
 @RestControllerWithBasePath("${api.default-path}/forum")
 public class ForumController {
 	private final ForumCategoryServiceInterface categoryService;

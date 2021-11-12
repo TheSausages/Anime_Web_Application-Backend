@@ -21,7 +21,12 @@ import pwr.pracainz.services.i18n.I18nServiceInterface;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
+/**
+ * Class for handling custom and selected errors. Each custom error must have its own Exception Handler and Status.
+ * The {@link CustomException#logMessage} for each should be logged here.
+ */
 @Log4j2
 @RestControllerAdvice
 public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
@@ -34,6 +39,11 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 		this.i18nService = i18nService;
 	}
 
+	/**
+	 * Exception handler for {@link AuthenticationException}.
+	 * @param ex The exception
+	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 */
 	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
 	ResponseBodyWithMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
@@ -42,6 +52,11 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
 
+	/**
+	 * Exception handler for {@link RegistrationException}.
+	 * @param ex The exception
+	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 */
 	@ExceptionHandler(RegistrationException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
 	ResponseBodyWithMessageDTO registrationExceptionHandler(RegistrationException ex) {
@@ -50,14 +65,24 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
 
+	/**
+	 * Exception handler for {@link AnilistException}.
+	 * @param ex The exception
+	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 */
 	@ExceptionHandler(AnilistException.class)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
 	ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
-		log.error("The Anilist served did not respond on date: " + LocalDateTime.now().format(dateTimeFormatter));
+		log.error("{} on date: {}", ex.getLogMessage(), LocalDateTime.now().format(dateTimeFormatter));
 
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
 
+	/**
+	 * Exception handler for {@link ObjectNotFoundException}.
+	 * @param ex The exception
+	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 */
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
@@ -66,14 +91,29 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
 
+	/**
+	 * Exception handler for {@link ObjectNotFoundException}.
+	 * @param ex The exception
+	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 */
 	@ExceptionHandler(DataException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	ResponseBodyWithMessageDTO dataExceptionHandler(IllegalArgumentException ex) {
+	ResponseBodyWithMessageDTO dataExceptionHandler(DataException ex) {
 		log.error(ex.getMessage());
 
 		return new ResponseBodyWithMessageDTO(ex.getMessage());
 	}
 
+	/**
+	 * Custom {@link HttpMessageNotReadableException} handler. If the root cause is {@link CustomDeserializationException},
+	 * proces the error further with a {@link ResponseBodyWithMessageDTO} containing a translated user message.
+	 * If the type is different, process further with a translated default error message.
+	 * @param ex The exception
+	 * @param headers Headers of the request
+	 * @param status Status of the request
+	 * @param request The web request
+	 * @return Further proces the exception in the default {@link #handleExceptionInternal(Exception, Object, HttpHeaders, HttpStatus, WebRequest)} handler.
+	 */
 	@Override
 	@NonNull
 	protected ResponseEntity<Object> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, HttpHeaders headers, HttpStatus status, WebRequest request) {
@@ -91,10 +131,10 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
 			String innerCauseMessage = ex.getCause().getMessage();
 
-			log.error("Error during deserialization: {}", innerCauseMessage);
+			log.error("Error during deserialization: {}", Objects.nonNull(innerCauseMessage) ? innerCauseMessage : "Not given");
 
 			return handleExceptionInternal(
-					ex, new ResponseBodyWithMessageDTO(innerCauseMessage),
+					ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")),
 					headers, HttpStatus.BAD_REQUEST, request
 			);
 		}
@@ -103,6 +143,14 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 				, headers, status, request);
 	}
 
+	/**
+	 * Custom {@link MethodArgumentNotValidException} handler. Handle the exception further, with a translated default error message returned to the user.
+	 * @param ex The exception
+	 * @param headers Headers of the request
+	 * @param status Status of the request
+	 * @param request The web request
+	 * @return Further proces the exception in the default {@link #handleExceptionInternal(Exception, Object, HttpHeaders, HttpStatus, WebRequest)} handler.
+	 */
 	@Override
 	@NonNull
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
@@ -110,13 +158,22 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
 		log.error(errorMessage);
 
-		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(errorMessage), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
+		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
 	}
 
+	/**
+	 * Custom {@link HttpMediaTypeNotSupportedException} handler. Handle the exception further, with a translated default error message returned to the user.
+	 * @param ex The exception
+	 * @param headers Headers of the request
+	 * @param status Status of the request
+	 * @param request The web request
+	 * @return Further proces the exception in the default {@link #handleExceptionInternal(Exception, Object, HttpHeaders, HttpStatus, WebRequest)} handler.
+	 */
 	@Override
 	@NonNull
 	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(@NonNull HttpMediaTypeNotSupportedException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
-		log.error("This media type is not Supported");
+		String message = Objects.nonNull(ex.getMessage()) ? ex.getMessage() : "No message given";
+		log.error("This media type is not supported: {}", ex.getMessage());
 
 		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, status, request);
 	}

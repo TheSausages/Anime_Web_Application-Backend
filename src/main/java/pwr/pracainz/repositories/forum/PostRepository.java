@@ -8,6 +8,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import pwr.pracainz.entities.databaseerntities.forum.Post;
 
+/**
+ * Repository for the {@link Post} class (Posts table). The {@link #getAllByThread_ThreadId(int, Pageable)} uses Pagination.
+ */
 @Repository
 public interface PostRepository extends JpaRepository<Post, Integer> {
 	Page<Post> getAllByThread_ThreadId(int id, Pageable pageable);

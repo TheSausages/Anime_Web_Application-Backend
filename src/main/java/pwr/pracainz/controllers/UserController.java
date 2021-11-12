@@ -14,6 +14,9 @@ import pwr.pracainz.services.user.UserServiceInterface;
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 
+/**
+ * Controllers connected to User information and User actions like login.
+ */
 @RestControllerWithBasePath
 public class UserController {
 	private final KeycloakServiceInterface keycloakService;

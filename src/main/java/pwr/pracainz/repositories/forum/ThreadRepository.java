@@ -15,6 +15,9 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Repository for the {@link Thread} class (Threads table). This repository enables Pagination.
+ */
 @Repository
 public interface ThreadRepository extends PagingAndSortingRepository<Thread, Integer> {
 

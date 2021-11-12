@@ -7,6 +7,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pwr.pracainz.services.achievement.AchievementServiceInterface;
 
+/**
+ * Controller for requests connected to Achievement emission.
+ */
 @RestControllerWithBasePath("${api.default-path}/achievements")
 public class AchievementController {
 	private final AchievementServiceInterface achievementService;
