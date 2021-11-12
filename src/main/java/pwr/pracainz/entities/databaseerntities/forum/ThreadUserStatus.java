@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "ThreadUserStatus")
+@Table(name = "ThreadUserStatuses")
 @Entity
 public class ThreadUserStatus {
 	@EmbeddedId

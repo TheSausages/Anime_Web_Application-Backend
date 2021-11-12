@@ -37,7 +37,7 @@ values (1, 'Second Thread on the forum!', 'Text of Second Thread!', 'OPEN', 3, '
 
 Insert into ThreadTags value (1, 1), (1, 2), (1, 3), (1, 4), (2, 2), (2, 3);
 
-Insert into ThreadUserStatus value ('51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b', 1, true, false),
+Insert into ThreadUserStatuses value ('51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b', 1, true, false),
     ('51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b', 2, false, false);
 
 Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second post on the forum', false, 2, 1, 0,
@@ -53,7 +53,7 @@ Insert into Posts value (1, 'Second Post on the forum!', 'Text of the second pos
      '2021-09-4 16:45:01', '2021-09-5 16:45:01',
      '467a809a-d893-48c2-85e2-82f9ce4b1560', 1);
 
-Insert Into PostUserStatus
+Insert Into PostUserStatuses
 values ('467a809a-d893-48c2-85e2-82f9ce4b1560', 1, true, false, false),
        ('467a809a-d893-48c2-85e2-82f9ce4b1560', 3, false, true, false),
        ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 4, false, false, true);

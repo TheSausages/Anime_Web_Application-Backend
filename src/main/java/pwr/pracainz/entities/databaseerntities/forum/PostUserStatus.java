@@ -17,7 +17,7 @@ import java.util.Objects;
 @NoArgsConstructor
 @Getter
 @Setter
-@Table(name = "PostUserStatus")
+@Table(name = "PostUserStatuses")
 @Entity
 public class PostUserStatus {
 	@EmbeddedId

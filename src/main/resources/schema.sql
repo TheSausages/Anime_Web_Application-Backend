@@ -92,7 +92,7 @@ CREATE TABLE `ThreadTags`
     CONSTRAINT `FK_5` FOREIGN KEY `FK_ThreadTags_Thread` (`ThreadID`) REFERENCES `Threads` (`ThreadID`)
 ) COMMENT='Table that contains information what tags a thread has';
 
-CREATE TABLE `ThreadUserStatus`
+CREATE TABLE `ThreadUserStatuses`
 (
     `UserID`     varchar(36) NOT NULL,
     `ThreadID`   int         NOT NULL,
@@ -127,7 +127,7 @@ CREATE TABLE `Posts`
     CONSTRAINT `FK_9` FOREIGN KEY `FK_Post_User` (`CreatorID`) REFERENCES `Users` (`UserID`)
 ) COMMENT ='Table containing Information about a single Post on the Forum';
 
-CREATE TABLE `PostUserStatus`
+CREATE TABLE `PostUserStatuses`
 (
     `UserID`     varchar(36) NOT NULL,
     `PostID`     int         NOT NULL,
