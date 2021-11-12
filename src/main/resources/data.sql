@@ -17,7 +17,7 @@ values (1, 'Ayy thats a title', 'Ayyyy thats something', 1, 2, 0);
 
 Insert Into Anime value ('127720', 0.0, 0, 0, 0, 25);
 
-Insert into AnimeUserInfos value ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', '127720', 'WATCHING', '2021-10-10 00:00:00',
+Insert into AnimeUserInfos value ('467a809a-d893-48c2-85e2-82f9ce4b1560', '127720', 'WATCHING', '2021-10-10 00:00:00',
                                   '2021-10-11', 0, false, '2021-07-5', true, 9, 1);
 
 Insert into Tags value (1, 'Episode Discussion', 'LOW', 'rgb(0, 183, 255)'), (2, 'New Studio', 'MEDIUM', 'rgb(255, 112, 112)'),

@@ -75,6 +75,11 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		User currUser = userService.getCurrentUser();
 		AnimeUserInfoIdDTO requestUserId = animeUserInfoDTO.getId();
 
+		if (animeUserInfoDTO.isDidReview() && animeUserInfoDTO.getReview().getReviewText().length() > 300) {
+			throw new AuthenticationException(i18nService.getTranslation("anime.review-to-long"),
+					currUser.getUsername() + " review was too long");
+		}
+
 		if (Objects.isNull(requestUserId) || !currUser.getUserId().equals(requestUserId.getUser().getUserId())) {
 			throw new AuthenticationException(i18nService.getTranslation("anime.error-during-anime-info-update"),
 					String.format("Error during Anime User Information update for user %s", currUser.getUsername()));

@@ -29,6 +29,7 @@ import pwr.pracainz.entities.anime.query.queryElements.Media.Media;
 import pwr.pracainz.entities.anime.query.queryElements.Page.Page;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
+import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.exceptions.exceptions.AnilistException;
 import pwr.pracainz.repositories.animeInfo.AnimeRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
@@ -41,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 /**
  * Default implementation for the {@link AnimeServiceInterface} interface.
@@ -518,6 +520,13 @@ public class AnimeService implements AnimeServiceInterface {
 					.orElseGet(() -> animeRepository.save(new Anime(id, averageEpisodeLength)));
 
 			node.set("localAnimeInformation", mapper.valueToTree(dtoConversion.convertToDTO(anime)));
+
+			node.set("reviews", mapper.valueToTree(anime.getAnimeUserInfos().stream()
+					.filter(AnimeUserInfo::isDidReview)
+					.limit(3)
+					.map(AnimeUserInfo::getReview)
+					.collect(Collectors.toList())
+			));
 
 			if (UserAuthorizationUtilities.checkIfLoggedUser()) {
 				node.set("animeUserInformation",
