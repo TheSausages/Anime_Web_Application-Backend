@@ -17,6 +17,9 @@ import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Class representing the <i>Threads</i> table from the database.
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -76,6 +79,10 @@ public class Thread {
 	@JoinColumn(name = "CreatorID", nullable = false)
 	private User creator;
 
+	/**
+	 * Get the {@link #tags} field sorted using {@link TagComparator} comparator.
+	 * @return Sorted {@link #tags} list
+	 */
 	public List<Tag> getTags() {
 		return tags.stream().sorted(new TagComparator()).collect(Collectors.toList());
 	}

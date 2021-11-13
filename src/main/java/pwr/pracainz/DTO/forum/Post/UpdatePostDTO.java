@@ -10,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+/**
+ * Domain object when a {@link pwr.pracainz.entities.databaseerntities.forum.Post} is being updated.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

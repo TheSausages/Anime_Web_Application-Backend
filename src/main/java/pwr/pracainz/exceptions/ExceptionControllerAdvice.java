@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
+import pwr.pracainz.DTO.SimpleMessageDTO;
 import pwr.pracainz.exceptions.exceptions.*;
 import pwr.pracainz.services.i18n.I18nServiceInterface;
 
@@ -42,71 +42,71 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 	/**
 	 * Exception handler for {@link AuthenticationException}.
 	 * @param ex The exception
-	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 * @return A {@link SimpleMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
 	 */
 	@ExceptionHandler(AuthenticationException.class)
 	@ResponseStatus(HttpStatus.UNAUTHORIZED)
-	ResponseBodyWithMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
+	SimpleMessageDTO authenticationExceptionHandler(AuthenticationException ex) {
 		log.error("An unauthorized access to secured elements occurred: " + ex.getMessage());
 
-		return new ResponseBodyWithMessageDTO(ex.getMessage());
+		return new SimpleMessageDTO(ex.getMessage());
 	}
 
 	/**
 	 * Exception handler for {@link RegistrationException}.
 	 * @param ex The exception
-	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 * @return A {@link SimpleMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
 	 */
 	@ExceptionHandler(RegistrationException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	ResponseBodyWithMessageDTO registrationExceptionHandler(RegistrationException ex) {
+	SimpleMessageDTO registrationExceptionHandler(RegistrationException ex) {
 		log.error("An error during registration: " + ex.getMessage());
 
-		return new ResponseBodyWithMessageDTO(ex.getMessage());
+		return new SimpleMessageDTO(ex.getMessage());
 	}
 
 	/**
 	 * Exception handler for {@link AnilistException}.
 	 * @param ex The exception
-	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 * @return A {@link SimpleMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
 	 */
 	@ExceptionHandler(AnilistException.class)
 	@ResponseStatus(HttpStatus.SERVICE_UNAVAILABLE)
-	ResponseBodyWithMessageDTO anilistExceptionHandler(AnilistException ex) {
+	SimpleMessageDTO anilistExceptionHandler(AnilistException ex) {
 		log.error("{} on date: {}", ex.getLogMessage(), LocalDateTime.now().format(dateTimeFormatter));
 
-		return new ResponseBodyWithMessageDTO(ex.getMessage());
+		return new SimpleMessageDTO(ex.getMessage());
 	}
 
 	/**
 	 * Exception handler for {@link ObjectNotFoundException}.
 	 * @param ex The exception
-	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 * @return A {@link SimpleMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
 	 */
 	@ExceptionHandler(ObjectNotFoundException.class)
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	ResponseBodyWithMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
+	SimpleMessageDTO objectNotFoundExceptionHandler(ObjectNotFoundException ex) {
 		log.error(ex.getLogMessage());
 
-		return new ResponseBodyWithMessageDTO(ex.getMessage());
+		return new SimpleMessageDTO(ex.getMessage());
 	}
 
 	/**
 	 * Exception handler for {@link ObjectNotFoundException}.
 	 * @param ex The exception
-	 * @return A {@link ResponseBodyWithMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
+	 * @return A {@link SimpleMessageDTO} with {@link CustomException#detailMessage}, that is returned to the user.
 	 */
 	@ExceptionHandler(DataException.class)
 	@ResponseStatus(HttpStatus.CONFLICT)
-	ResponseBodyWithMessageDTO dataExceptionHandler(DataException ex) {
+	SimpleMessageDTO dataExceptionHandler(DataException ex) {
 		log.error(ex.getMessage());
 
-		return new ResponseBodyWithMessageDTO(ex.getMessage());
+		return new SimpleMessageDTO(ex.getMessage());
 	}
 
 	/**
 	 * Custom {@link HttpMessageNotReadableException} handler. If the root cause is {@link CustomDeserializationException},
-	 * proces the error further with a {@link ResponseBodyWithMessageDTO} containing a translated user message.
+	 * proces the error further with a {@link SimpleMessageDTO} containing a translated user message.
 	 * If the type is different, process further with a translated default error message.
 	 * @param ex The exception
 	 * @param headers Headers of the request
@@ -124,7 +124,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 				log.error("Error during deserialization: {}", innerException.getLogMessage());
 
 				return handleExceptionInternal(
-						ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation(innerException.getMessage())),
+						ex, new SimpleMessageDTO(i18nService.getTranslation(innerException.getMessage())),
 						headers, HttpStatus.BAD_REQUEST, request
 				);
 			}
@@ -134,12 +134,12 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 			log.error("Error during deserialization: {}", Objects.nonNull(innerCauseMessage) ? innerCauseMessage : "Not given");
 
 			return handleExceptionInternal(
-					ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")),
+					ex, new SimpleMessageDTO(i18nService.getTranslation("general.an-error-occurred")),
 					headers, HttpStatus.BAD_REQUEST, request
 			);
 		}
 
-		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred"))
+		return handleExceptionInternal(ex, new SimpleMessageDTO(i18nService.getTranslation("general.an-error-occurred"))
 				, headers, status, request);
 	}
 
@@ -158,7 +158,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
 		log.error(errorMessage);
 
-		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
+		return handleExceptionInternal(ex, new SimpleMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, HttpStatus.UNPROCESSABLE_ENTITY, request);
 	}
 
 	/**
@@ -175,6 +175,6 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 		String message = Objects.nonNull(ex.getMessage()) ? ex.getMessage() : "No message given";
 		log.error("This media type is not supported: {}", ex.getMessage());
 
-		return handleExceptionInternal(ex, new ResponseBodyWithMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, status, request);
+		return handleExceptionInternal(ex, new SimpleMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, status, request);
 	}
 }

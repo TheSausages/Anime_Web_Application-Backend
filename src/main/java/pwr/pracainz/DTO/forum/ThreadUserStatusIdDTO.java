@@ -12,6 +12,9 @@ import pwr.pracainz.DTO.user.SimpleUserDTO;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Domain class for the {@link pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatusId} class.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

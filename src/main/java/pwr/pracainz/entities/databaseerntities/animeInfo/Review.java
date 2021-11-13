@@ -1,5 +1,6 @@
 package pwr.pracainz.entities.databaseerntities.animeInfo;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -9,6 +10,10 @@ import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
+/**
+ * Class representing the <i>Reviews</i> table from the database.
+ */
+@AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
@@ -33,6 +38,14 @@ public class Review {
 	@ColumnDefault("0")
 	private int nrOfMinus;
 
+	/**
+	 * Create a new <i>Review</i> object without an id.
+	 * @param reviewTitle Title of the review
+	 * @param reviewText Text of the review
+	 * @param nrOfHelpful Number of people that found this helpful
+	 * @param nrOfPlus Number of upvotes
+	 * @param nrOfMinus Number of downvotes
+	 */
 	public Review(String reviewTitle, String reviewText, int nrOfHelpful, int nrOfPlus, int nrOfMinus) {
 		this.reviewTitle = reviewTitle;
 		this.reviewText = reviewText;

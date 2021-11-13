@@ -11,6 +11,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 
+/**
+ * Simple domain class for {@link pwr.pracainz.entities.databaseerntities.forum.Post} class.
+ * Holds basic information on a post.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

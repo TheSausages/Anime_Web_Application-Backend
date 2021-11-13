@@ -9,6 +9,9 @@ import pwr.pracainz.entities.databaseerntities.forum.Enums.TagImportance;
 
 import javax.validation.constraints.*;
 
+/**
+ * Domain class for the {@link pwr.pracainz.entities.databaseerntities.forum.Tag} class.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

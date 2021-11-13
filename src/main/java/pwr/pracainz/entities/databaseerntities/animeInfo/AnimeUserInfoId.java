@@ -9,6 +9,10 @@ import javax.persistence.ManyToOne;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Class representing the composite primary key of the {@link AnimeUserInfo} class.
+ * It consists of an {@link User} and an {@link Anime}.
+ */
 @Embeddable
 @Setter
 @Getter

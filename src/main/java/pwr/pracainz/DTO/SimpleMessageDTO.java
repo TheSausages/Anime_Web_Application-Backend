@@ -8,11 +8,14 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.NotBlank;
 
+/**
+ * Simple domain class holding a message that should be forward to the user.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-public class ResponseBodyWithMessageDTO {
+public class SimpleMessageDTO {
 	@NotBlank(message = "Message cannot be blank")
 	String message;
 }

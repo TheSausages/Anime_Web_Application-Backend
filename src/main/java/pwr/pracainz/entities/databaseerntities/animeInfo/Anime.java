@@ -11,6 +11,9 @@ import javax.validation.constraints.Positive;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class representing the <i>Anime</i> table from the database.
+ */
 @NoArgsConstructor
 @Getter
 @Setter
@@ -49,13 +52,26 @@ public class Anime {
 	)
 	private Set<AnimeUserInfo> animeUserInfos;
 
+	/**
+	 * Create a new Anime in the database with a given id and default values for all other fields.
+	 * @param animeId Anilist Id of the Anime
+	 */
 	public Anime(int animeId) { this.animeId = animeId; }
 
+	/**
+	 * Create a new Anime in the database with a given id and average episode length, but default values for other fields.
+	 * @param animeId Anilist Id of the Anime
+	 * @param averageEpisodeLength Average episode length from Anilist
+	 */
 	public Anime(int animeId, int averageEpisodeLength) {
 		this.animeId = animeId;
 		this.averageEpisodeLength = averageEpisodeLength;
 	}
 
+	/**
+	 * Update the average Anime score when a user gives/updates their score.
+	 * @param grade New/Updated score given by a user
+	 */
 	public void updateAverageScore(int grade) {
 		nrOfScores++;
 

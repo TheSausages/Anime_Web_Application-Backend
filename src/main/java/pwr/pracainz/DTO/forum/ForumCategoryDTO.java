@@ -10,6 +10,9 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
+/**
+ * Domain class for the {@link pwr.pracainz.entities.databaseerntities.forum.ForumCategory} class.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

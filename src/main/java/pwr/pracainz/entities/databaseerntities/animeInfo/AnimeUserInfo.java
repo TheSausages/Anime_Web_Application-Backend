@@ -7,10 +7,15 @@ import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 
 import javax.persistence.*;
 import javax.validation.constraints.Min;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Class representing the <i>AnimeUserInfos</i> table from the database.
+ * It uses {@link AnimeUserInfoId} as an embedded composite primary id.
+ */
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
@@ -41,6 +46,7 @@ public class AnimeUserInfo {
 	@ColumnDefault("5")
 	private Integer grade;
 
+	@PastOrPresent
 	private LocalDateTime modification;
 
 	@ColumnDefault("false")
@@ -50,11 +56,21 @@ public class AnimeUserInfo {
 	@JoinColumn(name = "ReviewId")
 	private Review review;
 
+	/**
+	 * Return an empty {@link AnimeUserInfo} object with only the id. Other fields have the default value.
+	 * @param animeUserInfoId The id for the new object
+	 * @return An empty {@link AnimeUserInfo} with default field values with only the id inserted
+	 */
 	public static AnimeUserInfo getEmptyAnimeUserInfo(AnimeUserInfoId animeUserInfoId) {
 		return new AnimeUserInfo(animeUserInfoId, AnimeUserStatus.NO_STATUS, null, null, 0
 				, false, null, LocalDateTime.now(), false, null);
 	}
 
+	/**
+	 * Copy all data from a {@link AnimeUserInfoDTO} into an existing {@link AnimeUserInfo}.
+	 * @param animeUserInfoDTO The DTO from which the data should be copied
+	 * @return Updated {@link AnimeUserInfo} object
+	 */
 	public AnimeUserInfo copyDataFromDTO(AnimeUserInfoDTO animeUserInfoDTO) {
 		ReviewDTO reviewDTO = animeUserInfoDTO.getReview();
 

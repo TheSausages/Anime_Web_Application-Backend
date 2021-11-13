@@ -12,6 +12,10 @@ import javax.validation.constraints.Min;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+/**
+ * Query used when a User searches for Anime using selected conditions.
+ * No field should be mandatory.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

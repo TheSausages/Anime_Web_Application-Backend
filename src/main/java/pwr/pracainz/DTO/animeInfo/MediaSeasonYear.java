@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaSeason;
 
+/**
+ * Small helper class used to search by season and a year. It is used in {@link AnimeQuery}.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

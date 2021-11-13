@@ -9,6 +9,9 @@ import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class representing the <i>ForumCategories</i> table from the database.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

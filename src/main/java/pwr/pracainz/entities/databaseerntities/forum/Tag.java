@@ -10,6 +10,9 @@ import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import java.util.Objects;
 
+/**
+ * Class representing the <i>Tags</i> table from the database.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

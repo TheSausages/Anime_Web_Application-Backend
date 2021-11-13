@@ -13,6 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Objects;
 
+/**
+ * Class representing the <i>ThreadUserStatuses</i> table from the database.
+ * It uses {@link ThreadUserStatusId} as an embedded composite primary id.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter

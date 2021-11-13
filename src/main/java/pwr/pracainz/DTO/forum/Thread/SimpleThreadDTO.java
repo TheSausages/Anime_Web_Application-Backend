@@ -16,6 +16,10 @@ import javax.validation.constraints.*;
 import java.time.LocalDateTime;
 import java.util.List;
 
+/**
+ * Simple domain class for {@link pwr.pracainz.entities.databaseerntities.forum.Thread} class.
+ * Holds basic information on the thread.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

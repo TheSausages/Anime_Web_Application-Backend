@@ -13,6 +13,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+/**
+ * Domain object when a {@link pwr.pracainz.entities.databaseerntities.forum.Thread} is being updated.
+ */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor

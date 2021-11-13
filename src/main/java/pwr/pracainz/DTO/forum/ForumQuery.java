@@ -17,6 +17,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Query used when a user searcher the for Threads using selected conditions.
+ * No fields should be mandatory.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter

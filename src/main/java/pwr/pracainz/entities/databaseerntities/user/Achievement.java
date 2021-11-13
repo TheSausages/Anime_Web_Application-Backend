@@ -11,6 +11,9 @@ import javax.validation.constraints.Positive;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class representing the <i>Achievements</i> table from the database.
+ */
 @NoArgsConstructor
 @Getter
 @Setter

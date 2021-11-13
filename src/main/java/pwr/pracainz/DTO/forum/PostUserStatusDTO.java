@@ -10,6 +10,9 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+/**
+ * Domain class for the {@link pwr.pracainz.entities.databaseerntities.forum.PostUserStatus} class.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

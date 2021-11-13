@@ -6,6 +6,12 @@ import lombok.Getter;
 import pwr.pracainz.configuration.customMappers.tagImportanceMapper.TagImportanceDeserializer;
 import pwr.pracainz.configuration.customMappers.tagImportanceMapper.TagImportanceSerializer;
 
+/**
+ * Enum representing the importance of a {@link pwr.pracainz.entities.databaseerntities.forum.Tag}.
+ * The {@link #formattedImportance} is used in Frontend.
+ * The {@link #comparableImportance} field is used in {@link pwr.pracainz.entities.databaseerntities.forum.TagComparator}
+ * Uses {@link TagImportanceSerializer} to serialize and {@link TagImportanceDeserializer} to deserialize.
+ */
 @Getter
 @JsonSerialize(using = TagImportanceSerializer.class)
 @JsonDeserialize(using = TagImportanceDeserializer.class)

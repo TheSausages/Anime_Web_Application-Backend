@@ -15,6 +15,9 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.List;
 
+/**
+ * Domain object used when a new {@link pwr.pracainz.entities.databaseerntities.forum.Thread} is created.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

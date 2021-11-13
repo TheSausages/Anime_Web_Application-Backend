@@ -2,7 +2,7 @@ package pwr.pracainz.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
+import pwr.pracainz.DTO.SimpleMessageDTO;
 import pwr.pracainz.DTO.user.CompleteUserDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
@@ -44,7 +44,7 @@ public class UserController {
 	}
 
 	@PostMapping("/auth/logout")
-	public ResponseBodyWithMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken, HttpServletRequest request) {
+	public SimpleMessageDTO logout(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO, @RequestHeader("authorization") String accessToken, HttpServletRequest request) {
 		return keycloakService.logout(refreshTokenDTO, accessToken, request);
 	}
 

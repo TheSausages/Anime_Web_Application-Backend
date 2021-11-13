@@ -9,6 +9,9 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
+/**
+ * Domain object used when a new {@link pwr.pracainz.entities.databaseerntities.forum.Post} is created.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -1,6 +1,6 @@
 package pwr.pracainz.services.keycloak;
 
-import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
+import pwr.pracainz.DTO.SimpleMessageDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
@@ -34,7 +34,7 @@ public interface KeycloakServiceInterface {
 	 * @param request {@link pwr.pracainz.services.i18n.I18nServiceInterface#getTranslation(String, HttpServletRequest, Object...)}
 	 * @return Response body with a message about being logged out.
 	 */
-	ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request);
+	SimpleMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request);
 
 	/**
 	 * Register a user in keycloak.

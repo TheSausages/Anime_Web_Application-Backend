@@ -9,6 +9,9 @@ import lombok.experimental.FieldDefaults;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Positive;
 
+/**
+ * Domain class for the {@link pwr.pracainz.entities.databaseerntities.animeInfo.Anime} class.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

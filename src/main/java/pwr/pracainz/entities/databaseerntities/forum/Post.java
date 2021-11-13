@@ -10,13 +10,14 @@ import pwr.pracainz.entities.databaseerntities.user.User;
 import javax.persistence.*;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * Order of Entity listeners is determined by the order in the annotation - PostListener should always be last
+ * Class representing the <i>Posts</i> table from the database.
  */
 @NoArgsConstructor
 @Getter
@@ -51,8 +52,10 @@ public class Post {
 	@Min(value = 0)
 	private int nrOfReports;
 
+	@PastOrPresent
 	private LocalDateTime creation;
 
+	@PastOrPresent
 	private LocalDateTime modification;
 
 	@OneToMany(
@@ -83,6 +86,10 @@ public class Post {
 		return Objects.hash(postId, title, postText, isBlocked, nrOfPlus, nrOfMinus, thread);
 	}
 
+	/**
+	 * Custom getter for {@link #postUserStatuses}. If the field is null, return an empty Set.
+	 * @return The field or an empty set
+	 */
 	public Set<PostUserStatus> getPostUserStatuses() {
 		return Objects.isNull(postUserStatuses) ? Collections.emptySet() : postUserStatuses;
 	}

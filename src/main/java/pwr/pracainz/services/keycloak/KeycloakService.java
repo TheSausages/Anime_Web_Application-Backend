@@ -11,7 +11,7 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
-import pwr.pracainz.DTO.ResponseBodyWithMessageDTO;
+import pwr.pracainz.DTO.SimpleMessageDTO;
 import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
 import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
 import pwr.pracainz.DTO.userauthetification.RefreshTokenDTO;
@@ -62,7 +62,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ResponseBodyWithMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request) {
+	public SimpleMessageDTO logout(RefreshTokenDTO logoutRequestBody, String accessToken, HttpServletRequest request) {
 		if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
 			log.warn("Could not log out - missing information!");
 
@@ -83,7 +83,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 						.with("refresh_token", logoutRequestBody.getRefreshToken()))
 				.retrieve()
 				.toBodilessEntity()
-				.map(res -> new ResponseBodyWithMessageDTO("Logout was successful!"))
+				.map(res -> new SimpleMessageDTO("Logout was successful!"))
 				.doOnSuccess(s -> log.info("Logged Out Successfully"))
 				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.logout-not-successful"),
 						String.format("Logout was not successful for user %s", userService.getUsernameOfCurrentUser())))

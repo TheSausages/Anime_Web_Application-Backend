@@ -10,6 +10,10 @@ import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
+/**
+ * Domain class of the Spring {@link org.springframework.data.domain.Page} class. Uses only necessary information from the Page.
+ * @param <T> Class of the content inside the Page
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

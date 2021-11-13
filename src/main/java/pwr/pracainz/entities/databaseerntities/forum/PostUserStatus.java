@@ -13,6 +13,10 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 import java.util.Objects;
 
+/**
+ * Class representing the <i>PostUserStatuses</i> table from the database.
+ * It uses {@link PostUserStatusId} as an embedded composite primary key.
+ */
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -45,6 +49,15 @@ public class PostUserStatus {
 		return Objects.hash(postUserStatusId, isLiked, isDisliked, isReported);
 	}
 
+	/**
+	 * Create an empty {@link PostUserStatus}.
+	 * @param post Post used in the id
+	 * @param user user used in the id
+	 * @param isLiked Has the user liked the post?
+	 * @param isDisliked Has the user disliked the post?
+	 * @param isReported has the user reported the post?
+	 * @return A new {@link PostUserStatus} object
+	 */
 	public static PostUserStatus getEmptyPostUserStatus(Post post, User user, boolean isLiked, boolean isDisliked, boolean isReported) {
 		PostUserStatusId id = new PostUserStatusId(user, post);
 
@@ -53,6 +66,11 @@ public class PostUserStatus {
 		);
 	}
 
+	/**
+	 * Copy all data from an {@link PostUserStatusDTO} into an existing {@link PostUserStatus}.
+	 * @param status The DTo from which the data should be copied
+	 * @return Updated {@link PostUserStatus} object
+	 */
 	public PostUserStatus copyDataFromDTO(PostUserStatusDTO status) {
 		this.isLiked = status.isLiked();
 		this.isDisliked = status.isDisliked();

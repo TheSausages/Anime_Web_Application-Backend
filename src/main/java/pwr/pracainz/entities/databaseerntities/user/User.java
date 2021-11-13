@@ -19,6 +19,10 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+/**
+ * Class representing the <i>Users</i> table from the database.
+ * The {@link #userId} field is the keycloak id of a user.
+ */
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -86,7 +90,7 @@ public class User {
 	}
 
 	/**
-	 * This is used when registering
+	 * This constructor is used when a user registers.
 	 * @param userId Id of the user, retrieved from Keycloak
 	 * @param username Username of the user
 	 */
@@ -96,14 +100,25 @@ public class User {
 		this.achievements = new HashSet<>();
 	}
 
+	/**
+	 * Increase number of posts by 1.
+	 */
 	public void incrementNrOfPosts() {
 		nrOfPosts++;
 	}
 
+	/**
+	 * Add achievement points for a user. Should only be used in a {@link pwr.pracainz.achievementlisteners.AchievementListener}.
+	 * @param points Point to be added to {@link #achievementPoints}
+	 */
 	public void addAchievementPoints(int points) {
 		this.achievementPoints += points;
 	}
 
+	/**
+	 * Add time to a users watch time.
+	 * @param watchTime Time to be added to {@link #watchTime}
+	 */
 	public void addWatchTime(int watchTime) { this.watchTime += watchTime; }
 
 	@Override

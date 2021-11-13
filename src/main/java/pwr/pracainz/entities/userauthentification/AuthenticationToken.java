@@ -7,6 +7,9 @@ import lombok.Setter;
 
 import java.util.Objects;
 
+/**
+ * Information received from Keycloak when a user logs in.
+ */
 @Setter
 @Getter
 @NoArgsConstructor

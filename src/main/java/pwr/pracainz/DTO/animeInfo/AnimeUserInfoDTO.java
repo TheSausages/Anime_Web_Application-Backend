@@ -16,6 +16,10 @@ import javax.validation.constraints.PastOrPresent;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
+/**
+ * Domain class of the {@link pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo} class.
+ * Please note that the {@link #review} uses a custom {@link ReviewDTOFilter} filter.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

@@ -13,6 +13,10 @@ import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Objects;
 
+/**
+ * Class representing the composite primary key of the {@link PostUserStatusId} class.
+ * It consists of an {@link User} and a {@link Post}.
+ */
 @Embeddable
 @Setter
 @Getter
