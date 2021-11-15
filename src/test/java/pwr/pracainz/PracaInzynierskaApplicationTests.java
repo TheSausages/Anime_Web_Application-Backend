@@ -1,11 +1,11 @@
 package pwr.pracainz;
 
-/*
-@SpringBootTest
-class PracaInzynierskaApplicationTests {
 
+import org.junit.jupiter.api.Test;
+import pwr.pracainz.integrationtests.config.BaseIntegrationTest;
+
+class PracaInzynierskaApplicationTests extends BaseIntegrationTest {
 	@Test
 	void contextLoads() {
 	}
 }
-*/

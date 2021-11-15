@@ -1,5 +1,7 @@
 version: '3'
 
+#When doing changes here, remember to change testContainers in tests
+
 services:
   mysql:
     image: mysql:8.0.26

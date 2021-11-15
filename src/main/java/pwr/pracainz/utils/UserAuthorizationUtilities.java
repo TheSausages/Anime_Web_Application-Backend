@@ -1,10 +1,10 @@
 package pwr.pracainz.utils;
 
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
-import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import java.security.Principal;
+import java.util.Objects;
 
 /**
  * Interface possessing small static security utility methods.
@@ -12,21 +12,20 @@ import java.security.Principal;
 public interface UserAuthorizationUtilities {
 
 	/**
-	 * Return the Principal of the currently authenticated user - for keycloak it will be the ID (or UUID) of the User on the Keycloak Server.
-	 * @return ID (UUID) of the Logged User in the form of a Principal Object
-	 */
-	static Principal getPrincipalOfCurrentUser() {
-		KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-		return (Principal) principal.getPrincipal();
-	}
-
-	/**
-	 * Return the id of the currently authenticated user.
-	 * @see #getPrincipalOfCurrentUser()
-	 * @return Id of the currently authenticated user
+	 * Return the id of the currently authenticated user - for keycloak it will be the ID (or UUID) of the User on the Keycloak Server.
+	 * <p>
+	 * Should only be used when sure that the user is logged in!
+	 * @return Id of the currently authenticated user in form of UUID
 	 */
 	static String getIdOfCurrentUser() {
-		return getPrincipalOfCurrentUser().toString();
+		KeycloakAuthenticationToken principal = (KeycloakAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+
+		//In tests the principal is string, in normal run mode it isn't, and we need to .toString() it
+		if (principal.getPrincipal() instanceof String) {
+			return (String) principal.getPrincipal();
+		} else {
+			return principal.getPrincipal().toString();
+		}
 	}
 
 	/**
@@ -34,6 +33,8 @@ public interface UserAuthorizationUtilities {
 	 * @return true - the user is authenticated, false - it's anonymous
 	 */
 	static boolean checkIfLoggedUser() {
-		return !(SecurityContextHolder.getContext().getAuthentication() instanceof AnonymousAuthenticationToken);
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+		return Objects.nonNull(authentication) && authentication instanceof KeycloakAuthenticationToken;
 	}
 }

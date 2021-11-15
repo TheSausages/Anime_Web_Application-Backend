@@ -521,12 +521,16 @@ public class AnimeService implements AnimeServiceInterface {
 
 			node.set("localAnimeInformation", mapper.valueToTree(dtoConversion.convertToDTO(anime)));
 
-			node.set("reviews", mapper.valueToTree(anime.getAnimeUserInfos().stream()
-					.filter(AnimeUserInfo::isDidReview)
-					.limit(3)
-					.map(AnimeUserInfo::getReview)
-					.collect(Collectors.toList())
-			));
+			if (Objects.nonNull(anime.getAnimeUserInfos())) {
+				node.set("reviews",
+						mapper.valueToTree(anime.getAnimeUserInfos().stream()
+								.filter(AnimeUserInfo::isDidReview)
+								.limit(3)
+								.map(AnimeUserInfo::getReview)
+								.map(dtoConversion::convertToDTO)
+								.collect(Collectors.toList())
+						));
+			}
 
 			if (UserAuthorizationUtilities.checkIfLoggedUser()) {
 				node.set("animeUserInformation",

@@ -10,6 +10,7 @@ ext {
     keycloakVersion = "15.0.0"
     mysqlConnectorVersion = "8.0.25"
     lombokVersion = "1.18.20"
+    testContainersVersion = "1.16.2"
 }
 
 group = "pwr"
@@ -55,6 +56,16 @@ dependencies {
 	testImplementation "io.projectreactor:reactor-test:3.4.8"
 	testImplementation "org.springframework.security:spring-security-test:5.5.1"
 	testImplementation "mysql:mysql-connector-java:${mysqlConnectorVersion}"
+    testImplementation "org.testcontainers:testcontainers:${testContainersVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
+    testImplementation "org.testcontainers:mysql:${testContainersVersion}"
+    testImplementation "org.testcontainers:mysql:${testContainersVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testContainersVersion}"
+    testImplementation 'com.github.dasniko:testcontainers-keycloak:1.8.1'
+    testCompile "com.github.tomakehurst:wiremock-jre8:2.31.0"
+    testImplementation 'com.c4-soft.springaddons:spring-security-oauth2-addons:3.0.4'
+    testImplementation 'com.c4-soft.springaddons:spring-web-test-addons:3.0.4'
+    testImplementation 'com.c4-soft.springaddons:spring-security-oauth2-test-addons:3.0.4'
 }
 
 test {
