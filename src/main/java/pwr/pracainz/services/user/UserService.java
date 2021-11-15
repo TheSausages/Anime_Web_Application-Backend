@@ -66,6 +66,7 @@ public class UserService implements UserServiceInterface {
 						String.format("No User was found for given id: %s", userId)));
 
 		Set<AchievementDTO> achievements = user.getAchievements().stream()
+				.limit(6)
 				.map(iconService::getAchievementDtoWithIcon)
 				.collect(Collectors.toSet());
 

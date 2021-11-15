@@ -37,7 +37,7 @@ public class PostAchievementsListener {
 	 * @param event Event containing newly created post.
 	 */
 	@AchievementListener
-	public void NrOfAchievementListener(PostCreationEvent event) {
+	public void NrOfPostListener(PostCreationEvent event) {
 		User user = ((Post) event.getSource()).getCreator();
 
 		int achievementId = switch (user.getNrOfPosts()) {
@@ -50,8 +50,7 @@ public class PostAchievementsListener {
 		if (achievementId > -1 && achievementRepository.existsById(achievementId)) {
 			Achievement achievement = achievementRepository.getById(achievementId);
 
-			user.addAchievementPoints(achievement.getAchievementPoints());
-			user.getAchievements().add(achievement);
+			user.earnAchievement(achievement);
 
 			publisher.publishEvent(new AchievementEarnedEvent(achievement));
 		}

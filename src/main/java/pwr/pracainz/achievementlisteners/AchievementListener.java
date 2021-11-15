@@ -14,6 +14,9 @@ import java.lang.annotation.Target;
  * Annotation for all achievement listeners. Each of the listeners is asynchronous.
  * <p>
  * It creates a new transaction for each listener.
+ * <p>
+ * Note! Remember to make the method (in services) in which a new event is published
+ * transacional (with {@code @Transactional(propagation = Propagation.REQUIRED)})
  */
 @Async
 @EventListener

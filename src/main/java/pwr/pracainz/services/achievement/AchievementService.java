@@ -4,7 +4,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
@@ -17,7 +16,6 @@ import pwr.pracainz.services.icon.IconServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
-import java.io.IOException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -104,7 +102,6 @@ public class AchievementService implements AchievementServiceInterface {
 	 *
 	 * When an error occurs, emit an {@link AchievementException} with a message.
 	 */
-	@Async
 	@EventListener
 	public void emitAchievement(AchievementEarnedEvent event) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
@@ -121,7 +118,7 @@ public class AchievementService implements AchievementServiceInterface {
 					.data(dtoConversion.convertToDTO(earnedAchievement, iconService.getAchievementIcon(earnedAchievement)), MediaType.APPLICATION_JSON));
 
 			log.info("Achievement '{}' successfully emitted to user {}", earnedAchievement.getName(), userService.getUsernameOfCurrentUser());
-		} catch (IOException ex) {
+		} catch (Exception ex) {
 			log.error("Error occurred during achievement emitting for user {}, \n {}", userService.getUsernameOfCurrentUser(), ex);
 
 			emitter.completeWithError(new AchievementException(

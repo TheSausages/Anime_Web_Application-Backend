@@ -36,7 +36,7 @@ public class Achievement {
 	@Positive
 	private int achievementPoints;
 
-	@ManyToMany(mappedBy = "achievements", fetch = FetchType.EAGER)
+	@ManyToMany(mappedBy = "achievements")
 	private Set<User> users;
 
 	@Override

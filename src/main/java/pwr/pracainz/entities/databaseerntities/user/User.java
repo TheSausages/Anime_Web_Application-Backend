@@ -50,7 +50,7 @@ public class User {
 	@ColumnDefault("0")
 	private long achievementPoints;
 
-	@ManyToMany(fetch = FetchType.EAGER)
+	@ManyToMany
 	@JoinTable(
 			name = "UserAchievements",
 			joinColumns = {@JoinColumn(name = "UserID")},
@@ -108,7 +108,7 @@ public class User {
 	}
 
 	/**
-	 * Add achievement points for a user. Should only be used in a {@link pwr.pracainz.achievementlisteners.AchievementListener}.
+	 * Add achievement points for a user.
 	 * @param points Point to be added to {@link #achievementPoints}
 	 */
 	public void addAchievementPoints(int points) {
@@ -120,6 +120,15 @@ public class User {
 	 * @param watchTime Time to be added to {@link #watchTime}
 	 */
 	public void addWatchTime(int watchTime) { this.watchTime += watchTime; }
+
+	/**
+	 * Add achievement to {@link #achievements} and add its points
+	 * @param achievement Achievement to be added
+	 */
+	public void earnAchievement(Achievement achievement) {
+		addAchievementPoints(achievement.getAchievementPoints());
+		achievements.add(achievement);
+	}
 
 	@Override
 	public boolean equals(Object o) {

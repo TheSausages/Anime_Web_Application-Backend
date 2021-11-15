@@ -2,13 +2,17 @@ package pwr.pracainz.services.anime.AnimeUser;
 
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
 import pwr.pracainz.entities.databaseerntities.animeInfo.Anime;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.user.User;
+import pwr.pracainz.entities.events.AnimeUserInfoUpdateEvent;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.repositories.animeInfo.AnimeRepository;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
@@ -31,6 +35,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	private final UserServiceInterface userService;
 	private final I18nServiceInterface i18nService;
 	private final AnimeUserInfoRepository animeUserInfoRepository;
+	private final ApplicationEventPublisher publisher;
 	private final AnimeRepository animeRepository;
 
 	@Autowired
@@ -39,12 +44,14 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	                 UserServiceInterface userService,
 	                 AnimeUserInfoRepository animeUserInfoRepository,
 	                 AnimeRepository animeRepository,
+	                 ApplicationEventPublisher publisher,
 	                 I18nServiceInterface i18nService) {
 		this.dtoConversion = dtoConversion;
 		this.dtoDeconversion = dtoDeconversion;
 		this.userService = userService;
 		this.i18nService = i18nService;
 		this.animeUserInfoRepository = animeUserInfoRepository;
+		this.publisher = publisher;
 		this.animeRepository = animeRepository;
 	}
 
@@ -66,6 +73,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
@@ -113,7 +121,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 					return dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId);
 				});
 
-
+		publisher.publishEvent(new AnimeUserInfoUpdateEvent(updatedAnimeUserInfo));
 
 		return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
 	}

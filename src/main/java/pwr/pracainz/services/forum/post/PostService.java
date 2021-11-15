@@ -6,6 +6,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 import pwr.pracainz.DTO.PageDTO;
 import pwr.pracainz.DTO.forum.Post.CompletePostDTO;
 import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
@@ -31,7 +33,6 @@ import pwr.pracainz.services.i18n.I18nServiceInterface;
 import pwr.pracainz.services.user.UserServiceInterface;
 import pwr.pracainz.utils.UserAuthorizationUtilities;
 
-import javax.transaction.Transactional;
 import java.util.Objects;
 
 /**
@@ -89,6 +90,7 @@ public class PostService implements PostServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
+	@Transactional(propagation = Propagation.REQUIRED)
 	public PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO createPost) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
