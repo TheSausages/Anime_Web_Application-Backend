@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
@@ -73,7 +74,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
 	public AnimeUserInfoDTO updateCurrentUserAnimeInfo(AnimeUserInfoDTO animeUserInfoDTO) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
@@ -121,7 +122,12 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 					return dtoDeconversion.convertFromDTO(animeUserInfoDTO, animeUserInfoId);
 				});
 
-		publisher.publishEvent(new AnimeUserInfoUpdateEvent(updatedAnimeUserInfo));
+		//This needs to be done here, as we can do max 1 database operation in Listener (I think)
+		int numberOfReviews = (int) currUser.getAnimeUserInfo().stream()
+				.filter(AnimeUserInfo::isDidReview)
+				.count();
+
+		publisher.publishEvent(new AnimeUserInfoUpdateEvent(updatedAnimeUserInfo, numberOfReviews));
 
 		return dtoConversion.convertToDTO(animeUserInfoRepository.save(updatedAnimeUserInfo));
 	}

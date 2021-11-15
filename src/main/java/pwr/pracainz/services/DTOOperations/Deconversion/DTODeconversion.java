@@ -14,6 +14,7 @@ import pwr.pracainz.entities.databaseerntities.forum.Thread;
 import pwr.pracainz.entities.databaseerntities.forum.*;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 
 /**
  * Default implementation for the {@link DTODeconversionInterface} interface.
@@ -101,6 +102,9 @@ public class DTODeconversion implements DTODeconversionInterface {
 		thread.setCreation(LocalDateTime.now());
 		thread.setModification(LocalDateTime.now());
 		thread.setNrOfPosts(0);
+		thread.setTags(Collections.emptyList());
+		thread.setThreadUserStatuses(Collections.emptySet());
+		thread.setPosts(Collections.emptySet());
 
 		return thread;
 	}

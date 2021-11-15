@@ -140,6 +140,6 @@ public class User {
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints, posts);
+		return Objects.hash(userId, nrOfPosts, watchTime, achievementPoints);
 	}
 }

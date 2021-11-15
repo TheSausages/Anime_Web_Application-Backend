@@ -26,12 +26,8 @@ public class AnimeUserInfoListener {
 	public void NrOfReviewsListener(AnimeUserInfoUpdateEvent event) {
 		User user = ((AnimeUserInfo) event.getSource()).getAnimeUserInfoId().getUser();
 
-		long numberOfReviews = user.getAnimeUserInfo().stream()
-				.filter(AnimeUserInfo::isDidReview)
-				.count();
-
 		//Cases are one less that necessary, as the new review might not be saved to the database yet
-		int achievementId = switch ((int) numberOfReviews) {
+		int achievementId = switch (event.getNumberOfReviews()) {
 			case 0 -> AchievementIdEnum.NrOfReviewsAchievement_1.id;
 			case 9 -> AchievementIdEnum.NrOfReviewsAchievement_10.id;
 			case 49 -> AchievementIdEnum.NrOfReviewsAchievement_50.id;

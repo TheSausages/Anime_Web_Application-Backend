@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import pwr.pracainz.DTO.PageDTO;
@@ -90,7 +91,7 @@ public class PostService implements PostServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
-	@Transactional(propagation = Propagation.REQUIRED)
+	@Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
 	public PageDTO<CompletePostDTO> createPostForThread(int threadId, CreatePostDTO createPost) {
 		if (!UserAuthorizationUtilities.checkIfLoggedUser()) {
 			throw new AuthenticationException(i18nService.getTranslation("authentication.not-logged-in"),
