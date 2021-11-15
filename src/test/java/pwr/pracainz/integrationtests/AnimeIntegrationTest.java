@@ -3,14 +3,17 @@ package pwr.pracainz.integrationtests;
 import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockAuthentication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.client.WireMock;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
 import pwr.pracainz.DTO.animeInfo.AnimeDTO;
 import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
@@ -21,6 +24,7 @@ import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 import pwr.pracainz.integrationtests.config.BaseIntegrationTest;
 import pwr.pracainz.integrationtests.config.TestConstants;
+import pwr.pracainz.integrationtests.config.WireMockInitializer;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -32,10 +36,18 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.AllOf.allOf;
 
+@ContextConfiguration(initializers = WireMockInitializer.class)
 public class AnimeIntegrationTest extends BaseIntegrationTest {
+	//Will be autowired and is required, but without false there is an error
+	@Autowired(required = false)
+	private WireMockServer wireMockServer;
+
 	@BeforeEach
 	public void setUp() {
 		JsonNode responseBody = basicAnilistResponse();
+
+		//For http://localhost:9090 mock url no path besides / is given
+		String anilistWireMockURL = "/";
 
 		wireMockServer
 				.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))

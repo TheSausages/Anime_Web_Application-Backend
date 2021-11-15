@@ -1,7 +1,6 @@
 package pwr.pracainz.integrationtests.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.tomakehurst.wiremock.WireMockServer;
 import dasniko.testcontainers.keycloak.KeycloakContainer;
 import org.junit.jupiter.api.BeforeEach;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.jdbc.Sql;
@@ -67,19 +65,12 @@ import static org.springframework.security.test.web.servlet.setup.SecurityMockMv
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @ActiveProfiles(profiles = "test")
 @Testcontainers
-@ContextConfiguration(initializers = WireMockInitializer.class)
 @ComponentScan(basePackageClasses = { KeycloakSecurityComponents.class, KeycloakSpringBootConfigResolver.class })
 @Sql(scripts = {"classpath:schema.sql", "classpath:data-test.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 public abstract class BaseIntegrationTest {
-	//For http://localhost:9090 mock url no path besides / is given
-	protected String anilistWireMockURL = "/";
 
 	@Autowired
 	protected ObjectMapper mapper;
-
-	//Will be autowired and is required, but without false there is an error
-	@Autowired(required = false)
-	protected WireMockServer wireMockServer;
 
 	@Autowired
 	protected WebApplicationContext context;
