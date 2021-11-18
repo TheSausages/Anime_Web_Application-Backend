@@ -83,7 +83,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 						.with("refresh_token", logoutRequestBody.getRefreshToken()))
 				.retrieve()
 				.toBodilessEntity()
-				.map(res -> new SimpleMessageDTO("Logout was successful!"))
+				.map(res -> new SimpleMessageDTO(i18nService.getTranslation("authentication.logout-was-successful")))
 				.doOnSuccess(s -> log.info("Logged Out Successfully"))
 				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.logout-not-successful"),
 						String.format("Logout was not successful for user %s", userService.getUsernameOfCurrentUser())))
