@@ -42,5 +42,4 @@ public class CompleteUserDTO extends SimpleUserDTO {
 		this.threadUserStatuses = threadUserStatuses;
 		this.posts = posts;
 	}
-
 }

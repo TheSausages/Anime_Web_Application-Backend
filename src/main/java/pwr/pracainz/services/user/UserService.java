@@ -57,9 +57,7 @@ public class UserService implements UserServiceInterface {
 	 */
 	@Override
 	public CompleteUserDTO getUserInformationById(String userId) {
-		boolean isCurrentUser = UserAuthorizationUtilities.checkIfLoggedUser();
-
-		log.info("Get complete user information for user with id: {}, current User: {}", userId, isCurrentUser);
+		log.info("Get complete user information for user with id: {}, current User: {}", userId, UserAuthorizationUtilities.checkIfLoggedUser());
 
 		User user = userRepository.findById(userId)
 				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("general.no-such-user", userId),

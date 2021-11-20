@@ -190,7 +190,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.media(Media.getMediaBuilder(field)
 						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
 						.format(MediaFormat.MOVIE)
-						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC})
 						.buildMedia())
 				.buildPage();
 
@@ -233,7 +233,7 @@ public class AnimeService implements AnimeServiceInterface {
 				.media(Media.getMediaBuilder(field)
 						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
 						.status(MediaStatus.RELEASING)
-						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC})
 						.buildMedia())
 				.buildPage();
 
@@ -275,7 +275,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.buildPageInfo())
 				.media(Media.getMediaBuilder(field)
 						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC})
 						.buildMedia())
 				.buildPage();
 
@@ -386,7 +386,7 @@ public class AnimeService implements AnimeServiceInterface {
 						.buildPageInfo())
 				.media(mediaBuilder
 						.type(pwr.pracainz.entities.anime.query.parameters.media.MediaType.ANIME)
-						.sort(new MediaSort[]{MediaSort.SCORE_DESC}) //score desc gives highest score for some reason
+						.sort(new MediaSort[]{MediaSort.SCORE_DESC})
 						.buildMedia())
 				.buildPage();
 
