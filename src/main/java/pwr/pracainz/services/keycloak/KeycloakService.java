@@ -155,9 +155,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 						String.format("User %s was register successfully, but couldn't be saved to the database", registrationBody.getUsername()));
 			}
 
-			userService.saveUser(new User(
-					newUser.get().getId(), registrationBody.getUsername(), 0, 0, 0, null, null, null, null, null, null
-			));
+			userService.saveUser(new User(newUser.get().getId(), registrationBody.getUsername()));
 
 			LoginCredentialsDTO login = new LoginCredentialsDTO(
 					registrationBody.getUsername(),

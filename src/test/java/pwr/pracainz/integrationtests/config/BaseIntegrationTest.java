@@ -75,6 +75,9 @@ public abstract class BaseIntegrationTest {
 	@Autowired
 	protected WebApplicationContext context;
 
+	@Autowired
+	protected TestI18nService i18nService;
+
 	protected WebTestClient webTestClient;
 
 	/**
@@ -85,9 +88,7 @@ public abstract class BaseIntegrationTest {
 				.withUsername("backendUser")
 				.withPassword("backendPassword2")
 				.waitingFor(new HttpWaitStrategy().forPort(3606))
-			.withLogConsumer(new Slf4jLogConsumer(
-			LoggerFactory.getLogger(BaseIntegrationTest.class)
-				))
+			.withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(BaseIntegrationTest.class)))
 			.withReuse(true);
 
 	/**
@@ -97,9 +98,7 @@ public abstract class BaseIntegrationTest {
 			.withRealmImportFile("./keycloak/realm/realm-export.json")
 			.withAdminUsername("admin")
 			.withAdminPassword("Password1")
-			.withLogConsumer(new Slf4jLogConsumer(
-					LoggerFactory.getLogger(BaseIntegrationTest.class)
-			))
+			.withLogConsumer(new Slf4jLogConsumer(LoggerFactory.getLogger(BaseIntegrationTest.class)))
 			.withReuse(true);
 
 	static {

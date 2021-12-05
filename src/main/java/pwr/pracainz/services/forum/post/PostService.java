@@ -197,6 +197,10 @@ public class PostService implements PostServiceInterface {
 					}
 					if (!postUserStatus.isReported() && status.isReported()) {
 						reportPost(postId, status);
+
+						if (!post.isBlocked() &&  post.getPostUserStatuses().stream().filter(PostUserStatus::isReported).count() > 4) {
+							post.setBlocked(true);
+						}
 					}
 
 					return postUserStatus.copyDataFromDTO(status);

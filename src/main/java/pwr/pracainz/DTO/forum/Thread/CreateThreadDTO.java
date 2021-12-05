@@ -36,6 +36,7 @@ public class CreateThreadDTO {
 	private ForumCategoryDTO category;
 
 	@NotEmpty(message = "There must be at least 1 tag in a thread")
+	@Size(max = 6, message = "Cannot have more than 6 tags")
 	@Valid
 	private List<TagDTO> tags;
 }

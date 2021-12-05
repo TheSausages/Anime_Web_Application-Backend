@@ -55,7 +55,7 @@ public class ForumController {
 	}
 
 	@GetMapping("/thread/newest/{pageNumber}")
-	public PageDTO<SimpleThreadDTO> getNewestThread(@PathVariable @Min(value = 0) int pageNumber) {
+	public PageDTO<SimpleThreadDTO> getNewestThreads(@PathVariable @Min(value = 0) int pageNumber) {
 		return threadService.getNewestThreads(pageNumber);
 	}
 

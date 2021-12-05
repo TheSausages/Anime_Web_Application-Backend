@@ -124,6 +124,8 @@ public class AchievementService implements AchievementServiceInterface {
 			emitter.completeWithError(new AchievementException(
 					i18nService.getTranslation("general.error-during-achievement-emission")
 			));
+
+			emitterMap.remove(UserAuthorizationUtilities.getIdOfCurrentUser());
 		}
 	}
 }

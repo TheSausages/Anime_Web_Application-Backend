@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -114,6 +115,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res,  request, "currentSeason",
 						getCurrentSeasonInformation(), "Successfully got Current Season Information and Anime"))
@@ -159,6 +163,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, request,
 						String.format("Successfully got Anime from %s of %s", season, year)))
@@ -202,6 +209,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Anime Movies", pageNumber)))
@@ -245,6 +255,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Airing Anime", pageNumber)))
@@ -287,6 +300,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Top Anime of All Time", pageNumber)))
@@ -398,6 +414,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(page))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Page, res, request,
 						String.format("Successfully got %s Page of Search query with conditions: %s", pageNumber, query)))
@@ -507,6 +526,9 @@ public class AnimeService implements AnimeServiceInterface {
 				})
 				.body(Query.fromQueryElement(media))
 				.retrieve()
+				.onStatus(HttpStatus::isError, ex -> {
+					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
+				})
 				.bodyToMono(ObjectNode.class)
 				.flatMap(res -> evaluateClientResponse(QueryElements.Media, res, request,
 						String.format("Successfully got Anime with id: %s", id)))
@@ -574,7 +596,8 @@ public class AnimeService implements AnimeServiceInterface {
 	 */
 	private Mono<ObjectNode> evaluateClientResponse(QueryElements element, ObjectNode response, HttpServletRequest request, String additionalBodyName, ObjectNode additionalBody, String positiveLogResponse) {
 		return Mono.just(response)
-				.map(res -> removeDataAndQueryElementFromJson(res, element).<ObjectNode>set(additionalBodyName, additionalBody))
+				.map(res -> removeDataAndQueryElementFromJson(res, element)
+						.<ObjectNode>set(additionalBodyName, additionalBody))
 				.doOnSuccess(s -> log.info(positiveLogResponse))
 				.doOnError(e -> {
 					throw new AnilistException(i18nService.getTranslation("anime.anilist-server-no-response", request));
@@ -598,10 +621,8 @@ public class AnimeService implements AnimeServiceInterface {
 	 * @see MediaSeason#getCurrentSeason()
 	 */
 	private ObjectNode getCurrentSeasonInformation() {
-		ObjectNode seasonInformation = mapper.createObjectNode();
-		seasonInformation.put("year", LocalDateTime.now().getYear());
-		seasonInformation.put("season", MediaSeason.getCurrentSeason().toString());
-
-		return seasonInformation;
+		return mapper.createObjectNode()
+				.put("year", LocalDateTime.now().getYear())
+				.put("season", MediaSeason.getCurrentSeason().toString());
 	}
 }
