@@ -1,6 +1,5 @@
 package pwr.pracainz.integrationtests;
 
-import com.c4_soft.springaddons.security.oauth2.test.annotations.WithMockAuthentication;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,7 +18,6 @@ import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -38,6 +36,7 @@ import pwr.pracainz.integrationtests.config.BaseIntegrationTest;
 import pwr.pracainz.integrationtests.config.TestConstants;
 import pwr.pracainz.integrationtests.config.TestI18nService;
 import pwr.pracainz.integrationtests.config.WireMockInitializer;
+import pwr.pracainz.integrationtests.config.keycloakprincipal.KeycloakPrincipalByUserId;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -216,11 +215,9 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			}
 
 			@Test
-			@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getAnimeById_LoggedIn_ReturnWithExistingUserInfo() {
 				//given
-				changeLoggedInUserTo(TestConstants.USER_WITH_DATA_ID);
-
 				int animeId = 1;
 
 				AnimeDTO expectedLocalAnimeInfo = new AnimeDTO(
@@ -308,10 +305,9 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			}
 
 			@Test
-			@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void getAnimeById_LoggedIn_ReturnWithEmptyUserInfo() {
 				//given
-				changeLoggedInUserTo(TestConstants.USER_WITH_NO_DATA_ID);
 
 				int animeId = 1;
 
@@ -477,6 +473,72 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						equalTo(errorMessage)
 				));
 			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getAnimeById_LoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_ANIME_BY_ID_ENDPOINT, animeId)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getAnimeById_LoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_ANIME_BY_ID_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 		}
 	}
 
@@ -490,7 +552,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 
 			wireMockServer
 					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-
 							.willReturn(aResponse()
 									.withStatus(200)
 									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
@@ -529,11 +590,9 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		}
 
 		@Test
-		@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
+		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 		public void getCurrentSeasonAnime_LoggedIn_ReturnWithoutError() {
 			//given
-			changeLoggedInUserTo(TestConstants.USER_WITH_DATA_ID);
-
 			ObjectNode expectedCurrentSeasonInformation = mapper.createObjectNode()
 					.put("year", LocalDateTime.now().getYear())
 					.put("season", MediaSeason.getCurrentSeason().toString());
@@ -598,24 +657,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
-		}
-
 		@ParameterizedTest
-		@MethodSource("pagesLoggedIn")
-		@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page, String userId) {
+		@MethodSource("pages")
+		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
 			//given
 			JsonNode responseBody = basicPageAnilistResponse(page);
-			changeLoggedInUserTo(userId);
 
 			wireMockServer
 					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
@@ -642,14 +689,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pagesLoggedIn() {
+		Stream<Arguments> pages() {
 			return Stream.of(
-					Arguments.of(0, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(1, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(2, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(3, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(20, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(99, TestConstants.USER_WITH_NO_DATA_ID)
+					Arguments.of(0),
+					Arguments.of(1),
+					Arguments.of(2),
+					Arguments.of(3),
+					Arguments.of(20),
+					Arguments.of(99)
 			);
 		}
 	}
@@ -690,24 +737,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
-		}
-
 		@ParameterizedTest
-		@MethodSource("pagesLoggedIn")
-		@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page, String userId) {
+		@MethodSource("pages")
+		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
 			//given
 			JsonNode responseBody = basicPageAnilistResponse(page);
-			changeLoggedInUserTo(userId);
 
 			wireMockServer
 					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
@@ -734,14 +769,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pagesLoggedIn() {
+		Stream<Arguments> pages() {
 			return Stream.of(
-					Arguments.of(0, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(1, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(2, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(3, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(20, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(99, TestConstants.USER_WITH_NO_DATA_ID)
+					Arguments.of(0),
+					Arguments.of(1),
+					Arguments.of(2),
+					Arguments.of(3),
+					Arguments.of(20),
+					Arguments.of(99)
 			);
 		}
 	}
@@ -782,24 +817,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
-		}
-
 		@ParameterizedTest
-		@MethodSource("pagesLoggedIn")
-		@WithMockAuthentication(authType = KeycloakAuthenticationToken.class)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page, String userId) {
+		@MethodSource("pages")
+		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
 			//given
 			JsonNode responseBody = basicPageAnilistResponse(page);
-			changeLoggedInUserTo(userId);
 
 			wireMockServer
 					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
@@ -826,14 +849,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			checkForBasicAnilistResponseFields(node, page);
 		}
 
-		Stream<Arguments> pagesLoggedIn() {
+		Stream<Arguments> pages() {
 			return Stream.of(
-					Arguments.of(0, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(1, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(2, TestConstants.USER_WITH_DATA_ID),
-					Arguments.of(3, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(20, TestConstants.USER_WITH_NO_DATA_ID),
-					Arguments.of(99, TestConstants.USER_WITH_NO_DATA_ID)
+					Arguments.of(0),
+					Arguments.of(1),
+					Arguments.of(2),
+					Arguments.of(3),
+					Arguments.of(20),
+					Arguments.of(99)
 			);
 		}
 	}
