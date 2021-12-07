@@ -7,6 +7,9 @@ public class TestConstants {
 	public static final String GET_TOP_ANIME_OF_ALL_TIME_ENDPOINT = "/api/anime/ranking/topAllTime/{pageNumber}";
 	public static final String GET_TOP_AIRING_ENDPOINT = "/api/anime/ranking/topAiring/{pageNumber}";
 	public static final String GET_TOP_MOVIES_ENDPOINT = "/api/anime/ranking/topMovies/{pageNumber}";
+	public static final String SUBSCRIBE_TO_ACHIEVEMENTS_ENDPOINT = "/api/achievements/subscribe";
+	public static final String CANCEL_ACHIEVEMENTS_SUBSCRIPTION_ENDPOINT = "/api/achievements/cancel";
+	public static final String POST_POST_FOR_THREAD_ENDPOINT = "/api/forum/thread/{threadId}/post";
 	public static final String LOGIN_ENDPOINT = "/api/auth/login";
 
 	//Query elements

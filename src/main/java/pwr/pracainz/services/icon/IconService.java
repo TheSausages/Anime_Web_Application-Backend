@@ -6,6 +6,8 @@ import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.stereotype.Service;
 import pwr.pracainz.DTO.user.AchievementDTO;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
+import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
+import pwr.pracainz.repositories.user.AchievementRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 
 import java.io.IOException;
@@ -21,10 +23,12 @@ public class IconService implements IconServiceInterface {
 	private final static String defaultAchievementIconPath = "achievements/Default.png";
 
 	private final DTOConversionInterface dtoConversion;
+	private final AchievementRepository achievementRepository;
 	private final byte[] defaultAchievementIcon;
 
-	IconService(DTOConversionInterface dtoConversion) {
+	IconService(DTOConversionInterface dtoConversion, AchievementRepository achievementRepository) {
 		this.dtoConversion = dtoConversion;
+		this.achievementRepository = achievementRepository;
 
 		try (InputStream stream = this.getClass().getClassLoader().getResourceAsStream(defaultAchievementIconPath)) {
 			if (Objects.isNull(stream)) {
@@ -35,6 +39,16 @@ public class IconService implements IconServiceInterface {
 		} catch (Exception e) {
 			throw new BeanInitializationException("Could not find the default achievement icon", e);
 		}
+	}
+
+	/**
+	 * Variant of {@link #getAchievementIcon(Achievement)} that searches for the achievement using its id.
+	 * @throws ObjectNotFoundException When no achievement with the id was found
+	 */
+	public byte[] getAchievementIcon(int id) throws IOException {
+		return getAchievementIcon(achievementRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("Could not find achievement with id " + id))
+		);
 	}
 
 	/**

@@ -7,12 +7,14 @@ import org.junit.platform.commons.util.StringUtils;
 import org.keycloak.adapters.springsecurity.token.KeycloakAuthenticationToken;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 
+import java.util.Objects;
+
 import static org.mockito.Mockito.when;
 
 class ChangePrincipalToUserId implements BeforeTestExecutionCallback {
 	@Override
 	public void beforeTestExecution(ExtensionContext context) {
-		if (context.getElement().isEmpty() || StringUtils.isBlank(context.getElement().get().getAnnotation(KeycloakPrincipalByUserId.class).value())) {
+		if (Objects.isNull(context) || context.getElement().isEmpty() || StringUtils.isBlank(context.getElement().get().getAnnotation(KeycloakPrincipalByUserId.class).value())) {
 			throw new TestInstantiationException("Could not set Principal");
 		}
 

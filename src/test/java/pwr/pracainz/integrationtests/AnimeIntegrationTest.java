@@ -61,6 +61,10 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 	@Autowired(required = false)
 	private WireMockServer wireMockServer;
 
+	/**
+	 * This annotation is used to change the 'page' field in the response to the 'page' field value in request.
+	 * Both need to have the field!
+	 */
 	@interface UsePageExtension {
 		@RegisterExtension
 		WireMockExtension pageExtension = WireMockExtension.newInstance()
@@ -545,319 +549,915 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 	@DisplayName("Get Current Season Anime")
 	@Nested
 	class GetCurrentSeasonAnime {
-		@BeforeEach
-		public void setUp() {
-			//This endpoint doesnt use pages
-			JsonNode responseBody = basicPageAnilistResponse(0);
+		@Nested
+		@DisplayName("Without Error")
+		class GetCurrentSeasonAnimeWithoutError {
+			@BeforeEach
+			public void setUp() {
+				//This endpoint doesnt use pages
+				JsonNode responseBody = basicPageAnilistResponse(0);
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
+			}
+
+			@Test
+			public void getCurrentSeasonAnime_NotLoggedIn_ReturnWithoutError() {
+				//given
+				ObjectNode expectedCurrentSeasonInformation = mapper.createObjectNode()
+						.put("year", LocalDateTime.now().getYear())
+						.put("season", MediaSeason.getCurrentSeason().toString());
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node);
+
+				assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
+						allOf(
+								notNullValue(),
+								equalTo(expectedCurrentSeasonInformation)
+						));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getCurrentSeasonAnime_LoggedIn_ReturnWithoutError() {
+				//given
+				ObjectNode expectedCurrentSeasonInformation = mapper.createObjectNode()
+						.put("year", LocalDateTime.now().getYear())
+						.put("season", MediaSeason.getCurrentSeason().toString());
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node);
+
+				assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
+						allOf(
+								notNullValue(),
+								equalTo(expectedCurrentSeasonInformation)
+						));
+			}
 		}
 
-		@Test
-		public void getCurrentSeasonAnime_NotLoggedIn_ReturnWithoutError() {
-			//given
-			ObjectNode expectedCurrentSeasonInformation = mapper.createObjectNode()
-					.put("year", LocalDateTime.now().getYear())
-					.put("season", MediaSeason.getCurrentSeason().toString());
+		@Nested
+		@DisplayName("With Error")
+		class GetCurrentSeasonAnimeWithError {
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT)
-					.exchange();
+			@BeforeEach
+			public void setUp() {
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(400)
+										.withBody("Error"))
+						);
+			}
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+			@Test
+			public void getCurrentSeasonAnime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node);
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
 
-			assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
-					allOf(
-							notNullValue(),
-							equalTo(expectedCurrentSeasonInformation)
-					));
-		}
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-		@Test
-		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-		public void getCurrentSeasonAnime_LoggedIn_ReturnWithoutError() {
-			//given
-			ObjectNode expectedCurrentSeasonInformation = mapper.createObjectNode()
-					.put("year", LocalDateTime.now().getYear())
-					.put("season", MediaSeason.getCurrentSeason().toString());
+				assertThat(node, notNullValue());
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT)
-					.exchange();
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+			@Test
+			public void getCurrentSeasonAnime_NotLoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node);
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
 
-			assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
-					allOf(
-							notNullValue(),
-							equalTo(expectedCurrentSeasonInformation)
-					));
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getCurrentSeasonAnime_LoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getCurrentSeasonAnime_LoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 		}
 	}
 
 	@DisplayName("Get Top Anime Of All Time")
 	@Nested
-	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-	@UsePageExtension
 	class GetTopAnimeOfAllTime {
-		@ParameterizedTest
-		@MethodSource("pages")
-		public void getTopAnimeOfAllTime_NotLoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+		@UsePageExtension
+		@Nested
+		@DisplayName("Without Error")
+		class GetTopAnimeOfAllTimeWithoutError {
+			@ParameterizedTest
+			@MethodSource("pages")
+			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_ANIME_OF_ALL_TIME_ENDPOINT, page)
-					.exchange();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_ANIME_OF_ALL_TIME_ENDPOINT, page)
+						.exchange();
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			@ParameterizedTest
+			@MethodSource("pages")
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
+
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_ANIME_OF_ALL_TIME_ENDPOINT, page)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			Stream<Arguments> pages() {
+				return Stream.of(
+						Arguments.of(0),
+						Arguments.of(1),
+						Arguments.of(2),
+						Arguments.of(3),
+						Arguments.of(20),
+						Arguments.of(99)
+				);
+			}
 		}
 
-		@ParameterizedTest
-		@MethodSource("pages")
-		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@Nested
+		@DisplayName("With Error")
+		class GetTopAnimeOfAllTimeWithError {
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+			@BeforeEach
+			public void setUp() {
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(400)
+										.withBody("Error"))
+						);
+			}
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_ANIME_OF_ALL_TIME_ENDPOINT, page)
-					.exchange();
+			@Test
+			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
-		}
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeOfAllTime_LoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeOfAllTime_LoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 		}
 	}
 
 	@DisplayName("Get Top Anime Of All Time")
 	@Nested
-	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-	@UsePageExtension
 	class GetTopAiringAnime {
-		@ParameterizedTest
-		@MethodSource("pages")
-		public void getTopAnimeOfAllTime_NotLoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+		@UsePageExtension
+		@Nested
+		@DisplayName("Without Error")
+		class GetTopAiringAnimeWithoutError {
+			@ParameterizedTest
+			@MethodSource("pages")
+			public void getTopAiringAnime_NotLoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_AIRING_ENDPOINT, page)
-					.exchange();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_AIRING_ENDPOINT, page)
+						.exchange();
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			@ParameterizedTest
+			@MethodSource("pages")
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAiringAnime_LoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
+
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_AIRING_ENDPOINT, page)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			Stream<Arguments> pages() {
+				return Stream.of(
+						Arguments.of(0),
+						Arguments.of(1),
+						Arguments.of(2),
+						Arguments.of(3),
+						Arguments.of(20),
+						Arguments.of(99)
+				);
+			}
 		}
 
-		@ParameterizedTest
-		@MethodSource("pages")
-		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@Nested
+		@DisplayName("With Error")
+		class GetTopAiringAnimeWithError {
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+			@BeforeEach
+			public void setUp() {
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(400)
+										.withBody("Error"))
+						);
+			}
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_AIRING_ENDPOINT, page)
-					.exchange();
+			@Test
+			public void getTopAiringAnime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
-		}
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			public void getTopAiringAnime_NotLoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAiringAnime_LoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAiringAnime_LoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_CURRENT_SEASON_ANIME_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 		}
 	}
 
 	@DisplayName("Get Top Anime Movies")
 	@Nested
-	@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-	@UsePageExtension
 	class GetTopAnimeMovies {
-		@ParameterizedTest
-		@MethodSource("pages")
-		public void getTopAnimeMovies_NotLoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@Nested
+		@DisplayName("Without Error")
+		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+		@UsePageExtension
+		class GetTopAnimeMoviesWithoutError {
+			@ParameterizedTest
+			@MethodSource("pages")
+			public void getTopAnimeMovies_NotLoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, page)
-					.exchange();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, page)
+						.exchange();
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			@ParameterizedTest
+			@MethodSource("pages")
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeMovies_LoggedIn_ReturnWithoutError(int page) {
+				//given
+				JsonNode responseBody = basicPageAnilistResponse(page);
+
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(200)
+										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
+										.withJsonBody(responseBody))
+						);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, page)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+			}
+
+			Stream<Arguments> pages() {
+				return Stream.of(
+						Arguments.of(0),
+						Arguments.of(1),
+						Arguments.of(2),
+						Arguments.of(3),
+						Arguments.of(20),
+						Arguments.of(99)
+				);
+			}
 		}
 
-		@ParameterizedTest
-		@MethodSource("pages")
-		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-		public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
-			//given
-			JsonNode responseBody = basicPageAnilistResponse(page);
+		@Nested
+		@DisplayName("With Error")
+		class GetTopAiringAnimeWithError {
 
-			wireMockServer
-					.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-							.willReturn(aResponse()
-									.withStatus(200)
-									.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-									.withJsonBody(responseBody))
-					);
+			@BeforeEach
+			public void setUp() {
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(aResponse()
+										.withStatus(400)
+										.withBody("Error"))
+						);
+			}
 
-			//when
-			WebTestClient.ResponseSpec spec = webTestClient
-					.get()
-					.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, page)
-					.exchange();
+			@Test
+			public void getTopAnimeMovies_NotLoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
 
-			//then
-			JsonNode node = spec.expectStatus()
-					.isOk()
-					.expectBody(JsonNode.class)
-					.returnResult()
-					.getResponseBody();
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, animeId)
+						.exchange();
 
-			assertThat(node, notNullValue());
-			checkForBasicAnilistResponseFields(node, page);
-		}
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
 
-		Stream<Arguments> pages() {
-			return Stream.of(
-					Arguments.of(0),
-					Arguments.of(1),
-					Arguments.of(2),
-					Arguments.of(3),
-					Arguments.of(20),
-					Arguments.of(99)
-			);
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			public void getTopAnimeMovies_NotLoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeMovies_LoggedIn_ReturnErrorWithDefaultLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation("anime.anilist-server-no-response")
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, animeId)
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
+
+			@Test
+			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
+			public void getTopAnimeMovies_LoggedIn_ReturnErrorWithPolishLocal() {
+				//given
+				int animeId = 1;
+				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+						i18nService.getTranslation(
+								"anime.anilist-server-no-response",
+								TestI18nService.POLISH_LOCALE
+						)
+				);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.get()
+						.uri(TestConstants.GET_TOP_MOVIES_ENDPOINT, animeId)
+						.header("Accept-Language", "pl")
+						.exchange();
+
+				//then
+				JsonNode node = spec.expectStatus()
+						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+
+				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+						notNullValue(),
+						instanceOf(SimpleMessageDTO.class),
+						equalTo(errorMessage)
+				));
+			}
 		}
 	}
 

@@ -6,6 +6,7 @@ import org.springframework.context.event.EventListener;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import pwr.pracainz.configuration.factories.sseemitter.SseEmitterFactoryInterface;
 import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.entities.events.AchievementEarnedEvent;
 import pwr.pracainz.exceptions.exceptions.AchievementException;
@@ -29,17 +30,21 @@ public class AchievementService implements AchievementServiceInterface {
 	private final UserServiceInterface userService;
 	private final I18nServiceInterface i18nService;
 	private final IconServiceInterface iconService;
+	private final SseEmitterFactoryInterface emitterFactory;
+
 	private final Map<String, SseEmitter> emitterMap;
 
 	@Autowired
 	AchievementService(DTOConversion dtoConversion,
 	                   UserServiceInterface userService,
 	                   IconServiceInterface iconService,
-	                   I18nServiceInterface i18nService) {
+	                   I18nServiceInterface i18nService,
+	                   SseEmitterFactoryInterface emitterFactory) {
 		this.dtoConversion = dtoConversion;
 		this.userService = userService;
 		this.iconService = iconService;
 		this.i18nService = i18nService;
+		this.emitterFactory = emitterFactory;
 
 		emitterMap = new ConcurrentHashMap<>();
 	}
@@ -61,9 +66,7 @@ public class AchievementService implements AchievementServiceInterface {
 		if (emitterMap.containsKey(userId)) {
 			return emitterMap.get(userId);
 		} else {
-			SseEmitter emitter = new SseEmitter(Long.MAX_VALUE);
-			emitter.onCompletion(() -> log.info("Achievement emitter ended"));
-			emitter.onTimeout(() -> log.info("Achievement sending timeout"));
+			SseEmitter emitter = emitterFactory.createNewSseEmitter();
 
 			emitterMap.put(userId, emitter);
 
@@ -84,6 +87,7 @@ public class AchievementService implements AchievementServiceInterface {
 		}
 
 		String userId = UserAuthorizationUtilities.getIdOfCurrentUser();
+		emitterMap.get(userId).complete();
 		emitterMap.remove(userId);
 
 		log.info("User {} canceled subscription to achievements", userService.getUsernameOfCurrentUser());
