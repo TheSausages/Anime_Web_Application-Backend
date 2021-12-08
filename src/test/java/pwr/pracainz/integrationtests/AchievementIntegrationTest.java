@@ -4,11 +4,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.RepeatedTest;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Primary;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 import org.springframework.security.task.DelegatingSecurityContextAsyncTaskExecutor;
@@ -18,9 +21,16 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.reactive.server.FluxExchangeResult;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
+import pwr.pracainz.DTO.animeInfo.AnimeDTO;
+import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
+import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
+import pwr.pracainz.DTO.animeInfo.ReviewDTO;
 import pwr.pracainz.DTO.forum.Post.CreatePostDTO;
 import pwr.pracainz.DTO.user.AchievementDTO;
+import pwr.pracainz.DTO.user.SimpleUserDTO;
 import pwr.pracainz.configuration.factories.sseemitter.SseEmitterFactoryInterface;
+import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
+import pwr.pracainz.entities.databaseerntities.user.Achievement;
 import pwr.pracainz.integrationtests.config.BaseIntegrationTest;
 import pwr.pracainz.integrationtests.config.TestConstants;
 import pwr.pracainz.integrationtests.config.keycloakprincipal.KeycloakPrincipalByUserId;
@@ -35,6 +45,7 @@ import java.util.Objects;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.AllOf.allOf;
+import static org.mockito.Mockito.doThrow;
 
 @DirtiesContext(classMode = DirtiesContext.ClassMode.AFTER_EACH_TEST_METHOD)
 public class AchievementIntegrationTest extends BaseIntegrationTest {
@@ -42,14 +53,14 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 	private AchievementService achievementService;
 
 	@Autowired
-	IconService iconService;
-
-	@Autowired
 	@Qualifier("AsyncTestExec")
 	DelegatingSecurityContextAsyncTaskExecutor executor;
 
+	@SpyBean
+	IconService iconService;
+
 	@TestConfiguration
-	static class SseEmitterTestConfiguration {
+	static class DefaultTestConfig {
 		@Bean(name = "AsyncTestExec")
 		DelegatingSecurityContextAsyncTaskExecutor getAsyncExecutor() {
 			ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
@@ -60,6 +71,26 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 			return new DelegatingSecurityContextAsyncTaskExecutor(executor);
 		}
 
+		/**
+		 * Small SseEmitter subclass, that can be closed many times
+		 * (need to close for request, and them by subscription canceling)
+		 */
+		static class MiniSseEmitter extends SseEmitter {
+			private boolean isCompleted = false;
+
+			MiniSseEmitter(long timeout) {
+				super(timeout);
+			}
+
+			@Override
+			public synchronized void complete() {
+				if (!isCompleted) {
+					this.isCompleted = true;
+					super.complete();
+				}
+			}
+		}
+
 		@Primary
 		@Component
 		public class TestSseEmitterFactory implements SseEmitterFactoryInterface {
@@ -67,29 +98,9 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 			@Qualifier("AsyncTestExec")
 			DelegatingSecurityContextAsyncTaskExecutor executor;
 
-			/**
-			 * Small SseEmitter subclass, that can be closed many times
-			 * (need to close for request, and them by subscription canceling)
-			 */
-			class MiniSseEmitter extends SseEmitter {
-				private boolean isCompleted = false;
-
-				MiniSseEmitter(long timeout) {
-					super(timeout);
-				}
-
-				@Override
-				public synchronized void complete() {
-					if (!isCompleted) {
-						this.isCompleted = true;
-						super.complete();
-					}
-				}
-			}
-
 			@Override
 			public SseEmitter createNewSseEmitter() {
-				SseEmitter emitter = new MiniSseEmitter(2000L);
+				MiniSseEmitter emitter = new DefaultTestConfig.MiniSseEmitter(2000L);
 
 				//Complete the emitter to unlock the request
 				executor.execute(
@@ -130,7 +141,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Nested
 	@DisplayName("Check if same SseEmitter is returned when same user calls subscribe many times, then cancel")
-	//We don't clean the subscription here, but if others pass this would too
+			//We don't clean the subscription here, but if others pass this would too
 	class MultipleSubscribeAndCancel {
 		String sseEmitterInstance = null;
 
@@ -164,7 +175,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
-	public void subscribeAndEmit_LoggedIn_ReturnEmittedAchievement() throws IOException {
+	public void subscribeAndEmitSingleAchievement_LoggedIn_ReturnEmittedAchievement() throws IOException {
 		//given
 		schedulePostNumberAchievementEmission(100);
 
@@ -204,6 +215,90 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 		cancelSubscription();
 	}
 
+	@Test
+	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
+	public void subscribeAndEmitTwoAchievement_LoggedIn_ReturnEmittedAchievements() throws IOException {
+		//given
+		schedulePostNumberAchievementEmission(100);
+		scheduleReviewNumberAchievementEmission(
+				200,
+				TestConstants.USER_WITH_NO_DATA_ID,
+				TestConstants.USER_WITH_NO_DATA_USERNAME
+		);
+
+		AchievementDTO expectedPostAchievement = new AchievementDTO(
+				1,
+				"First Post!",
+				"The first is never the last",
+				iconService.getAchievementIcon(1),
+				15,
+				1
+		);
+
+		AchievementDTO expectedReviewAchievement = new AchievementDTO(
+				4,
+				"First Review!",
+				"Getting started",
+				iconService.getAchievementIcon(4),
+				10,
+				0
+		);
+
+		//when
+		FluxExchangeResult<AchievementDTO> achievementResult = webTestClient
+				.get()
+				.uri(TestConstants.SUBSCRIBE_TO_ACHIEVEMENTS_ENDPOINT)
+				.accept(MediaType.TEXT_EVENT_STREAM)
+				.exchange()
+				.expectStatus().isOk()
+				.returnResult(AchievementDTO.class);
+
+		//then
+		Map<String, SseEmitter> emitterMap = getSseEmitters();
+
+		assertThat(emitterMap, allOf(
+				notNullValue(),
+				aMapWithSize(1),
+				hasKey(TestConstants.USER_WITH_NO_DATA_ID)
+		));
+
+		StepVerifier.create(achievementResult.getResponseBody())
+				.expectNext(expectedPostAchievement)
+				.expectNext(expectedReviewAchievement)
+				.thenCancel()
+				.verify();
+
+		//Clean Up
+		cancelSubscription();
+	}
+
+	@Test
+	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
+	public void subscribeAndEmitSingleAchievementWithError_LoggedIn_ReturnEmittedAchievement() throws IOException {
+		//given
+		schedulePostNumberAchievementEmission(5000);
+		doThrow(new IOException()).when(iconService).getAchievementIcon(ArgumentMatchers.any(Achievement.class));
+
+		//when
+		webTestClient
+				.get()
+				.uri(TestConstants.SUBSCRIBE_TO_ACHIEVEMENTS_ENDPOINT)
+				.accept(MediaType.TEXT_EVENT_STREAM)
+				.exchange()
+				.expectStatus().isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
+
+		//then
+		Map<String, SseEmitter> emitterMap = getSseEmitters();
+
+		assertThat(emitterMap, allOf(
+				notNullValue(),
+				anEmptyMap()
+		));
+
+		//Clean Up
+		cancelSubscription();
+	}
+
 	private void cancelSubscription() {
 		//given
 
@@ -215,9 +310,9 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 				.expectStatus().isOk();
 
 		//then
-		Map<String, SseEmitter> emitterMap2 = getSseEmitters();
+		Map<String, SseEmitter> emitterMap = getSseEmitters();
 
-		assertThat(emitterMap2, allOf(
+		assertThat(emitterMap, allOf(
 				notNullValue(),
 				anEmptyMap()
 		));
@@ -236,6 +331,49 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 					.body(BodyInserters.fromValue(createdPost))
 					.exchange()
 					.expectStatus().isOk(),
+				delay);
+	}
+
+	private void scheduleReviewNumberAchievementEmission(int delay, String userId, String username) {
+		AnimeUserInfoDTO animeUserInfoDTO = new AnimeUserInfoDTO(
+				new AnimeUserInfoIdDTO(
+						new SimpleUserDTO(
+								userId,
+								username,
+								0,
+								0,
+								0
+						),
+						new AnimeDTO(
+								1,
+								0,
+								0,
+								0
+						)
+				),
+				AnimeUserStatus.NO_STATUS,
+				null,
+				null,
+				0, false,
+				null,
+				true,
+				null,
+				new ReviewDTO(
+						10,
+						"Title",
+						"Text",
+						0,
+						0,
+						0
+				)
+		);
+
+		executor.execute(() ->webTestClient
+						.put()
+						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
+						.body(BodyInserters.fromValue(animeUserInfoDTO))
+						.exchange()
+						.expectStatus().isOk(),
 				delay);
 	}
 

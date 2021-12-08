@@ -1,20 +1,14 @@
 package pwr.pracainz.integrationtests;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.ResponseDefinitionBuilder;
 import com.github.tomakehurst.wiremock.client.WireMock;
-import com.github.tomakehurst.wiremock.common.FileSource;
-import com.github.tomakehurst.wiremock.extension.Parameters;
-import com.github.tomakehurst.wiremock.extension.ResponseDefinitionTransformer;
-import com.github.tomakehurst.wiremock.http.Request;
-import com.github.tomakehurst.wiremock.http.ResponseDefinition;
-import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.apache.http.HttpStatus;
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -23,29 +17,33 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.reactive.server.WebTestClient;
+import org.springframework.web.reactive.function.BodyInserters;
 import pwr.pracainz.DTO.SimpleMessageDTO;
-import pwr.pracainz.DTO.animeInfo.AnimeDTO;
-import pwr.pracainz.DTO.animeInfo.AnimeUserInfoDTO;
-import pwr.pracainz.DTO.animeInfo.AnimeUserInfoIdDTO;
-import pwr.pracainz.DTO.animeInfo.ReviewDTO;
+import pwr.pracainz.DTO.animeInfo.*;
 import pwr.pracainz.DTO.user.SimpleUserDTO;
+import pwr.pracainz.entities.anime.query.parameters.fuzzyDate.FuzzyDateValue;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaSeason;
+import pwr.pracainz.entities.anime.query.parameters.media.MediaStatus;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 import pwr.pracainz.integrationtests.config.BaseIntegrationTest;
+import pwr.pracainz.integrationtests.config.GraphQlUtils;
 import pwr.pracainz.integrationtests.config.TestConstants;
 import pwr.pracainz.integrationtests.config.TestI18nService;
-import pwr.pracainz.integrationtests.config.WireMockInitializer;
 import pwr.pracainz.integrationtests.config.keycloakprincipal.KeycloakPrincipalByUserId;
+import pwr.pracainz.integrationtests.config.wiremock.WireMockAnimeSearchExtension;
+import pwr.pracainz.integrationtests.config.wiremock.WireMockInitializer;
+import pwr.pracainz.integrationtests.config.wiremock.WireMockPageExtension;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.stream.Stream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.post;
-import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.AllOf.allOf;
@@ -60,48 +58,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 	//Will be autowired and is required, but without false there is an error
 	@Autowired(required = false)
 	private WireMockServer wireMockServer;
-
-	/**
-	 * This annotation is used to change the 'page' field in the response to the 'page' field value in request.
-	 * Both need to have the field!
-	 */
-	@interface UsePageExtension {
-		@RegisterExtension
-		WireMockExtension pageExtension = WireMockExtension.newInstance()
-				.options(wireMockConfig().extensions(new ResponseDefinitionTransformer() {
-					@Override
-					public ResponseDefinition transform(Request request, ResponseDefinition responseDefinition, FileSource files, Parameters parameters) {
-						try {
-							ObjectMapper mapper = new ObjectMapper();
-
-							JsonNode requestBody = mapper.readTree(request.getBody());
-
-							if (!requestBody.has("page")) {
-								throw new AssertionError("Request body does not have a 'page' element");
-							}
-
-
-							JsonNode responseBody = mapper.readTree(responseDefinition.getBody());
-
-							if (!responseBody.has("page")) {
-								throw new AssertionError("Response body does not have a 'page' element");
-							}
-
-							((ObjectNode) responseBody).set("page", requestBody.get("page"));
-
-							return ResponseDefinition.okForJson(responseBody);
-						} catch (Exception e) {
-							throw new AssertionError(e.getMessage(), e);
-						}
-					}
-
-					@Override
-					public String getName() {
-						return "Return Request Page Extension";
-					}
-				}))
-				.build();
-	}
 
 	@DisplayName("Get Anime by Id")
 	@Nested
@@ -555,14 +511,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@BeforeEach
 			public void setUp() {
 				//This endpoint doesnt use pages
-				JsonNode responseBody = basicPageAnilistResponse(0);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody))
 						);
 			}
 
@@ -778,7 +732,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 	@Nested
 	class GetTopAnimeOfAllTime {
 		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-		@UsePageExtension
 		@Nested
 		@DisplayName("Without Error")
 		class GetTopAnimeOfAllTimeWithoutError {
@@ -786,14 +739,13 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@MethodSource("pages")
 			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -818,14 +770,13 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -1007,7 +958,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 	@Nested
 	class GetTopAiringAnime {
 		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-		@UsePageExtension
 		@Nested
 		@DisplayName("Without Error")
 		class GetTopAiringAnimeWithoutError {
@@ -1015,14 +965,13 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@MethodSource("pages")
 			public void getTopAiringAnime_NotLoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -1047,14 +996,13 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAiringAnime_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -1238,20 +1186,18 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		@Nested
 		@DisplayName("Without Error")
 		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
-		@UsePageExtension
 		class GetTopAnimeMoviesWithoutError {
 			@ParameterizedTest
 			@MethodSource("pages")
 			public void getTopAnimeMovies_NotLoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -1276,14 +1222,13 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAnimeMovies_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse(page);
+				JsonNode responseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(aResponse()
-										.withStatus(200)
-										.withHeader(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-										.withJsonBody(responseBody))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
 				//when
@@ -1461,6 +1406,116 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		}
 	}
 
+	@DisplayName("Search using Anime Query")
+	@Nested
+	class SearchUsingAnimeQuery {
+		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+		@Nested
+		@DisplayName("Without Error")
+		class WithoutError {
+			@ParameterizedTest
+			@MethodSource("queries")
+			public void searchUsingAnimeQuery_NotLoggedIn_ReturnWithoutError(
+					AnimeQuery animeQuery,
+					BiConsumer<Map<String, Object>, AnimeQuery> assertions
+			) throws JsonProcessingException {
+				//given
+				int page = 0;
+				JsonNode responseBody = basicPageAnilistResponse();
+
+				wireMockServer
+						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
+								.willReturn(ResponseDefinitionBuilder
+										.okForJson(responseBody)
+										.withTransformers(
+												WireMockPageExtension.wireMockPageExtensionName,
+												WireMockAnimeSearchExtension.wireMockPageExtensionName
+										))
+						);
+
+				//when
+				WebTestClient.ResponseSpec spec = webTestClient
+						.post()
+						.uri(TestConstants.SEARCH_FOR_ANIME_ENDPOINT, page)
+						.body(BodyInserters.fromValue(animeQuery))
+						.exchange();
+
+				//then
+				JsonNode node = spec
+						.expectStatus().isOk()
+						.expectBody(JsonNode.class)
+						.returnResult()
+						.getResponseBody();
+
+				assertThat(node, notNullValue());
+				checkForBasicAnilistResponseFields(node, page);
+
+				assertions.accept(
+						GraphQlUtils.readStringIntoStringKeyMap(
+								node.get("variables").asText(),
+								mapper
+						),
+						animeQuery
+				);
+			}
+
+			Stream<Arguments> queries() {
+				LocalDateTime testingDateTime = LocalDateTime.now();
+				int testingFuzzyDateNumber = FuzzyDateValue
+						.getFuzzyDateValueBuilder()
+						.fromDate(testingDateTime)
+						.buildFuzzyDateValue()
+						.getFuzzyDateNumber();
+
+				return Stream.of(
+						Arguments.of(
+								AnimeQuery
+										.builder()
+										.title("Title")
+										.build(),
+								(BiConsumer<Map<String, Object>, AnimeQuery>) (variables, query) ->
+									assertThat((String) variables.get("search"), allOf(
+											notNullValue(),
+											instanceOf(String.class),
+											is(query.getTitle())
+									))
+
+						),
+						Arguments.of(
+								AnimeQuery
+										.builder()
+										.status(MediaStatus.FINISHED)
+										.build(),
+								(BiConsumer<Map<String, Object>, AnimeQuery>) (variables, query) ->
+									assertThat(MediaStatus.valueOf((String) variables.get("status")), allOf(
+											notNullValue(),
+											instanceOf(MediaStatus.class),
+											is(query.getStatus())
+									))
+						),
+						Arguments.of(
+								AnimeQuery
+										.builder()
+										.maxStartDate(testingDateTime)
+										.build(),
+								(BiConsumer<Map<String, Object>, AnimeQuery>) (variables, query) ->
+										assertThat((int) variables.get("startDate_lesser"), allOf(
+												notNullValue(),
+												instanceOf(int.class),
+												is(testingFuzzyDateNumber)
+										))
+						)
+				);
+			}
+		}
+
+		@Nested
+		@DisplayName("With Error")
+		class WithError {
+
+		}
+	}
+
 	private void checkForBasicAnilistResponseFields(JsonNode node, int page) {
 		assertThat(node.get("page").asInt(), allOf(
 				notNullValue(),
@@ -1501,32 +1556,29 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		));
 	}
 
-	private JsonNode basicPageAnilistResponse(int page) {
-		return addElementToCreateGraphQlQueryAnwser(
+	private JsonNode basicPageAnilistResponse() {
+		return GraphQlUtils.addElementToCreateGraphQlQueryAnwser(
 				mapper.createObjectNode()
-						.put("page", page)
 						.put("Field1", "value1")
 						.set("Field2", mapper.createObjectNode()
 								.put("Field2-field1", 1)
 								.put("Field2-field2", "value2")
 						),
-				QueryElements.Page
+				QueryElements.Page,
+				mapper
 		);
 	}
 
 	private JsonNode basicMediaAnilistResponse() {
-		return addElementToCreateGraphQlQueryAnwser(
+		return GraphQlUtils.addElementToCreateGraphQlQueryAnwser(
 				mapper.createObjectNode()
 						.put("Field1", "value1")
 						.set("Field2", mapper.createObjectNode()
 								.put("Field2-field1", 1)
 								.put("Field2-field2", "value2")
 						),
-				QueryElements.Media
+				QueryElements.Media,
+				mapper
 		);
-	}
-
-	private JsonNode addElementToCreateGraphQlQueryAnwser(JsonNode answer, QueryElements element) {
-		return mapper.createObjectNode().set("data", mapper.createObjectNode().set(element.name(), answer));
 	}
 }

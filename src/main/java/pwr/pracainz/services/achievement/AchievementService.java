@@ -87,8 +87,10 @@ public class AchievementService implements AchievementServiceInterface {
 		}
 
 		String userId = UserAuthorizationUtilities.getIdOfCurrentUser();
-		emitterMap.get(userId).complete();
-		emitterMap.remove(userId);
+		emitterMap.computeIfPresent(userId, (id, emitter) -> {
+			emitter.complete();
+			return null;
+		});
 
 		log.info("User {} canceled subscription to achievements", userService.getUsernameOfCurrentUser());
 	}
@@ -123,7 +125,7 @@ public class AchievementService implements AchievementServiceInterface {
 
 			log.info("Achievement '{}' successfully emitted to user {}", earnedAchievement.getName(), userService.getUsernameOfCurrentUser());
 		} catch (Exception ex) {
-			log.error("Error occurred during achievement emitting for user {}, \n {}", userService.getUsernameOfCurrentUser(), ex);
+			log.error("Error occurred during achievement emitting for user {}", userService.getUsernameOfCurrentUser());
 
 			emitter.completeWithError(new AchievementException(
 					i18nService.getTranslation("general.error-during-achievement-emission")

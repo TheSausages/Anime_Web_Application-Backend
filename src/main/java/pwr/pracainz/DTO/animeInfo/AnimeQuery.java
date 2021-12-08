@@ -1,9 +1,6 @@
 package pwr.pracainz.DTO.animeInfo;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaFormat;
 import pwr.pracainz.entities.anime.query.parameters.media.MediaStatus;
 
@@ -20,6 +17,8 @@ import java.util.Objects;
 @AllArgsConstructor
 @Getter
 @Setter
+//Builder is for testing in #AnimeIntegrationTests
+@Builder
 public class AnimeQuery {
 	private String title = null;
 
