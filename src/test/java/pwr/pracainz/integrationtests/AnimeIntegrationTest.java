@@ -32,6 +32,7 @@ import pwr.pracainz.integrationtests.config.TestConstants;
 import pwr.pracainz.integrationtests.config.TestI18nService;
 import pwr.pracainz.integrationtests.config.keycloakprincipal.KeycloakPrincipalByUserId;
 import pwr.pracainz.integrationtests.config.wiremock.WireMockAnimeSearchExtension;
+import pwr.pracainz.integrationtests.config.wiremock.WireMockExtensionSummarizer;
 import pwr.pracainz.integrationtests.config.wiremock.WireMockInitializer;
 import pwr.pracainz.integrationtests.config.wiremock.WireMockPageExtension;
 
@@ -1423,14 +1424,19 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				int page = 0;
 				JsonNode responseBody = basicPageAnilistResponse();
 
+				WireMockExtensionSummarizer.getInstance().addToTransformers(
+						WireMockPageExtension.getInstance(),
+						WireMockAnimeSearchExtension.getInstance()
+				);
+
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
 										.okForJson(responseBody)
 										.withTransformers(
-												WireMockPageExtension.wireMockPageExtensionName,
-												WireMockAnimeSearchExtension.wireMockPageExtensionName
-										))
+												WireMockExtensionSummarizer.wireMockExtensionSummarizerName
+										)
+								)
 						);
 
 				//when
@@ -1452,7 +1458,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 
 				assertions.accept(
 						GraphQlUtils.readStringIntoStringKeyMap(
-								node.get("variables").asText(),
+								node.get(WireMockAnimeSearchExtension.variableFieldName).asText(),
 								mapper
 						),
 						animeQuery

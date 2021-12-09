@@ -3,6 +3,7 @@ package pwr.pracainz.integrationtests.config;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import pwr.pracainz.configuration.configuration.ObjectMapperConfiguration;
 import pwr.pracainz.entities.anime.query.queryElements.QueryElements;
 
 import java.util.HashMap;
@@ -14,7 +15,7 @@ public class GraphQlUtils {
 	}
 
 	public JsonNode addElementToCreateGraphQlQueryAnwser(JsonNode answer, QueryElements element) {
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = ObjectMapperConfiguration.ObjectMapperFactory.getNewObjectMapper();
 		return mapper.createObjectNode().set("data", mapper.createObjectNode().set(element.name(), answer));
 	}
 

@@ -1,14 +1,16 @@
 package pwr.pracainz.integrationtests.config.wiremock;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.common.ConsoleNotifier;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import lombok.Getter;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.context.ApplicationContextInitializer;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.event.ContextClosedEvent;
 
+@Getter
 public class WireMockInitializer implements ApplicationContextInitializer<ConfigurableApplicationContext> {
-
 	@Override
 	public void initialize(ConfigurableApplicationContext configurableApplicationContext) {
 		if (!configurableApplicationContext.getEnvironment().containsProperty("wire-mock.port")) {
@@ -20,9 +22,13 @@ public class WireMockInitializer implements ApplicationContextInitializer<Config
 		WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig()
 				.port(wireMockPort)
 				.extensions(
-						new WireMockPageExtension(),
-						new WireMockAnimeSearchExtension()
-				));
+						WireMockExtensionSummarizer.getInstance(),
+						WireMockAnimeSearchExtension.getInstance(),
+						WireMockPageExtension.getInstance()
+				)
+				.notifier(new ConsoleNotifier(true))
+		);
+
 		wireMockServer.start();
 		configurableApplicationContext.getBeanFactory().registerSingleton("wireMockServer", wireMockServer);
 
