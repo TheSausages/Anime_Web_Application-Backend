@@ -20,34 +20,46 @@ import java.util.Objects;
 //Builder is for testing in #AnimeIntegrationTests
 @Builder
 public class AnimeQuery {
+	@Builder.Default
 	private String title = null;
 
+	@Builder.Default
 	private LocalDateTime maxStartDate = null;
 
+	@Builder.Default
 	private LocalDateTime minStartDate = null;
 
+	@Builder.Default
 	private LocalDateTime maxEndDate = null;
 
+	@Builder.Default
 	private LocalDateTime minEndDate = null;
 
+	@Builder.Default
 	@Min(value = 0, message = "Maximal number of episodes cannot be negative")
 	private Integer maxNrOfEpisodes = null;
 
+	@Builder.Default
 	@Min(value = 0, message = "Minimal number of episodes cannot be negative")
 	private Integer minNrOfEpisodes = null;
 
+	@Builder.Default
 	@Min(value = 0, message = "Maximal average score cannot be negative")
 	@Max(value = 101, message = "Maximal average score cannot be over 100")
 	private Integer maxAverageScore = null;
 
+	@Builder.Default
 	@Min(value = 0, message = "Minimal average score cannot be negative")
 	@Max(value = 101, message = "Minimal average score cannot be over 100")
 	private Integer minAverageScore = null;
 
+	@Builder.Default
 	private MediaSeasonYear season = null;
 
+	@Builder.Default
 	private MediaStatus status = null;
 
+	@Builder.Default
 	private MediaFormat format = null;
 
 	@Override

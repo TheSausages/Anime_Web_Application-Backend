@@ -173,7 +173,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 	@NonNull
 	protected ResponseEntity<Object> handleHttpMediaTypeNotSupported(@NonNull HttpMediaTypeNotSupportedException ex, @NonNull HttpHeaders headers, @NonNull HttpStatus status, @NonNull WebRequest request) {
 		String message = Objects.nonNull(ex.getMessage()) ? ex.getMessage() : "No message given";
-		log.error("This media type is not supported: {}", ex.getMessage());
+		log.error("This media type is not supported: {}", message);
 
 		return handleExceptionInternal(ex, new SimpleMessageDTO(i18nService.getTranslation("general.an-error-occurred")), headers, status, request);
 	}

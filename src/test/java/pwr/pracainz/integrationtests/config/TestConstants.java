@@ -13,6 +13,7 @@ public class TestConstants {
 	public static final String CANCEL_ACHIEVEMENTS_SUBSCRIPTION_ENDPOINT = "/api/achievements/cancel";
 	public static final String POST_POST_FOR_THREAD_ENDPOINT = "/api/forum/thread/{threadId}/post";
 	public static final String LOGIN_ENDPOINT = "/api/auth/login";
+	public static final String GET_CURRENT_USER_PROFILE_ENDPOINT = "/api/user/current";
 
 	//Query elements
 

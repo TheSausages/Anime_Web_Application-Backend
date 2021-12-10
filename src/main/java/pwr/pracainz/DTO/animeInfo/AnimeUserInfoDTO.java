@@ -1,13 +1,11 @@
 package pwr.pracainz.DTO.animeInfo;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import pwr.pracainz.configuration.ReviewDTOFilter;
 import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserStatus;
 
 import javax.validation.Valid;
@@ -18,7 +16,6 @@ import java.time.LocalDateTime;
 
 /**
  * Domain class of the {@link pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfo} class.
- * Please note that the {@link #review} uses a custom {@link ReviewDTOFilter} filter.
  */
 @Data
 @NoArgsConstructor
@@ -50,8 +47,7 @@ public class AnimeUserInfoDTO {
 	@Min(value = 1, message = "Not one of the possible grades")
 	private Integer grade;
 
-	//Validation in filter class
-	@JsonInclude(value = JsonInclude.Include.CUSTOM, valueFilter = ReviewDTOFilter.class)
+	@Valid
 	private ReviewDTO review;
 }
 

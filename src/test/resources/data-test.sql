@@ -1,5 +1,5 @@
 Insert into Users values
-    ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'UserWithData', 0, 0, 0),
+    ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'UserWithData', 2, 10, 25),
     ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'SecondForumUser', 0, 0, 0),
     ('51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b', 'UserWithNoData', 0, 0, 0);
 
@@ -14,7 +14,7 @@ Insert into Achievements values
 
 Insert into UserAchievements values
     (1, '467a809a-d893-48c2-85e2-82f9ce4b1560'),
-    (2, '467a809a-d893-48c2-85e2-82f9ce4b1560');
+    (4, '467a809a-d893-48c2-85e2-82f9ce4b1560');
 
 Insert into Reviews values
     (1, 'First Test Review', 'First Test Review Text', 8, 3, 2),
@@ -26,7 +26,7 @@ Insert into AnimeUserInfos value
     ('467a809a-d893-48c2-85e2-82f9ce4b1560', 1, 'WATCHING', '2021-10-10',
         '2021-10-11', 0, false, '2021-10-11', true, 9, 1),
     ('467a809a-d893-48c2-85e2-82f9ce4b1560', 2, 'COMPLETED', '2021-10-01',
-        '2021-10-10', 0, true, '2021-10-10', true, 5, 2);
+        '2021-10-10', 1, true, '2021-10-10', true, 5, 2);
 
 Insert into Tags value
     (1, 'Episode Discussion', 'LOW', 'rgb(0, 183, 255)'),

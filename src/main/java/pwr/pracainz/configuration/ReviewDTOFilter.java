@@ -40,7 +40,7 @@ public class ReviewDTOFilter {
 
 		Set<ConstraintViolation<ReviewDTO>> violations = validator.validate(review);
 
-		if (!validator.validate(review).isEmpty()) {
+		if (!validator.validate(review).isEmpty() && violations.stream().findFirst().isPresent()) {
 			throw new ConstraintViolationException(violations);
 		}
 

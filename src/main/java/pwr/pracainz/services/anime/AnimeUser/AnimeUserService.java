@@ -15,6 +15,7 @@ import pwr.pracainz.entities.databaseerntities.animeInfo.AnimeUserInfoId;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.entities.events.AnimeUserInfoUpdateEvent;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
+import pwr.pracainz.exceptions.exceptions.DataException;
 import pwr.pracainz.repositories.animeInfo.AnimeRepository;
 import pwr.pracainz.repositories.animeInfo.AnimeUserInfoRepository;
 import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
@@ -90,6 +91,7 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		}
 
 		if (animeUserInfoDTO.isDidReview() && (animeUserInfoDTO.getReview().getReviewTitle().length() > 100 || animeUserInfoDTO.getReview().getReviewText().length() > 300)) {
+			System.out.println("throwing");
 			throw new AuthenticationException(i18nService.getTranslation("anime.review-to-long"),
 					currUser.getUsername() + " review was too long");
 		}
@@ -109,6 +111,12 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 
 		AnimeUserInfo updatedAnimeUserInfo = animeUserInfoRepository.findById(animeUserInfoId)
 				.map(animeUserInfo -> {
+					if (animeUserInfo.isDidReview() && animeUserInfoDTO.isDidReview() && animeUserInfo.getReview().getReviewId() != animeUserInfoDTO.getReview().getId()) {
+						throw new DataException(i18nService.getTranslation("anime.error-during-anime-info-update"),
+									String.format("While updating %s anime information, the id of the reviews wasn't the same", currUser.getUsername())
+								);
+					}
+
 					int oldWatchTime = animeUserInfo.getNrOfEpisodesSeen() * anime.getAverageEpisodeLength();
 					int newWatchTime = animeUserInfoDTO.getNrOfEpisodesSeen() * anime.getAverageEpisodeLength();
 					currUser.addWatchTime(newWatchTime - oldWatchTime);

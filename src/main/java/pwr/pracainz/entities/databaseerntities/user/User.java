@@ -50,7 +50,7 @@ public class User {
 	@ColumnDefault("0")
 	private long achievementPoints;
 
-	@ManyToMany
+	@ManyToMany(fetch = FetchType.EAGER)
 	@JoinTable(
 			name = "UserAchievements",
 			joinColumns = {@JoinColumn(name = "UserID")},
@@ -122,7 +122,7 @@ public class User {
 	public void addWatchTime(int watchTime) { this.watchTime += watchTime; }
 
 	/**
-	 * Add achievement to {@link #achievements} and add its points
+	 * Add achievement to {@link #achievements} and add its points to the user score.
 	 * @param achievement Achievement to be added
 	 */
 	public void earnAchievement(Achievement achievement) {

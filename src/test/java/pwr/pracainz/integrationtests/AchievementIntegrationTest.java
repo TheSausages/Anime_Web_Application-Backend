@@ -115,7 +115,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-	public void subscribeAndCancel_LoggedIn_ReturnCreatedSseEmitter() {
+	public void achievementEmission_LoggedInSimpleSubscribeAndCancel_ReturnCreatedSseEmitter() {
 		//given
 
 		//when
@@ -147,7 +147,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 		@RepeatedTest(5)
 		@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
-		public void subscribeMultipleTimes_LoggedIn_ReturnSameSseEmitter() {
+		public void achievementEmission_LoggedInSubscribeMultipleTimes_ReturnSameSseEmitter() {
 			//given
 
 			//when
@@ -175,7 +175,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
-	public void subscribeAndEmitSingleAchievement_LoggedIn_ReturnEmittedAchievement() throws IOException {
+	public void achievementEmission_LoggedInEmitSingleAchievement_EmitAchievementWithoutError() throws IOException {
 		//given
 		schedulePostNumberAchievementEmission(100);
 
@@ -217,7 +217,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
-	public void subscribeAndEmitTwoAchievement_LoggedIn_ReturnEmittedAchievements() throws IOException {
+	public void achievementEmission_LoggedInEmitMultipleAchievements_EmitAchievementsWithoutError() throws IOException {
 		//given
 		schedulePostNumberAchievementEmission(100);
 		scheduleReviewNumberAchievementEmission(
@@ -241,7 +241,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 				"Getting started",
 				iconService.getAchievementIcon(4),
 				10,
-				0
+				1
 		);
 
 		//when
@@ -274,7 +274,7 @@ public class AchievementIntegrationTest extends BaseIntegrationTest {
 
 	@Test
 	@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
-	public void subscribeAndEmitSingleAchievementWithError_LoggedIn_ReturnEmittedAchievement() throws IOException {
+	public void achievementEmission_LoggedInErrorDuringEmission_ThrowError() throws IOException {
 		//given
 		schedulePostNumberAchievementEmission(5000);
 		doThrow(new IOException()).when(iconService).getAchievementIcon(ArgumentMatchers.any(Achievement.class));
