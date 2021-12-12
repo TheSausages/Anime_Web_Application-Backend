@@ -13,7 +13,11 @@ public class TestConstants {
 	public static final String CANCEL_ACHIEVEMENTS_SUBSCRIPTION_ENDPOINT = "/api/achievements/cancel";
 	public static final String POST_POST_FOR_THREAD_ENDPOINT = "/api/forum/thread/{threadId}/post";
 	public static final String LOGIN_ENDPOINT = "/api/auth/login";
+	public static final String LOGOUT_ENDPOINT = "/api/auth/logout";
+	public static final String REGISTER_ENDPOINT = "/api/auth/register";
+	public static final String REFRESH_TOKENS_ENDPOINT = "/api/auth/refreshToken";
 	public static final String GET_CURRENT_USER_PROFILE_ENDPOINT = "/api/user/current";
+	public static final String GET_OTHER_USER_PROFILE_ENDPOINT = "/api/user/{userId}";
 
 	//Query elements
 
@@ -23,11 +27,10 @@ public class TestConstants {
 	public static final String ANIME_USER_INFORMATION = "animeUserInformation";
 	public static final String CURRENT_SEASON = "currentSeason";
 
-	public static final String MESSAGE = "message";
-
-	//Users
+	//Users - Passwords can be found in resources -> keycloak -> realm -> search for UserWithData
 	public static final String USER_WITH_DATA_ID = "467a809a-d893-48c2-85e2-82f9ce4b1560";
 	public static final String USER_WITH_DATA_USERNAME = "UserWithData";
+	public static final String USER_WITH_DATA_PASSWORD = "Password1";
 
 	public static final String SECOND_FORUM_USER_ID = "eabc11d0-e6da-49f8-a6db-6bceb84a06bc";
 	public static final String SECOND_FORUM_USER_USERNAME = "SecondForumUser";

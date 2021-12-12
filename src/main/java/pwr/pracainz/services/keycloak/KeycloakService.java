@@ -66,7 +66,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 		if (StringUtils.isEmptyOrWhitespaceOnly(logoutRequestBody.getRefreshToken()) || StringUtils.isEmptyOrWhitespaceOnly(accessToken)) {
 			log.warn("Could not log out - missing information!");
 
-			throw new AuthenticationException(i18nService.getTranslation("authentication.credentials-wrong-structure"),
+			throw new AuthenticationException(i18nService.getTranslation("authentication.credentials-wrong-structure", request),
 					"The credentials had wrong structure");
 		}
 
@@ -83,9 +83,9 @@ public class KeycloakService implements KeycloakServiceInterface {
 						.with("refresh_token", logoutRequestBody.getRefreshToken()))
 				.retrieve()
 				.toBodilessEntity()
-				.map(res -> new SimpleMessageDTO(i18nService.getTranslation("authentication.logout-was-successful")))
+				.map(res -> new SimpleMessageDTO(i18nService.getTranslation("authentication.logout-was-successful", request)))
 				.doOnSuccess(s -> log.info("Logged Out Successfully"))
-				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.logout-not-successful"),
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.logout-not-successful", request),
 						String.format("Logout was not successful for user %s", userService.getUsernameOfCurrentUser())))
 				.block();
 	}
@@ -125,7 +125,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 		log.info("Attempt registration for user: {}, with email: {}", registrationBody.getUsername(), registrationBody.getEmail());
 
 		if (!registrationBody.getPassword().equals(registrationBody.getMatchingPassword())) {
-			throw new AuthenticationException(i18nService.getTranslation("authentication.not-matching-passwords"),
+			throw new AuthenticationException(i18nService.getTranslation("authentication.not-matching-passwords", request),
 					String.format("The Passwords did not match for new user with username %s", registrationBody.getUsername()));
 		}
 
@@ -151,7 +151,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 					.stream().filter(userRep -> userRep.getEmail().equalsIgnoreCase(registrationBody.getEmail())).findAny();
 
 			if (newUser.isEmpty()) {
-				throw new RegistrationException(i18nService.getTranslation("authentication.after-registration-error"),
+				throw new RegistrationException(i18nService.getTranslation("authentication.after-registration-error", request),
 						String.format("User %s was register successfully, but couldn't be saved to the database", registrationBody.getUsername()));
 			}
 
@@ -166,14 +166,14 @@ public class KeycloakService implements KeycloakServiceInterface {
 		}
 
 		if (response.getStatus() == 409) {
-			throw new RegistrationException(i18nService.getTranslation("authentication.registration-data-taken"),
+			throw new RegistrationException(i18nService.getTranslation("authentication.registration-data-taken", request),
 					String.format("Data for user was already taken:\n username: %s,\n email: %s",
 							registrationBody.getUsername(),
 							registrationBody.getEmail())
 			);
 		}
 
-		throw new AuthenticationException(i18nService.getTranslation("authentication.registration-error"),
+		throw new AuthenticationException(i18nService.getTranslation("authentication.registration-error", request),
 				String.format("Registration was not successful for user %s", registrationBody.getUsername()));
 	}
 
@@ -196,7 +196,7 @@ public class KeycloakService implements KeycloakServiceInterface {
 				.bodyToMono(AuthenticationToken.class)
 				.map(dtoConversion::convertToDTO)
 				.doOnSuccess(s -> log.info("Tokens has been successful refreshed"))
-				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.tokens-not-refreshed"),
+				.onErrorMap(throwable -> new AuthenticationException(i18nService.getTranslation("authentication.tokens-not-refreshed", request),
 						String.format("The refresh token of user %s did not work", userService.getUsernameOfCurrentUser())))
 				.block();
 	}

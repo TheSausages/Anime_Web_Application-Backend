@@ -123,12 +123,12 @@ public class AchievementService implements AchievementServiceInterface {
 					.name(earnedAchievement.getName())
 					.data(dtoConversion.convertToDTO(earnedAchievement, iconService.getAchievementIcon(earnedAchievement)), MediaType.APPLICATION_JSON));
 
-			log.info("Achievement '{}' successfully emitted to user {}", earnedAchievement.getName(), userService.getUsernameOfCurrentUser());
+			log.info("Achievement '{}' successfully emitted to user with id {}", earnedAchievement.getName(), UserAuthorizationUtilities.getIdOfCurrentUser());
 		} catch (Exception ex) {
 			log.error("Error occurred during achievement emitting for user with id {}", UserAuthorizationUtilities.getIdOfCurrentUser());
 
-			emitterMap.computeIfPresent(UserAuthorizationUtilities.getIdOfCurrentUser(), (id, emmiter) -> {
-				emitter.completeWithError(new AchievementException(
+			emitterMap.computeIfPresent(UserAuthorizationUtilities.getIdOfCurrentUser(), (id, existingEmitter) -> {
+				existingEmitter.completeWithError(new AchievementException(
 						i18nService.getTranslation("general.error-during-achievement-emission")
 				));
 

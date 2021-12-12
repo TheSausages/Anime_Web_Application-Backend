@@ -2,6 +2,7 @@ package pwr.pracainz.integrationtests.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dasniko.testcontainers.keycloak.KeycloakContainer;
+import org.hamcrest.Matcher;
 import org.junit.jupiter.api.BeforeEach;
 import org.keycloak.adapters.springboot.KeycloakSpringBootConfigResolver;
 import org.keycloak.adapters.springsecurity.KeycloakSecurityComponents;
@@ -10,8 +11,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.TestSecurityContextHolder;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ActiveProfiles;
@@ -23,15 +22,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.client.MockMvcWebTestClient;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.reactive.function.BodyInserters;
 import org.testcontainers.containers.MySQLContainer;
 import org.testcontainers.containers.output.Slf4jLogConsumer;
 import org.testcontainers.containers.wait.strategy.HttpWaitStrategy;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import pwr.pracainz.DTO.userauthetification.AuthenticationTokenDTO;
-import pwr.pracainz.DTO.userauthetification.LoginCredentialsDTO;
+
+import java.util.Arrays;
+import java.util.List;
+import java.util.ListIterator;
 
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.Matchers.hasProperty;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.Mockito.when;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -119,6 +120,7 @@ public abstract class BaseIntegrationTest {
 	 * Container for keycloak. For tests, it does not connect to the mysql database. Will be reused for each test without restart.
 	 */
 	protected static final KeycloakContainer keycloak = new KeycloakContainer("quay.io/keycloak/keycloak:15.0.0")
+			.withExposedPorts(8080)
 			.withRealmImportFile("./keycloak/realm/realm-export.json")
 			.withAdminUsername("admin")
 			.withAdminPassword("Password1")
@@ -152,7 +154,6 @@ public abstract class BaseIntegrationTest {
 	@DynamicPropertySource
 	static void registerContainerProperties(DynamicPropertyRegistry registry) {
 		//The anilist api should be set here to the wireMock address
-
 		registry.add("anilist.apiUrl", () -> "http://localhost:9090");
 		registry.add("keycloak.auth-server-url", keycloak::getAuthServerUrl);
 		registry.add("keycloakrealm.master.url", keycloak::getAuthServerUrl);
@@ -160,39 +161,20 @@ public abstract class BaseIntegrationTest {
 		registry.add("spring.datasource.url", mysql::getJdbcUrl);
 	}
 
+	protected static <T> Matcher<T> hasGraph(String graphPath, Matcher<T> matcher) {
+		List<String> properties = Arrays.asList(graphPath.split("\\."));
+		ListIterator<String> iterator =
+				properties.listIterator(properties.size());
+
+		Matcher<T> ret = matcher;
+		while (iterator.hasPrevious()) {
+			ret = hasProperty(iterator.previous(), ret);
+		}
+		return ret;
+	}
+
 	protected void changeLoggedInUserTo(String userId) {
 		final var auth = (KeycloakAuthenticationToken) TestSecurityContextHolder.getContext().getAuthentication();
 		when(auth.getPrincipal()).thenReturn(userId);
-	}
-
-	@Deprecated
-	protected HttpHeaders logInAndGetAuthorizationHeader(String username, String password) {
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.AUTHORIZATION, logInAndGetToken(username, password));
-
-		return headers;
-	}
-
-	@Deprecated
-	protected String logInAndGetToken(String username, String password) {
-		LoginCredentialsDTO credentials = new LoginCredentialsDTO(
-				username,
-				password
-		);
-
-		HttpHeaders headers = new HttpHeaders();
-		headers.add(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
-
-		AuthenticationTokenDTO tokenDTO = webTestClient.post()
-				.uri(TestConstants.LOGIN_ENDPOINT)
-				.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE)
-				.body(BodyInserters.fromValue(credentials))
-				.exchange()
-				.expectStatus().isOk()
-				.expectBody(AuthenticationTokenDTO.class)
-				.returnResult()
-				.getResponseBody();
-
-		return tokenDTO.getAccess_token();
 	}
 }

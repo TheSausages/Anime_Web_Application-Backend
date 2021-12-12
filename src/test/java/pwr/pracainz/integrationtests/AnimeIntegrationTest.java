@@ -97,25 +97,25 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedAnimeById = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedAnimeById, notNullValue());
+				checkForBasicAnilistResponseFields(receivedAnimeById);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeDTO.class),
 								equalTo(expectedLocalAnimeInfo)
 						));
 
-				assertThat(node.get(TestConstants.REVIEWS), emptyIterable());
+				assertThat(receivedAnimeById.get(TestConstants.REVIEWS), emptyIterable());
 
-				assertThat(node.get(TestConstants.ANIME_USER_INFORMATION), nullValue());
+				assertThat(receivedAnimeById.get(TestConstants.ANIME_USER_INFORMATION), nullValue());
 			}
 
 			@Test
@@ -147,23 +147,23 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedAnimeById = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedAnimeById, notNullValue());
+				checkForBasicAnilistResponseFields(receivedAnimeById);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeDTO.class),
 								equalTo(expectedLocalAnimeInfo)
 						));
 
-				assertThat(mapper.convertValue(node.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
 						allOf(
 								notNullValue(),
 								instanceOf(List.class),
@@ -171,7 +171,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								equalTo(expectedReviews)
 						));
 
-				assertThat(node.get(TestConstants.ANIME_USER_INFORMATION), nullValue());
+				assertThat(receivedAnimeById.get(TestConstants.ANIME_USER_INFORMATION), nullValue());
 			}
 
 			@Test
@@ -231,23 +231,23 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedAnimeById = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedAnimeById, notNullValue());
+				checkForBasicAnilistResponseFields(receivedAnimeById);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeDTO.class),
 								equalTo(expectedLocalAnimeInfo)
 						));
 
-				assertThat(mapper.convertValue(node.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
 						allOf(
 								notNullValue(),
 								instanceOf(List.class),
@@ -255,7 +255,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								equalTo(expectedReviews)
 						));
 
-				assertThat(mapper.convertValue(node.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeUserInfoDTO.class),
@@ -311,25 +311,25 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedAnimeById = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedAnimeById, notNullValue());
+				checkForBasicAnilistResponseFields(receivedAnimeById);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeDTO.class),
 								equalTo(expectedLocalAnimeInfo)
 						));
 
-				assertThat(node.get(TestConstants.REVIEWS), emptyIterable());
+				assertThat(receivedAnimeById.get(TestConstants.REVIEWS), emptyIterable());
 
-				assertThat(mapper.convertValue(node.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeUserInfoDTO.class),
@@ -396,23 +396,23 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedAnimeById = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedAnimeById, notNullValue());
+				checkForBasicAnilistResponseFields(receivedAnimeById);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.LOCAL_ANIME_INFORMATION), AnimeDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeDTO.class),
 								equalTo(expectedLocalAnimeInfo)
 						));
 
-				assertThat(mapper.convertValue(node.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.REVIEWS), new TypeReference<List<ReviewDTO>>() {}),
 						allOf(
 								notNullValue(),
 								instanceOf(List.class),
@@ -420,7 +420,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								equalTo(expectedReviews)
 						));
 
-				assertThat(mapper.convertValue(node.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
+				assertThat(mapper.convertValue(receivedAnimeById.get(TestConstants.ANIME_USER_INFORMATION), AnimeUserInfoDTO.class),
 						allOf(
 								notNullValue(),
 								instanceOf(AnimeUserInfoDTO.class),
@@ -448,7 +448,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getAnimeById_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -459,18 +459,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -478,7 +476,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getAnimeById_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -493,18 +491,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -513,7 +509,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getAnimeById_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -524,18 +520,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -544,7 +538,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getAnimeById_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -559,18 +553,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}
@@ -608,16 +600,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedCurrentSeasonInformation = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedCurrentSeasonInformation, notNullValue());
+				checkForBasicAnilistResponseFields(receivedCurrentSeasonInformation);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
+				assertThat(mapper.convertValue(receivedCurrentSeasonInformation.get(TestConstants.CURRENT_SEASON), JsonNode.class),
 						allOf(
 								notNullValue(),
 								equalTo(expectedCurrentSeasonInformation)
@@ -639,16 +631,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedCurrentSeasonInformation = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node);
+				assertThat(receivedCurrentSeasonInformation, notNullValue());
+				checkForBasicAnilistResponseFields(receivedCurrentSeasonInformation);
 
-				assertThat(mapper.convertValue(node.get(TestConstants.CURRENT_SEASON), JsonNode.class),
+				assertThat(mapper.convertValue(receivedCurrentSeasonInformation.get(TestConstants.CURRENT_SEASON), JsonNode.class),
 						allOf(
 								notNullValue(),
 								equalTo(expectedCurrentSeasonInformation)
@@ -674,7 +666,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getCurrentSeasonAnime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -685,18 +677,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -704,7 +694,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getCurrentSeasonAnime_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -719,18 +709,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -739,7 +727,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getCurrentSeasonAnime_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -750,18 +738,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -770,7 +756,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getCurrentSeasonAnime_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -785,18 +771,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}
@@ -813,12 +797,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@MethodSource("pages")
 			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse();
+				JsonNode wireMockResponseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wireMockResponseBody)
 										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
@@ -829,14 +813,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedTopAnimeOfAllTime = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node, page);
+				assertThat(receivedTopAnimeOfAllTime, notNullValue());
+				checkForBasicAnilistResponseFields(receivedTopAnimeOfAllTime, page);
 			}
 
 			@ParameterizedTest(name = "Top anime of all time, logged in test {index}: {argumentsWithNames}")
@@ -844,12 +828,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAnimeOfAllTime_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse();
+				JsonNode wireMockResponseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wireMockResponseBody)
 										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
@@ -860,14 +844,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedTopAnimeOfAllTime = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node, page);
+				assertThat(receivedTopAnimeOfAllTime, notNullValue());
+				checkForBasicAnilistResponseFields(receivedTopAnimeOfAllTime, page);
 			}
 
 			Stream<Arguments> pages() {
@@ -900,7 +884,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -911,18 +895,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -930,7 +912,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeOfAllTime_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -945,18 +927,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -965,7 +945,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeOfAllTime_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -976,18 +956,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -996,7 +974,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeOfAllTime_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -1011,18 +989,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(receivedError)
 				));
 			}
 		}
@@ -1039,12 +1015,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@MethodSource("pages")
 			public void getTopAiringAnime_NotLoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse();
+				JsonNode wiremockResponseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wiremockResponseBody)
 										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
@@ -1055,14 +1031,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedTopAiringAnime = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node, page);
+				assertThat(receivedTopAiringAnime, notNullValue());
+				checkForBasicAnilistResponseFields(receivedTopAiringAnime, page);
 			}
 
 			@ParameterizedTest(name = "Top airing anime, logged in test {index}: {argumentsWithNames}")
@@ -1070,12 +1046,12 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAiringAnime_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse();
+				JsonNode wiremockResponseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wiremockResponseBody)
 										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
 
@@ -1086,14 +1062,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				JsonNode receivedTopAiringAnime = spec.expectStatus()
 						.isOk()
 						.expectBody(JsonNode.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-				checkForBasicAnilistResponseFields(node, page);
+				assertThat(receivedTopAiringAnime, notNullValue());
+				checkForBasicAnilistResponseFields(receivedTopAiringAnime, page);
 			}
 
 			Stream<Arguments> pages() {
@@ -1126,7 +1102,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAiringAnime_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -1137,18 +1113,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -1156,7 +1130,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAiringAnime_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -1171,18 +1145,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -1191,7 +1163,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAiringAnime_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -1202,18 +1174,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -1222,7 +1192,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAiringAnime_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -1237,18 +1207,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}
@@ -1261,18 +1229,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		@DisplayName("Without Error")
 		@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 		class GetTopAnimeMoviesWithoutError {
-			@ParameterizedTest(name = "Top anime movies, not logged in test {index}: {argumentsWithNames}")
-			@MethodSource("pages")
-			public void getTopAnimeMovies_NotLoggedIn_ReturnWithoutError(int page) {
-				//given
-				JsonNode responseBody = basicPageAnilistResponse();
+			@BeforeEach
+			public void setUp() {
+				JsonNode wiremockResponseBody = basicPageAnilistResponse();
 
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wiremockResponseBody)
 										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
 						);
+			}
+
+			@ParameterizedTest(name = "Top anime movies, not logged in test {index}: {argumentsWithNames}")
+			@MethodSource("pages")
+			public void getTopAnimeMovies_NotLoggedIn_ReturnWithoutError(int page) {
+				//given
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -1296,14 +1268,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_DATA_ID)
 			public void getTopAnimeMovies_LoggedIn_ReturnWithoutError(int page) {
 				//given
-				JsonNode responseBody = basicPageAnilistResponse();
-
-				wireMockServer
-						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
-										.withTransformers(WireMockPageExtension.wireMockPageExtensionName))
-						);
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -1352,7 +1316,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeMovies_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -1363,18 +1327,18 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
+				assertThat(receivedError, notNullValue());
 
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -1382,7 +1346,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeMovies_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -1397,18 +1361,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -1417,7 +1379,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeMovies_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO excpectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -1428,18 +1390,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(excpectedError)
 				));
 			}
 
@@ -1448,7 +1408,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void getTopAnimeMovies_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int animeId = 1;
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -1463,18 +1423,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}
@@ -1487,16 +1445,9 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		@Nested
 		@DisplayName("Without Error")
 		class SearchUsingAnimeQueryWithoutError {
-
-			@ParameterizedTest(name = "Search using anime query, not logged in test {index}: {argumentsWithNames}")
-			@MethodSource("queries")
-			public void searchUsingAnimeQuery_NotLoggedIn_ReturnWithoutErrorAndWithCorrectQuery(
-					AnimeQuery animeQuery,
-					BiConsumer<Map<String, Object>, AnimeQuery> assertions
-			) throws JsonProcessingException {
-				//given
-				int page = 0;
-				JsonNode responseBody = basicPageAnilistResponse();
+			@BeforeEach
+			public void setUp() {
+				JsonNode wireMockResponseBody = basicPageAnilistResponse();
 
 				WireMockExtensionSummarizer.getInstance().addToTransformers(
 						WireMockPageExtension.getInstance(),
@@ -1506,12 +1457,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				wireMockServer
 						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
 								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
+										.okForJson(wireMockResponseBody)
 										.withTransformers(
 												WireMockExtensionSummarizer.wireMockExtensionSummarizerName
 										)
 								)
 						);
+			}
+
+			@ParameterizedTest(name = "Search using anime query, not logged in test {index}: {argumentsWithNames}")
+			@MethodSource("queries")
+			public void searchUsingAnimeQuery_NotLoggedIn_ReturnWithoutErrorAndWithCorrectQuery(
+					AnimeQuery animeQuery,
+					BiConsumer<Map<String, Object>, AnimeQuery> assertions
+			) throws JsonProcessingException {
+				//given
+				int page = 0;
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -1548,22 +1509,6 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			) throws JsonProcessingException {
 				//given
 				int page = 0;
-				JsonNode responseBody = basicPageAnilistResponse();
-
-				WireMockExtensionSummarizer.getInstance().addToTransformers(
-						WireMockPageExtension.getInstance(),
-						WireMockAnimeSearchExtension.getInstance()
-				);
-
-				wireMockServer
-						.stubFor(post(WireMock.urlEqualTo(anilistWireMockURL))
-								.willReturn(ResponseDefinitionBuilder
-										.okForJson(responseBody)
-										.withTransformers(
-												WireMockExtensionSummarizer.wireMockExtensionSummarizerName
-										)
-								)
-						);
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -2004,6 +1949,10 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		@Nested
 		@DisplayName("With Error")
 		class SearchUsingAnimeQueryWithError {
+			AnimeQuery animeQuery = AnimeQuery
+					.builder()
+					.title("Title")
+					.build();
 
 			@BeforeEach
 			public void setUp() {
@@ -2019,11 +1968,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void searchUsingAnimeQuery_NotLoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int page = 0;
-				AnimeQuery animeQuery = AnimeQuery
-						.builder()
-						.title("Title")
-						.build();
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -2035,18 +1980,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2054,11 +1997,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void searchUsingAnimeQuery_NotLoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int page = 0;
-				AnimeQuery animeQuery = AnimeQuery
-						.builder()
-						.title("Title")
-						.build();
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -2074,18 +2013,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2094,11 +2031,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void searchUsingAnimeQuery_LoggedIn_ReturnErrorWithDefaultLocal() {
 				//given
 				int page = 0;
-				AnimeQuery animeQuery = AnimeQuery
-						.builder()
-						.title("Title")
-						.build();
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation("anime.anilist-server-no-response")
 				);
 
@@ -2110,18 +2043,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2130,11 +2061,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void searchUsingAnimeQuery_LoggedIn_ReturnErrorWithPolishLocal() {
 				//given
 				int page = 0;
-				AnimeQuery animeQuery = AnimeQuery
-						.builder()
-						.title("Title")
-						.build();
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.anilist-server-no-response",
 								TestI18nService.POLISH_LOCALE
@@ -2150,18 +2077,16 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						.exchange();
 
 				//then
-				JsonNode node = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_SERVICE_UNAVAILABLE)
-						.expectBody(JsonNode.class)
+						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(node, notNullValue());
-
-				assertThat(mapper.convertValue(node.get(TestConstants.MESSAGE), SimpleMessageDTO.class), allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}
@@ -2178,23 +2103,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void putAnimeUserInformation_LoggedInExistingInformationWithoutReview_ReturnWithoutErrorAndUpdatedWatchTime() {
 				//given
 				int animeId = 1;
-				AnimeUserInfoIdDTO sendingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_DATA_ID,
-								TestConstants.USER_WITH_DATA_USERNAME,
-								2,
-								10,
-								25
-						),
-						new AnimeDTO(
-								animeId,
-								7.0,
-								0,
-								1
-						)
-				);
 				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
-						sendingUserInfoIdDTO,
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_DATA_ID,
+										TestConstants.USER_WITH_DATA_USERNAME,
+										2,
+										10,
+										25
+								),
+								new AnimeDTO(
+										animeId,
+										7.0,
+										0,
+										1
+								)
+						),
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2206,23 +2130,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						null
 				);
 
-				AnimeUserInfoIdDTO expectingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_DATA_ID,
-								TestConstants.USER_WITH_DATA_USERNAME,
-								2,
-								85,
-								25
+				AnimeUserInfoDTO expectedUserInfoDTO = new AnimeUserInfoDTO(
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_DATA_ID,
+										TestConstants.USER_WITH_DATA_USERNAME,
+										2,
+										85,
+										25
+								),
+								new AnimeDTO(
+										animeId,
+										7.0,
+										0,
+										1
+								)
 						),
-						new AnimeDTO(
-								animeId,
-								7.0,
-								0,
-								1
-						)
-				);
-				AnimeUserInfoDTO expectingUserInfoDTO = new AnimeUserInfoDTO(
-						expectingUserInfoIdDTO,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2251,7 +2174,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				assertThat(mapper.convertValue(node, AnimeUserInfoDTO.class), allOf(
 						notNullValue(),
 						instanceOf(AnimeUserInfoDTO.class),
-						samePropertyValuesAs(expectingUserInfoDTO, "modification")
+						samePropertyValuesAs(expectedUserInfoDTO, "modification")
 				));
 
 				//additionally, check if the user watchTime was updated in the profile
@@ -2289,23 +2212,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						0,
 						0
 				);
-				AnimeUserInfoIdDTO sendingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_DATA_ID,
-								TestConstants.USER_WITH_DATA_USERNAME,
-								2,
-								10,
-								25
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_DATA_ID,
+										TestConstants.USER_WITH_DATA_USERNAME,
+										2,
+										10,
+										25
+								),
+								new AnimeDTO(
+										animeId,
+										7.0,
+										0,
+										1
+								)
 						),
-						new AnimeDTO(
-								animeId,
-								7.0,
-								0,
-								1
-						)
-				);
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
-						sendingUserInfoIdDTO,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2317,23 +2239,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						review
 				);
 
-				AnimeUserInfoIdDTO expectingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_DATA_ID,
-								TestConstants.USER_WITH_DATA_USERNAME,
-								2,
-								85,
-								25
+				AnimeUserInfoDTO expectedUserInfo = new AnimeUserInfoDTO(
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_DATA_ID,
+										TestConstants.USER_WITH_DATA_USERNAME,
+										2,
+										85,
+										25
+								),
+								new AnimeDTO(
+										animeId,
+										7.0,
+										0,
+										1
+								)
 						),
-						new AnimeDTO(
-								animeId,
-								7.0,
-								0,
-								1
-						)
-				);
-				AnimeUserInfoDTO expectingUserInfoDTO = new AnimeUserInfoDTO(
-						expectingUserInfoIdDTO,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2349,7 +2270,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.exchange();
 
 				//then
@@ -2362,7 +2283,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				assertThat(mapper.convertValue(node, AnimeUserInfoDTO.class), allOf(
 						notNullValue(),
 						instanceOf(AnimeUserInfoDTO.class),
-						samePropertyValuesAs(expectingUserInfoDTO, "modification", "review"),
+						samePropertyValuesAs(expectedUserInfo, "modification", "review"),
 						hasProperty("review", samePropertyValuesAs(review, "id"))
 				));
 
@@ -2393,23 +2314,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void putAnimeUserInformation_LoggedInNonExistingInformationWithoutReview_ReturnWithoutErrorAndUpdatedWatchTime() {
 				//given
 				int animeId = 3;
-				AnimeUserInfoIdDTO sendingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_NO_DATA_ID,
-								TestConstants.USER_WITH_NO_DATA_USERNAME,
-								0,
-								0,
-								0
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_NO_DATA_ID,
+										TestConstants.USER_WITH_NO_DATA_USERNAME,
+										0,
+										0,
+										0
+								),
+								new AnimeDTO(
+										animeId,
+										0.0,
+										0,
+										0
+								)
 						),
-						new AnimeDTO(
-								animeId,
-								0.0,
-								0,
-								0
-						)
-				);
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
-						sendingUserInfoIdDTO,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2421,15 +2341,15 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						null
 				);
 
-				SimpleUserDTO userDTO = new SimpleUserDTO(
+				SimpleUserDTO expectedSimpleUserProfile = new SimpleUserDTO(
 						TestConstants.USER_WITH_NO_DATA_ID,
 						TestConstants.USER_WITH_NO_DATA_USERNAME,
 						0,
 						66,
 						0
 				);
-				AnimeUserInfoIdDTO expectingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						userDTO,
+				AnimeUserInfoIdDTO expectedUserInfoId = new AnimeUserInfoIdDTO(
+						expectedSimpleUserProfile,
 						new AnimeDTO(
 								animeId,
 								5.0,
@@ -2437,8 +2357,8 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								0
 						)
 				);
-				AnimeUserInfoDTO expectingUserInfoDTO = new AnimeUserInfoDTO(
-						expectingUserInfoIdDTO,
+				AnimeUserInfoDTO expectedUserInfo = new AnimeUserInfoDTO(
+						expectedUserInfoId,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2454,7 +2374,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.exchange();
 
 				//then
@@ -2467,15 +2387,15 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				assertThat(mapper.convertValue(node, AnimeUserInfoDTO.class), allOf(
 						notNullValue(),
 						instanceOf(AnimeUserInfoDTO.class),
-						samePropertyValuesAs(expectingUserInfoDTO, "modification", "id", "review"),
+						samePropertyValuesAs(expectedUserInfo, "modification", "id", "review"),
 						hasProperty("id", allOf(
 								notNullValue(),
 								instanceOf(AnimeUserInfoIdDTO.class),
-								samePropertyValuesAs(expectingUserInfoIdDTO, "user"),
+								samePropertyValuesAs(expectedUserInfoId, "user"),
 								hasProperty("user", allOf(
 										notNullValue(),
 										instanceOf(SimpleUserDTO.class),
-										samePropertyValuesAs(userDTO, "achievementPoints")
+										samePropertyValuesAs(expectedSimpleUserProfile, "achievementPoints")
 								))
 						))
 				));
@@ -2515,23 +2435,22 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						0,
 						0
 				);
-				AnimeUserInfoIdDTO sendingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						new SimpleUserDTO(
-								TestConstants.USER_WITH_NO_DATA_ID,
-								TestConstants.USER_WITH_NO_DATA_USERNAME,
-								0,
-								0,
-								0
-						),
-						new AnimeDTO(
-								animeId,
-								7.0,
-								0,
-								0
-						)
-				);
 				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
-						sendingUserInfoIdDTO,
+						new AnimeUserInfoIdDTO(
+								new SimpleUserDTO(
+										TestConstants.USER_WITH_NO_DATA_ID,
+										TestConstants.USER_WITH_NO_DATA_USERNAME,
+										0,
+										0,
+										0
+								),
+								new AnimeDTO(
+										animeId,
+										7.0,
+										0,
+										0
+								)
+						),
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2543,15 +2462,15 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						review
 				);
 
-				SimpleUserDTO userDTO = new SimpleUserDTO(
+				SimpleUserDTO expectedSimpleUserProfile = new SimpleUserDTO(
 						TestConstants.USER_WITH_NO_DATA_ID,
 						TestConstants.USER_WITH_NO_DATA_USERNAME,
 						0,
 						66,
 						10
 				);
-				AnimeUserInfoIdDTO expectingUserInfoIdDTO = new AnimeUserInfoIdDTO(
-						userDTO,
+				AnimeUserInfoIdDTO expectedUserInfoIdDTO = new AnimeUserInfoIdDTO(
+						expectedSimpleUserProfile,
 						new AnimeDTO(
 								animeId,
 								5.0,
@@ -2559,8 +2478,8 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								0
 						)
 				);
-				AnimeUserInfoDTO expectingUserInfoDTO = new AnimeUserInfoDTO(
-						expectingUserInfoIdDTO,
+				AnimeUserInfoDTO expectedUserInfoDTO = new AnimeUserInfoDTO(
+						expectedUserInfoIdDTO,
 						AnimeUserStatus.WATCHING,
 						LocalDate.now().minusDays(2),
 						LocalDate.now().minusDays(1),
@@ -2589,7 +2508,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				assertThat(mapper.convertValue(node, AnimeUserInfoDTO.class), allOf(
 						notNullValue(),
 						instanceOf(AnimeUserInfoDTO.class),
-						samePropertyValuesAs(expectingUserInfoDTO, "modification", "id", "review"),
+						samePropertyValuesAs(expectedUserInfoDTO, "modification", "id", "review"),
 						hasProperty("review", allOf(
 								notNullValue(),
 								instanceOf(ReviewDTO.class),
@@ -2598,11 +2517,11 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						hasProperty("id", allOf(
 								notNullValue(),
 								instanceOf(AnimeUserInfoIdDTO.class),
-								samePropertyValuesAs(expectingUserInfoIdDTO, "user"),
+								samePropertyValuesAs(expectedUserInfoIdDTO, "user"),
 								hasProperty("user", allOf(
 										notNullValue(),
 										instanceOf(SimpleUserDTO.class),
-										samePropertyValuesAs(userDTO, "achievementPoints")
+										samePropertyValuesAs(expectedSimpleUserProfile, "achievementPoints")
 								))
 						))
 				));
@@ -2631,14 +2550,14 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 		}
 
 		@Nested
-		@DisplayName("Without Error")
+		@DisplayName("With Error")
 		class PutAnimeUserInformationWithError {
 			@Test
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void putAnimeUserInformation_LoggedInNonExistingInformationWrongUserWithoutReview_ThrowErrorDefaultLocale() {
 				//given
 				int animeId = 3;
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_DATA_ID,
@@ -2665,7 +2584,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						null
 				);
 
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.error-during-anime-info-update"
 						)
@@ -2675,22 +2594,20 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNAUTHORIZED)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
-
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2699,7 +2616,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			public void putAnimeUserInformation_LoggedInNonExistingInformationWrongUserWithoutReview_ThrowErrorPolishLocale() {
 				//given
 				int animeId = 3;
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_DATA_ID,
@@ -2726,7 +2643,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						null
 				);
 
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedMessage = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"anime.error-during-anime-info-update",
 								TestI18nService.POLISH_LOCALE
@@ -2737,23 +2654,21 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.header("Accept-Language", "pl")
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNAUTHORIZED)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
-
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedMessage)
 				));
 			}
 
@@ -2761,7 +2676,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void putAnimeUserInformation_LoggedInNonExistingInformationReviewTitleTooLong_ThrowErrorDefaultLocale() {
 				//given
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_NO_DATA_ID,
@@ -2805,19 +2720,17 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNPROCESSABLE_ENTITY)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
-
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
 						equalTo(errorMessage)
@@ -2828,7 +2741,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void putAnimeUserInformation_LoggedInNonExistingInformationReviewTitleTooLong_ThrowErrorPolishLocale() {
 				//given
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_NO_DATA_ID,
@@ -2862,7 +2775,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						)
 				);
 
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"general.an-error-occurred",
 								TestI18nService.POLISH_LOCALE
@@ -2873,23 +2786,23 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.header("Accept-Language", "pl")
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNPROCESSABLE_ENTITY)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
+				assertThat(receivedError, notNullValue());
 
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2897,7 +2810,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void putAnimeUserInformation_LoggedInNonExistingInformationReviewTextTooLong_ThrowErrorDefaultLocale() {
 				//given
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_NO_DATA_ID,
@@ -2931,7 +2844,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						)
 				);
 
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"general.an-error-occurred"
 						)
@@ -2941,22 +2854,20 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNPROCESSABLE_ENTITY)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
-
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 
@@ -2964,7 +2875,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void putAnimeUserInformation_LoggedInNonExistingInformationReviewTextTooLong_ThrowErrorPolishLocale() {
 				//given
-				AnimeUserInfoDTO sendingUserInfoDTO = new AnimeUserInfoDTO(
+				AnimeUserInfoDTO sendingUserInfo = new AnimeUserInfoDTO(
 						new AnimeUserInfoIdDTO(
 								new SimpleUserDTO(
 										TestConstants.USER_WITH_NO_DATA_ID,
@@ -2998,7 +2909,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						)
 				);
 
-				SimpleMessageDTO errorMessage = new SimpleMessageDTO(
+				SimpleMessageDTO expectedError = new SimpleMessageDTO(
 						i18nService.getTranslation(
 								"general.an-error-occurred",
 								TestI18nService.POLISH_LOCALE
@@ -3010,23 +2921,21 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 				WebTestClient.ResponseSpec spec = webTestClient
 						.put()
 						.uri(TestConstants.PUT_USER_ANIME_INFO_ENDPOINT)
-						.body(BodyInserters.fromValue(sendingUserInfoDTO))
+						.body(BodyInserters.fromValue(sendingUserInfo))
 						.header("Accept-Language", "pl")
 						.exchange();
 
 				//then
-				SimpleMessageDTO message = spec.expectStatus()
+				SimpleMessageDTO receivedError = spec.expectStatus()
 						.isEqualTo(HttpStatus.SC_UNPROCESSABLE_ENTITY)
 						.expectBody(SimpleMessageDTO.class)
 						.returnResult()
 						.getResponseBody();
 
-				assertThat(message, notNullValue());
-
-				assertThat(message, allOf(
+				assertThat(receivedError, allOf(
 						notNullValue(),
 						instanceOf(SimpleMessageDTO.class),
-						equalTo(errorMessage)
+						equalTo(expectedError)
 				));
 			}
 		}

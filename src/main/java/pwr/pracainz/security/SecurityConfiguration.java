@@ -98,7 +98,8 @@ public class SecurityConfiguration extends KeycloakWebSecurityConfigurerAdapter 
 				.and()
 				.authorizeRequests()
 				.mvcMatchers("/**", "/auth**", "/auth/**", "/anime/**", "/anime**", "/user/**", "/user**").permitAll()
-				.mvcMatchers("/forum/**", "/forum**", "/animeUser**", "/animeUser/**", "/achievements/**", "/achievements**", "/user/current").authenticated()
+				.mvcMatchers("/forum/**", "/forum**", "/animeUser**", "/animeUser/**", "/achievements/**",
+						"/achievements**", "/user/current", "/auth/logout", "/auth/refreshToken", "/auth/refreshToken").authenticated()
 				.anyRequest().authenticated()
 		;
 	}

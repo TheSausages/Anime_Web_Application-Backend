@@ -37,6 +37,7 @@ public class CompleteUserDTO extends SimpleUserDTO {
 	                       Set<AnimeUserInfoDTO> animeUserInfos, Set<ThreadUserStatusDTO> threadUserStatuses, Set<SimpleThreadDTO> threads, Set<CompletePostDTO> posts) {
 		super(userId, username, nrOfPosts, watchTime, achievementPoints);
 
+		this.threads = threads;
 		this.achievements = achievements;
 		this.animeUserInfos = animeUserInfos;
 		this.threadUserStatuses = threadUserStatuses;

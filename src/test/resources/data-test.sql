@@ -1,6 +1,6 @@
 Insert into Users values
     ('467a809a-d893-48c2-85e2-82f9ce4b1560', 'UserWithData', 2, 10, 25),
-    ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'SecondForumUser', 0, 0, 0),
+    ('eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 'SecondForumUser', 2, 0, 0),
     ('51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b', 'UserWithNoData', 0, 0, 0);
 
 
@@ -59,7 +59,7 @@ Insert into Posts value
     (2, 'Second Post on the forum!', 'Text of the second post on the forum', false, 2, 1, 0,
         '2021-09-2 15:34:21', '2021-09-2 15:34:21',
         'eabc11d0-e6da-49f8-a6db-6bceb84a06bc', 1),
-    (3, 'Third Post on the forum!', 'Text of the third post on the forum', true, 0, 35, 0,
+    (3, 'Third Post on the forum!', 'Text of the third post on the forum', true, 0, 35, 5,
         '2021-09-3 16:45:01', '2021-09-3 16:45:01',
         '467a809a-d893-48c2-85e2-82f9ce4b1560', 1),
     (4, 'Fourth Post on the forum!', 'Text of the fourth post on the forum', false, 10, 5, 2,
