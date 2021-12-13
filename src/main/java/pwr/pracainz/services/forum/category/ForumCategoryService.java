@@ -12,6 +12,7 @@ import pwr.pracainz.services.DTOOperations.Conversion.DTOConversionInterface;
 import pwr.pracainz.services.i18n.I18nServiceInterface;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -46,9 +47,20 @@ public class ForumCategoryService implements ForumCategoryServiceInterface {
 	 * {@inheritDoc}
 	 */
 	@Override
-	public ForumCategory findCategoryByIdAndName(int id, String name) {
+	public ForumCategory findCategoryByIdAndNameOrNull(int id, String name) {
 		return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(id, name)
 				.orElseThrow(() -> new ObjectNotFoundException(i18nService.getTranslation("forum.no-such-category", name),
 						"No category with name '" + name + "' and id '" + id + "' found!"));
+	}
+
+	@Override
+	public ForumCategory findCategoryByIdAndNameOrNull(ForumCategoryDTO categoryDTO) {
+		if (Objects.isNull(categoryDTO)) return null;
+
+		return categoryRepository.findForumCategoryByCategoryIdAndCategoryName(
+						categoryDTO.getCategoryId(),
+						categoryDTO.getCategoryName()
+				)
+				.orElse(null);
 	}
 }

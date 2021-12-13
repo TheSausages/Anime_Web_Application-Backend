@@ -21,5 +21,13 @@ public interface ForumCategoryServiceInterface {
 	 * @param name Name of the searched category
 	 * @return The found Category
 	 */
-	ForumCategory findCategoryByIdAndName(int id, String name);
+	ForumCategory findCategoryByIdAndNameOrNull(int id, String name);
+
+	/**
+	 * Variant of {@link #findCategoryByIdAndNameOrNull(int, String)} that uses the DTO object instead of id and name.
+	 * Additionally, it returns null if not found, instead of throwing an error.
+	 * @param categoryDTO DTO object used to search
+	 * @return The found Category or null
+	 */
+	ForumCategory findCategoryByIdAndNameOrNull(ForumCategoryDTO categoryDTO);
 }

@@ -1,13 +1,9 @@
 package pwr.pracainz.DTO.forum;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Transient;
 import pwr.pracainz.entities.databaseerntities.forum.Enums.ThreadStatus;
-import pwr.pracainz.entities.databaseerntities.forum.ForumCategory;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Min;
@@ -26,37 +22,50 @@ import java.util.Objects;
 @Getter
 @Setter
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
+//Builder is for testing in #ForumIntegrationTests
+@Builder
 public class ForumQuery {
 	@Transient
 	private LocalDateTime queryCreationTime = LocalDateTime.now();
 
 	@PastOrPresent(message = "Minimal creation time cannot be in the future")
+	@Builder.Default
 	private LocalDateTime minCreation = LocalDateTime.MIN;
 
 	@PastOrPresent(message = "Maximal creation time cannot be in the future")
-	private LocalDateTime maxCreation = queryCreationTime;
+	@Builder.Default
+	private LocalDateTime maxCreation = LocalDateTime.now();
 
 	@PastOrPresent(message = "Minimal modification time cannot be in the future")
+	@Builder.Default
 	private LocalDateTime minModification = LocalDateTime.MIN;
 
 	@PastOrPresent(message = "Maximal modification time cannot be in the future")
-	private LocalDateTime maxModification = queryCreationTime;
+	@Builder.Default
+	private LocalDateTime maxModification = LocalDateTime.now();
 
 	@Min(value = 0, message = "Minimal number of posts cannot be negative")
+	@Builder.Default
 	private int maxNrOfPosts = Integer.MAX_VALUE;
 
 	@Min(value = 0, message = "Maximal number of posts cannot be negative")
+	@Builder.Default
 	private int minNrOfPosts = 0;
 
-	private ForumCategory category = null;
+	@Builder.Default
+	private ForumCategoryDTO category = null;
 
+	@Builder.Default
 	private String title = "";
 
+	@Builder.Default
 	private String creatorUsername = "";
 
+	@Builder.Default
 	private ThreadStatus status = null;
 
 	@Valid
+	@Builder.Default
 	private List<TagDTO> tags = Collections.emptyList();
 
 	@Override

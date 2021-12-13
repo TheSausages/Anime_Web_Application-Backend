@@ -1468,11 +1468,11 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@ParameterizedTest(name = "Search using anime query, not logged in test {index}: {argumentsWithNames}")
 			@MethodSource("queries")
 			public void searchUsingAnimeQuery_NotLoggedIn_ReturnWithoutErrorAndWithCorrectQuery(
+					int page,
 					AnimeQuery animeQuery,
 					BiConsumer<Map<String, Object>, AnimeQuery> assertions
 			) throws JsonProcessingException {
 				//given
-				int page = 0;
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -1504,11 +1504,11 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 			@MethodSource("queries")
 			@KeycloakPrincipalByUserId(TestConstants.USER_WITH_NO_DATA_ID)
 			public void searchUsingAnimeQuery_LoggedIn_ReturnWithoutErrorAndWithCorrectQuery(
+					int page,
 					AnimeQuery animeQuery,
 					BiConsumer<Map<String, Object>, AnimeQuery> assertions
 			) throws JsonProcessingException {
 				//given
-				int page = 0;
 
 				//when
 				WebTestClient.ResponseSpec spec = webTestClient
@@ -1548,6 +1548,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 
 				return Stream.of(
 						Arguments.of(
+								0,
 								AnimeQuery
 										.builder()
 										.title("Title")
@@ -1562,6 +1563,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								5,
 								AnimeQuery
 										.builder()
 										.season(testingSeason)
@@ -1579,6 +1581,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 
 						),
 						Arguments.of(
+								99,
 								AnimeQuery
 										.builder()
 										.status(MediaStatus.FINISHED)
@@ -1593,6 +1596,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								8,
 								AnimeQuery
 										.builder()
 										.format(MediaFormat.TV)
@@ -1607,6 +1611,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								15,
 								AnimeQuery
 										.builder()
 										.maxStartDate(testingDateTime)
@@ -1621,6 +1626,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								24,
 								AnimeQuery
 										.builder()
 										.minStartDate(testingDateTime)
@@ -1635,6 +1641,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								48,
 								AnimeQuery
 										.builder()
 										.maxEndDate(testingDateTime)
@@ -1649,6 +1656,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								69,
 								AnimeQuery
 										.builder()
 										.minEndDate(testingDateTime)
@@ -1663,6 +1671,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								78,
 								AnimeQuery
 										.builder()
 										.maxNrOfEpisodes(10)
@@ -1677,6 +1686,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								96,
 								AnimeQuery
 										.builder()
 										.minNrOfEpisodes(1)
@@ -1691,6 +1701,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								23,
 								AnimeQuery
 										.builder()
 										.maxAverageScore(90)
@@ -1705,6 +1716,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								45,
 								AnimeQuery
 										.builder()
 										.minAverageScore(50)
@@ -1719,6 +1731,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								2,
 								AnimeQuery
 										.builder()
 										.title("Search Title")
@@ -1749,6 +1762,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 								}
 						),
 						Arguments.of(
+								1,
 								AnimeQuery
 										.builder()
 										.season(testingSeason)
@@ -1789,6 +1803,7 @@ public class AnimeIntegrationTest extends BaseIntegrationTest {
 						),
 						//Test full Query
 						Arguments.of(
+								0,
 								AnimeQuery
 										.builder()
 										.title("Max Test Title")

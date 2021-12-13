@@ -9,15 +9,21 @@ public class TestConstants {
 	public static final String GET_TOP_MOVIES_ENDPOINT = "/api/anime/ranking/topMovies/{pageNumber}";
 	public static final String SEARCH_FOR_ANIME_ENDPOINT = "/api/anime/search/{pageNumber}";
 	public static final String PUT_USER_ANIME_INFO_ENDPOINT = "/api/anime/updateUserAnime";
+
 	public static final String SUBSCRIBE_TO_ACHIEVEMENTS_ENDPOINT = "/api/achievements/subscribe";
 	public static final String CANCEL_ACHIEVEMENTS_SUBSCRIPTION_ENDPOINT = "/api/achievements/cancel";
-	public static final String POST_POST_FOR_THREAD_ENDPOINT = "/api/forum/thread/{threadId}/post";
+
 	public static final String LOGIN_ENDPOINT = "/api/auth/login";
 	public static final String LOGOUT_ENDPOINT = "/api/auth/logout";
 	public static final String REGISTER_ENDPOINT = "/api/auth/register";
 	public static final String REFRESH_TOKENS_ENDPOINT = "/api/auth/refreshToken";
 	public static final String GET_CURRENT_USER_PROFILE_ENDPOINT = "/api/user/current";
 	public static final String GET_OTHER_USER_PROFILE_ENDPOINT = "/api/user/{userId}";
+
+	public static final String POST_POST_FOR_THREAD_ENDPOINT = "/api/forum/thread/{threadId}/post";
+	public static final String GET_ALL_TAGS_ENDPOINT = "/api/forum/tags";
+	public static final String GET_ALL_CATEGORIES_ENDPOINT = "/api/forum/categories";
+	public static final String SEARCH_FORUM_USING_QUERY = "/api/forum/thread/search/{pageNumber}";
 
 	//Query elements
 

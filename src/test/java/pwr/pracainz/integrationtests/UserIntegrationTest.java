@@ -2,10 +2,7 @@ package pwr.pracainz.integrationtests;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpStatus;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInstance;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -56,13 +53,11 @@ import java.time.LocalDateTime;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.core.AllOf.allOf;
-import static org.junit.jupiter.api.Assertions.assertIterableEquals;
 import static pwr.pracainz.integrationtests.UserIntegrationTest.UserControllerConfig.mockAuthorizationHeader;
 
 public class UserIntegrationTest extends BaseIntegrationTest {
@@ -307,18 +302,18 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 																"Talks about news from the industry"
 														),
 														List.of(
-																new TagDTO(1,
-																		"Episode Discussion",
-																		TagImportance.LOW,
-																		"rgb(0, 183, 255)"),
-																new TagDTO(2,
-																		"New Studio",
-																		TagImportance.MEDIUM,
-																		"rgb(255, 112, 112)"),
 																new TagDTO(3,
 																		"Best Girl",
 																		TagImportance.HIGH,
 																		"rgb(255, 180, 112)"),
+																new TagDTO(2,
+																		"New Studio",
+																		TagImportance.MEDIUM,
+																		"rgb(255, 112, 112)"),
+																new TagDTO(1,
+																		"Episode Discussion",
+																		TagImportance.LOW,
+																		"rgb(0, 183, 255)"),
 																new TagDTO(4,
 																		"Best Boy",
 																		TagImportance.LOW,
@@ -346,14 +341,14 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 												"Suggestions for enhancing the site and service"
 										),
 										List.of(
-												new TagDTO(2,
-														"New Studio",
-														TagImportance.MEDIUM,
-														"rgb(255, 112, 112)"),
 												new TagDTO(3,
 														"Best Girl",
 														TagImportance.HIGH,
-														"rgb(255, 180, 112)")
+														"rgb(255, 180, 112)"),
+												new TagDTO(2,
+														"New Studio",
+														TagImportance.MEDIUM,
+														"rgb(255, 112, 112)")
 										),
 										null
 								)
@@ -402,62 +397,33 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 				assertThat(receivedUserProfile, allOf(
 						notNullValue(),
 						instanceOf(CompleteUserDTO.class),
-						samePropertyValuesAs(expectingUserProfile, "achievements", "'animeUserInfos", "posts", "threadUserStatuses", "threads")
+						samePropertyValuesAs(expectingUserProfile, "achievements", "'animeUserInfos", "posts", "threadUserStatuses", "threads"),
+						hasProperty("achievements", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getAchievements())
+						)),
+						hasProperty("animeUserInfos", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getAnimeUserInfos())
+						)),
+						hasProperty("threadUserStatuses", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getThreadUserStatuses())
+						)),
+						hasProperty("posts", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getPosts())
+						)),
+						hasProperty("threads", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getThreads())
+						))
 				));
-
-				assertThat(receivedUserProfile.getAchievements(), allOf(
-						notNullValue(),
-						containsInAnyOrder(expectingUserProfile.getAchievements().toArray())
-				));
-
-				assertThat(receivedUserProfile.getAnimeUserInfos(), allOf(
-						notNullValue(),
-						containsInAnyOrder(expectingUserProfile.getAnimeUserInfos().toArray())
-				));
-
-
-				//containsInAnyOrder does not work well with inheriting classes
-				//Even worse with nested collections
-				//Because of this we use assertIterableEquals with sorted lists
-				//Beware, each nested list must also be sorted
-				//This is not optimal, but at least it works
-				assertThat(receivedUserProfile.getThreadUserStatuses(), notNullValue());
-				assertIterableEquals(
-						receivedUserProfile.getThreadUserStatuses().stream()
-								.peek(sts -> sts.getIds().getThread().setTags(
-										sts.getIds().getThread().getTags().stream()
-												.sorted(new TagDTOComparator()).collect(Collectors.toList())
-								))
-								.sorted().collect(Collectors.toList()),
-						expectingUserProfile.getThreadUserStatuses().stream()
-								.peek(sts -> sts.getIds().getThread().setTags(
-										sts.getIds().getThread().getTags().stream()
-												.sorted(new TagDTOComparator()).collect(Collectors.toList())
-								))
-								.sorted().collect(Collectors.toList())
-				);
-
-				//Same as ThreadUserStatuses
-				assertThat(receivedUserProfile.getPosts(), notNullValue());
-				assertIterableEquals(
-						expectingUserProfile.getPosts().stream()
-								.sorted(new CompletePostDTOComparator()).collect(Collectors.toList()),
-						receivedUserProfile.getPosts().stream()
-								.sorted(new CompletePostDTOComparator()).collect(Collectors.toList())
-				);
-
-				//Same as ThreadUserStatuses
-				assertThat(receivedUserProfile.getThreads(), notNullValue());
-				assertIterableEquals(
-						expectingUserProfile.getThreads().stream()
-								.peek(thr -> thr.setTags(thr.getTags().stream()
-										.sorted(new TagDTOComparator()).collect(Collectors.toList())))
-								.sorted().collect(Collectors.toList()),
-						receivedUserProfile.getThreads().stream()
-								.peek(thr -> thr.setTags(thr.getTags().stream()
-										.sorted(new TagDTOComparator()).collect(Collectors.toList())))
-								.sorted().collect(Collectors.toList())
-				);
 			}
 		}
 
@@ -580,18 +546,18 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 																"Talks about news from the industry"
 														),
 														List.of(
-																new TagDTO(1,
-																		"Episode Discussion",
-																		TagImportance.LOW,
-																		"rgb(0, 183, 255)"),
-																new TagDTO(2,
-																		"New Studio",
-																		TagImportance.MEDIUM,
-																		"rgb(255, 112, 112)"),
 																new TagDTO(3,
 																		"Best Girl",
 																		TagImportance.HIGH,
 																		"rgb(255, 180, 112)"),
+																new TagDTO(2,
+																		"New Studio",
+																		TagImportance.MEDIUM,
+																		"rgb(255, 112, 112)"),
+																new TagDTO(1,
+																		"Episode Discussion",
+																		TagImportance.LOW,
+																		"rgb(0, 183, 255)"),
 																new TagDTO(4,
 																		"Best Boy",
 																		TagImportance.LOW,
@@ -619,14 +585,14 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 												"Suggestions for enhancing the site and service"
 										),
 										List.of(
-												new TagDTO(2,
-														"New Studio",
-														TagImportance.MEDIUM,
-														"rgb(255, 112, 112)"),
 												new TagDTO(3,
 														"Best Girl",
 														TagImportance.HIGH,
-														"rgb(255, 180, 112)")
+														"rgb(255, 180, 112)"),
+												new TagDTO(2,
+														"New Studio",
+														TagImportance.MEDIUM,
+														"rgb(255, 112, 112)")
 										),
 										null
 								)
@@ -675,62 +641,33 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 				assertThat(receivedUserProfile, allOf(
 						notNullValue(),
 						instanceOf(CompleteUserDTO.class),
-						samePropertyValuesAs(expectingUserProfile, "achievements", "'animeUserInfos", "posts", "threadUserStatuses", "threads")
+						samePropertyValuesAs(expectingUserProfile, "achievements", "'animeUserInfos", "posts", "threadUserStatuses", "threads"),
+						hasProperty("achievements", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getAchievements())
+						)),
+						hasProperty("animeUserInfos", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getAnimeUserInfos())
+						)),
+						hasProperty("threadUserStatuses", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getThreadUserStatuses())
+						)),
+						hasProperty("posts", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getPosts())
+						)),
+						hasProperty("threads", allOf(
+								notNullValue(),
+								instanceOf(Set.class),
+								equalTo(expectingUserProfile.getThreads())
+						))
 				));
-
-				assertThat(receivedUserProfile.getAchievements(), allOf(
-						notNullValue(),
-						containsInAnyOrder(expectingUserProfile.getAchievements().toArray())
-				));
-
-				assertThat(receivedUserProfile.getAnimeUserInfos(), allOf(
-						notNullValue(),
-						containsInAnyOrder(expectingUserProfile.getAnimeUserInfos().toArray())
-				));
-
-
-				//containsInAnyOrder does not work well with inheriting classes
-				//Even worse with nested collections
-				//Because of this we use assertIterableEquals with sorted lists
-				//Beware, each nested list must also be sorted
-				//This is not optimal, but at least it works
-				assertThat(receivedUserProfile.getThreadUserStatuses(), notNullValue());
-				assertIterableEquals(
-						receivedUserProfile.getThreadUserStatuses().stream()
-								.peek(sts -> sts.getIds().getThread().setTags(
-										sts.getIds().getThread().getTags().stream()
-												.sorted(new TagDTOComparator()).collect(Collectors.toList())
-								))
-								.sorted().collect(Collectors.toList()),
-						expectingUserProfile.getThreadUserStatuses().stream()
-								.peek(sts -> sts.getIds().getThread().setTags(
-										sts.getIds().getThread().getTags().stream()
-												.sorted(new TagDTOComparator()).collect(Collectors.toList())
-								))
-								.sorted().collect(Collectors.toList())
-				);
-
-				//Same as ThreadUserStatuses
-				assertThat(receivedUserProfile.getPosts(), notNullValue());
-				assertIterableEquals(
-						expectingUserProfile.getPosts().stream()
-								.sorted(new CompletePostDTOComparator()).collect(Collectors.toList()),
-						receivedUserProfile.getPosts().stream()
-								.sorted(new CompletePostDTOComparator()).collect(Collectors.toList())
-				);
-
-				//Same as ThreadUserStatuses
-				assertThat(receivedUserProfile.getThreads(), notNullValue());
-				assertIterableEquals(
-						expectingUserProfile.getThreads().stream()
-								.peek(thr -> thr.setTags(thr.getTags().stream()
-										.sorted(new TagDTOComparator()).collect(Collectors.toList())))
-								.sorted().collect(Collectors.toList()),
-						receivedUserProfile.getThreads().stream()
-								.peek(thr -> thr.setTags(thr.getTags().stream()
-										.sorted(new TagDTOComparator()).collect(Collectors.toList())))
-								.sorted().collect(Collectors.toList())
-				);
 			}
 		}
 	}
@@ -742,6 +679,7 @@ public class UserIntegrationTest extends BaseIntegrationTest {
 		@DisplayName("Login")
 		class Login {
 			@Test
+			@Disabled("The keycloak container is not stable enough for this test to be run every time")
 			public void login_CorrectData_ReturnAuthenticationToken() {
 				//given + when + then
 				logIn(TestConstants.USER_WITH_DATA_USERNAME, TestConstants.USER_WITH_DATA_PASSWORD);

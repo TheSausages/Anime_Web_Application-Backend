@@ -13,10 +13,8 @@ import pwr.pracainz.DTO.forum.Thread.SimpleThreadDTO;
 import pwr.pracainz.DTO.forum.Thread.UpdateThreadDTO;
 import pwr.pracainz.DTO.forum.ThreadUserStatusDTO;
 import pwr.pracainz.DTO.forum.ThreadUserStatusIdDTO;
-import pwr.pracainz.entities.databaseerntities.forum.Tag;
 import pwr.pracainz.entities.databaseerntities.forum.Thread;
-import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatus;
-import pwr.pracainz.entities.databaseerntities.forum.ThreadUserStatusId;
+import pwr.pracainz.entities.databaseerntities.forum.*;
 import pwr.pracainz.entities.databaseerntities.user.User;
 import pwr.pracainz.exceptions.exceptions.AuthenticationException;
 import pwr.pracainz.exceptions.exceptions.ObjectNotFoundException;
@@ -96,9 +94,12 @@ public class ThreadService implements ThreadServiceInterface {
 				.map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName()))
 				.collect(Collectors.toList());
 
+		ForumCategory category = forumCategoryService
+				.findCategoryByIdAndNameOrNull(forumQuery.getCategory());
+
 		return dtoConversion.convertToDTO(
 				threadRepository.findAllByForumQuery(
-						forumQuery.getMinCreation(),
+								forumQuery.getMinCreation(),
 								forumQuery.getMaxCreation(),
 								forumQuery.getMinModification(),
 								forumQuery.getMaxModification(),
@@ -106,7 +107,7 @@ public class ThreadService implements ThreadServiceInterface {
 								forumQuery.getMaxNrOfPosts(),
 								forumQuery.getTitle(),
 								forumQuery.getCreatorUsername(),
-								forumQuery.getCategory(),
+								category,
 								forumQuery.getStatus(),
 								tags,
 								PageRequest.of(pageNumber, 30, Sort.by("creation").descending()))
@@ -153,7 +154,7 @@ public class ThreadService implements ThreadServiceInterface {
 		log.info("Create thread with title '{}' by user {}", newThread.getTitle(), userService.getUsernameOfCurrentUser());
 
 		Thread thread = dtoDeconversion.convertFromDTO(newThread);
-		thread.setCategory(forumCategoryService.findCategoryByIdAndName(newThread.getCategory().getCategoryId(), newThread.getCategory().getCategoryName()));
+		thread.setCategory(forumCategoryService.findCategoryByIdAndNameOrNull(newThread.getCategory().getCategoryId(), newThread.getCategory().getCategoryName()));
 		thread.setTags(newThread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
 		thread.setCreator(userService.getCurrentUser());
 
@@ -187,7 +188,7 @@ public class ThreadService implements ThreadServiceInterface {
 		oldThread.setTitle(thread.getTitle());
 		oldThread.setThreadText(thread.getText());
 		oldThread.setStatus(thread.getStatus());
-		oldThread.setCategory(forumCategoryService.findCategoryByIdAndName(thread.getCategory().getCategoryId(), thread.getCategory().getCategoryName()));
+		oldThread.setCategory(forumCategoryService.findCategoryByIdAndNameOrNull(thread.getCategory().getCategoryId(), thread.getCategory().getCategoryName()));
 		oldThread.setTags(thread.getTags().stream().map(tagDto -> tagService.findTagByIdAndName(tagDto.getTagId(), tagDto.getTagName())).collect(Collectors.toList()));
 
 		Thread savedThread = threadRepository.save(oldThread);

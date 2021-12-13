@@ -37,7 +37,16 @@ dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-validation:${springVersion}"
 	annotationProcessor "org.springframework.boot:spring-boot-configuration-processor:${springVersion}"
 
-	//Keycloak Dependencies
+    //An exploit appears in any version below 2.15 on 11.12.2021
+    //because of all log4j versions used are changed to 2.15
+    //see https://www.kaspersky.com/blog/log4shell-critical-vulnerability-in-apache-log4j/43124/
+    implementation 'org.apache.logging.log4j:log4j-api:2.15.0'
+    implementation 'org.apache.logging.log4j:log4j-core:2.15.0'
+    implementation 'org.apache.logging.log4j:log4j-to-slf4j:2.15.0'
+
+    ext['log4j2.version'] = '2.15.0'
+
+    //Keycloak Dependencies
 	implementation "org.keycloak:keycloak-spring-boot-starter:${keycloakVersion}"
 	implementation "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
 	implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"

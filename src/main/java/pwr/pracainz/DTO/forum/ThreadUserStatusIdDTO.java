@@ -24,7 +24,7 @@ public class ThreadUserStatusIdDTO {
 	@Valid
 	private SimpleUserDTO user;
 
-	@JsonIgnoreProperties("threadUserStatus")
+	@JsonIgnoreProperties(value = "threadUserStatus", allowSetters = true)
 	@NotNull(message = "Thread in Thread User Status id cannot be null")
 	@Valid
 	private SimpleThreadDTO thread;
