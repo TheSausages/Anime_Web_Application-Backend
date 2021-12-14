@@ -45,7 +45,7 @@ services:
       DB_DATABASE: keycloak
       DB_USER: keycloakUser
       DB_PASSWORD: keycloakPassword1
-      #Should be used only on first startup
+      #During first starting of the volumes, please use:
       #KEYCLOAK_USER: admin
       #KEYCLOAK_PASSWORD: Password1
 

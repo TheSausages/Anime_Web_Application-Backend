@@ -26,7 +26,7 @@ import java.util.Objects;
 @Builder
 public class ForumQuery {
 	@Transient
-	private LocalDateTime queryCreationTime = LocalDateTime.now();
+	private final LocalDateTime queryCreationTime = LocalDateTime.now();
 
 	@PastOrPresent(message = "Minimal creation time cannot be in the future")
 	@Builder.Default
