@@ -106,16 +106,11 @@ In order to use this configuration the frontend application would need to be bui
 
 
 3) *All elements run in docker* - This configuration runs the server using docker, with frontend serving enabled.
-Same as version 2, the frontend will be build (just make sure the folder structure is correct, [more here](#File Structure for Backend)). 
-First step is to build the current version of the app using:
-```shell
-gradle build
-```
-4) In order to run this configuration run the shell script [*run.sh*](/docker/scripts/run.sh) using __GIT BASH__:
-```shell
+Same as version 2, the frontend will be build (just make sure the folder structure is correct, [more here](#File Structure for Backend)).
+In order to run this configuration run the shell script [*run.sh*](/docker/scripts/run.sh). The best way to run it is using 
+the predefined run configuration *All elements run in docker*.
 
-```
-Tests are not run here.
+It is possible that some problems might occur with the tests. If this happens, please *Disable* these tests.
    
 #Generating the documentation
 

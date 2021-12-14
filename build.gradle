@@ -81,11 +81,8 @@ test {
 	useJUnitPlatform()
 }
 
-javadoc {
-    options.addBooleanOption('html5', true)
-}
-
 task generateJavadocs(type: Javadoc) {
+    options.addBooleanOption('html5', true)
     source = project.sourceSets.main.allJava
     classpath = project.sourceSets.main.compileClasspath
     destinationDir = reporting.file("$projectDir/javadoc")
