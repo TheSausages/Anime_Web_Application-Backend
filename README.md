@@ -2,20 +2,20 @@
 
 # Table of Contents
 
-- [General Information](#General Information)
-- [File Structure for Backend](#File Structure for Backend)
-- [Main Technologies](#Main Technologies)
+- [General Information](#General-Information)
+- [File Structure for Backend](#File-Structure-for-Backend)
+- [Main Technologies](#Main-Technologies)
 - [Launch](#Launch)
-- [Generating the documentation](#Generating the documentation)
-- [Needed environmental variables](#Needed environmental variables)
-- [Plans for future](#Plans for future)
+- [Generating the documentation](#Generating-the-documentation)
+- [Needed environmental variables](#Needed-environmental-variables)
+- [Plans for future](#Plans-for-future)
 
 # General Information
 ## General
 
-This is a web application created for my Bachelor's Degree. It's one of 2 parts - [link to Fronend here](https://github.com/TheSausages/Anime_Web_Application-Fronend "FrontEnd").
+This is a web application created for my Bachelor's Degree. It's one of 2 parts - [link to Frontend here](https://github.com/TheSausages/Anime_Web_Application-Fronend "FrontEnd").
 The main desire for creating this app was to enable both Polish and international users to access information and discuss Anime.
-Users would be able to find selected anime, get detailed information on it and, if they want to, dissguss it with others. 
+Users would be able to find selected anime, get detailed information on it and, if they want to, discuss it with others. 
 
 ## Backend specific
 
@@ -24,7 +24,7 @@ This way it can be used for both the web app and a future mobile application.
 This app uses [Anilist GraphQl Api](https://anilist.gitbook.io/anilist-apiv2-docs/ "Anilist GrapgQl Api") in order to acquire Anime information.
 Additionally, it offers several functions, such as a build-in forum or the ability to earn achievements.
 
-#File Structure for Backend
+# File Structure for Backend
 
 The structure should at least consist of these files and folders:
 1) .run - run configurations
@@ -62,7 +62,7 @@ If the frontend folder has any other name, please change the *ReactFrontEnd* val
   - TestContainers 1.16.2
   - Wiremock 2.31.0
 
-#Launch
+# Launch
 
 Remember! Change the option: file -> setting -> editor -> file encoding -> properties files to use `UTF-8` encoding
 and check the `Transparent native-to-ascii conversion`. This way the translation files won't be damaged.
@@ -84,7 +84,7 @@ All commands should be run from the __[main server folder](/)__.
 1) *Local server without frontend serving* - Most basic way to run the app. Consist of 2 parts:
    - Keycloak and MySql are run using Docker.,
    - The server is run locally using the IDE. All needed environmental variables are defined in the run config 
-   (full list can be found [here](#Needed environmental variables)). It is recommended to clean before running
+   (full list can be found [here](#Needed-environmental-variables)). It is recommended to clean before running
      if frontend was served before using this option. Cleaning can be done using:
     ```shell
    gradle clean
@@ -100,25 +100,25 @@ All commands should be run from the __[main server folder](/)__.
 In order to use this configuration the frontend application would need to be build ([more here](/)). Also consists of 2 parts:
     - Keycloak and MySql are run using Docker (same as option 1),
     - The server is run locally using the IDE. All needed environmental variables are defined in the run config
-     (full list can be found [here](#Needed environmental variables)),
+     (full list can be found [here](#Needed-environmental-variables)),
    
    Docker is run using the same command as in option 1, but the *Local server serves react app static files* configuration is used.
 
 
 3) *All elements run in docker* - This configuration runs the server using docker, with frontend serving enabled.
-Same as version 2, the frontend will be build (just make sure the folder structure is correct, [more here](#File Structure for Backend)).
+Same as version 2, the frontend will be build (just make sure the folder structure is correct, [more here](#File-Structure-for-Backend)).
 In order to run this configuration run the shell script [*run.sh*](/docker/scripts/run.sh). The best way to run it is using 
 the predefined run configuration *All elements run in docker*.
 
 It is possible that some problems might occur with the tests. If this happens, please *Disable* these tests.
    
-#Generating the documentation
+# Generating the documentation
 
 In order to generate the documentation run this command:
 ```shell
 gradle generateJavadocs
 ```
-The documentation is now available in the *javadoc* folder.
+The documentation is now available in the *javadoc* folder. Start with the *index.html* file.
 
 The other way is use the IDE builds-in tools. For Intellij idea this would be:
 1) Click 'Tools' on the menu at the top of the screen
@@ -145,21 +145,17 @@ Additionally, if frontend should be served as static content:
 - SERVE_STATIC_CONTENT: __must__ use the value *serve*
 
 
-#Plans for future
+# Plans for future
 
 - add openapi 3 for endpoint (using https://github.com/springdoc/springdoc-openapi#integration-of-the-library-in-a-spring-boot-2xx-project-without-the-swagger-ui)
 - make sure mock data is concise (all data makes sense)
 - check if all services update all necessary information
-- when clicking button, make it load
-- better min/max itp for yups
-- Add user profile (front)
-- Write Tests for backend and frontend
 - make backend calls cancelable (front)
-- Add user picture (back + front)
-- add sort by for both queries
-- Posts as subscription (back + front)
-- Adjust dto to whats needed (back + front)
-- when changing anime using link in relations, add loading (front)
+- Add user picture (together with frontend)
+- add sort by for both queries (together with frontend)
+- Adjust dto to whats needed (together with frontend)
+
+# Miscellaneous
 
 The default achievement icon was made by [Made by Made](https://www.flaticon.com/authors/made-by-made) perfect
 from [www.flaticon.com](www.flaticon.com "flaticon")
