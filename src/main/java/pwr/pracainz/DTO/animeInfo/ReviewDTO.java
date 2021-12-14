@@ -8,7 +8,6 @@ import lombok.experimental.FieldDefaults;
 
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 
 /**
@@ -19,7 +18,7 @@ import javax.validation.constraints.Size;
 @AllArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
 public class ReviewDTO {
-	@Positive(message = "Review id must be positive")
+	@Min(value = 0, message = "Review id must be positive")
 	private int id;
 
 	@NotBlank(message = "Review title cannot be blank")

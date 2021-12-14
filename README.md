@@ -6,6 +6,7 @@
 - [File Structure for Backend](#File-Structure-for-Backend)
 - [Main Technologies](#Main-Technologies)
 - [Launch](#Launch)
+- [Trying it out](#Trying-it-out)
 - [Generating the documentation](#Generating-the-documentation)
 - [Needed environmental variables](#Needed-environmental-variables)
 - [Plans for future](#Plans-for-future)
@@ -75,6 +76,33 @@ In order to launch the app these technologies are __needed__:
 __Important!__
 The easiest way to run the applications using Intellij Idea. It is highly recommended to using it.
 
+## For the first time
+
+Check both docker compose files (in [docker](/docker) folder) and decomment the admin credentials.
+Then run the *Keycloak + Database* run configuration, or use this command:
+```shell
+docker-compose -f docker/docker-compose-local.yml up --build
+```
+
+When starting the containers for the first time using any run configurations, errors with connecting to the database and keycloak may occur.
+If it happens, make sure that:
+1) The database is running and has no errors
+2) The keycloak admin console is accessible on *http://localhost:8180/auth/admin/master/console/*
+
+If both conditions are met, then restart the app. If the app still won't connect to Keycloak 
+(after logging in, errors will occur) please check the public key of the realm:
+1) log into keycloak admin console using the credentials from the docker compose file
+2) Go to *Realm Settings*
+3) Go to *Keys*
+4) Click on *Public key*, copy it
+5) Paste in into the property *keycloak.realm-key*
+
+Possible errors
+
+![Possible Errors](pictures/login-errors.png)
+
+## First and next times
+
 *For all configurations* - Docker is used to create the database and Keycloak instances. All needed Keycloak information, such as realms and test users,
 are loaded automatically when starting the server using the predefined run methods.
 All commands should be run from the __[main server folder](/)__.
@@ -112,6 +140,17 @@ the predefined run configuration *All elements run in docker*.
 
 It is possible that some problems might occur with the tests. If this happens, please *Disable* these tests.
    
+# Trying it out
+
+After successfully launching the app, it is possible to log in using 3 users:
+
+1) User With Data (username: *Username*, password: *Password1*) - 
+   User with the most predefined data, and already earned achievements.
+2) Second Forum User (username: *SecondForumUser*, password: *Password1*) - 
+   User with only predefined forum data, no achievements earned.
+3) User with no data (username: *UserWithNoData*, password: *Password1*) - 
+   User with no predefined data.
+
 # Generating the documentation
 
 In order to generate the documentation run this command:

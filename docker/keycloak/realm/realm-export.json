@@ -473,6 +473,51 @@
       ],
       "notBefore": 0,
       "groups": []
+    },
+    {
+      "id": "467a809a-d893-48c2-85e2-82f9ce4b1560",
+      "username": "Username",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Password1"
+        }
+      ],
+      "clientRoles": {
+        "realm-management": [ "realm-admin" ],
+        "account": [ "default-roles-pracainz-realm" ]
+      }
+    },
+    {
+      "id": "eabc11d0-e6da-49f8-a6db-6bceb84a06bc",
+      "username": "SecondForumUser",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Password1"
+        }
+      ],
+      "clientRoles": {
+        "realm-management": [ "realm-admin" ],
+        "account": [ "default-roles-pracainz-realm" ]
+      }
+    },
+    {
+      "id": "51d75b0a-9d45-4fe8-bf0e-01f7abd07c0b",
+      "username": "UserWithNoData",
+      "enabled": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "Password1"
+        }
+      ],
+      "clientRoles": {
+        "realm-management": [ "realm-admin" ],
+        "account": [ "default-roles-pracainz-realm" ]
+      }
     }
   ],
   "scopeMappings": [

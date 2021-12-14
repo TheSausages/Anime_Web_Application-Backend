@@ -91,7 +91,6 @@ public class AnimeUserService implements AnimeUserServiceInterface {
 		}
 
 		if (animeUserInfoDTO.isDidReview() && (animeUserInfoDTO.getReview().getReviewTitle().length() > 100 || animeUserInfoDTO.getReview().getReviewText().length() > 300)) {
-			System.out.println("throwing");
 			throw new AuthenticationException(i18nService.getTranslation("anime.review-to-long"),
 					currUser.getUsername() + " review was too long");
 		}
